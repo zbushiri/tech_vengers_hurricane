@@ -1,0 +1,51 @@
+[
+    {
+        "id": 3,
+        "firstName": "Jim",
+        "lastName": "Smith",
+        "phoneNumber": "321-469-8765",
+        "email": "jim.smith@example.com",
+        "address": "789 Anywhere Boulevard, Anytown, USA",
+        "username": "jimsmith",
+        "passwordHash": "password789",
+        "roles": ["volunteer", "user"],
+        "associated_people": [{"firstName": "John", "lastName": "Doe", "age": 35, "specialNeeds": "none"}, {"firstName": "Jane", "lastName": "Doe", "age": 30, "specialNeeds": "mobility impaired"}],
+        "verification_status": "verified",
+        "lastKnownLocation": {
+            "latitude": 30.7328,
+            "longitude": -54.0060
+        },
+        "safety_status": "safe",
+        "safetyStatusUpdatedAt": "2024-06-01T12:00:00Z",
+        "skills": ["first aid", "logistics", "communication"],
+        "equipment": ["first aid kit", "walkie-talkie", "flashlight"],
+        "backgroundCheckStatus": "verified",
+        "transportationStatus": true,
+        "availabilityStatus": "on_assignment"
+    },
+    {
+        "id": 4,
+        "firstName": "Macy",
+        "lastName": "West",
+        "phoneNumber": "840-243-0632",
+        "email": "macy.west@example.com",
+        "address": "456 Oak Ave, Anytown, USA",
+        "username": "macywest",
+        "passwordHash": "password101",
+        "roles": ["user", "volunteer"],
+        "associated_people": [{"firstName": "Lucas", "lastName": "West", "age": 35, "specialNeeds": "none"}, {"firstName": "Emma", "lastName": "Johnson", "age": 28, "specialNeeds": "none"}, {"firstName": "Mark", "lastName": "Johnson", "age": 40, "specialNeeds": "none"}],
+        "verification_status": "verified",
+        "lastKnownLocation": {
+            "latitude": 59.0522,
+            "longitude": -109.2437
+        },
+        "safety_status": "safe",
+        "safetyStatusUpdatedAt": "2024-06-01T12:00:00Z",
+        "skills": ["emergency response", "logistics", "communication"],
+        "equipment": ["emergency kit", "walkie-talkie", "flashlight"],
+        "backgroundCheckStatus": "pending",
+        "transportationStatus": true,
+        "availabilityStatus": "available"
+    }
+
+]

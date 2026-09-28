@@ -1,0 +1,23 @@
+[
+    {
+        "name": "Hurricane Katrina",
+        "startDate": "2005-08-23",
+        "endDate": "2005-08-31",
+        "status": "monitoring",
+        "affectedAreas": ["Louisiana", "Mississippi", "Alabama"]
+    },
+    {
+        "name": "Hurricane Sandy",
+        "startDate": "2012-10-22",
+        "endDate": "2012-10-30",
+        "status": "closed",
+        "affectedAreas": ["New Jersey", "New York", "Connecticut"]
+    },
+    {
+        "name": "Hurricane Harvey",
+        "startDate": "2017-08-18",
+        "endDate": "2017-08-25",
+        "status": "closed",
+        "affectedAreas": ["Texas", "Louisiana"]
+    }
+]
