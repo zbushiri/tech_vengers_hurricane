@@ -24,6 +24,8 @@
     {
     "requestId": "2",
         "type": "medical",
+        "status": "IN_PROGRESS",
+        "location": "Columbia, SC",
         "description": "Request for medical assistance",
         "priority": "medium",
         "dateSubmitted": "2024-06-02T15:30:00Z",
