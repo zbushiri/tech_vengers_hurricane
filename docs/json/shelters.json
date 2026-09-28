@@ -1,0 +1,24 @@
+[
+    {
+        "shelterId": 1,
+        "name": "Community Shelter",
+        "address": "123 Main Street, Anytown, USA",
+        "capacity": 50,
+        "occupancy": 30,
+        "status": "open",
+        "accomodations": ["food", "water", "medical assistance"],
+        "lastUpdated": "2024-06-01T12:00:00Z",
+        "shelterOperators": ["John Doe", "Jane Smith"]
+    },
+    {
+        "shelterId": 2,
+        "name": "Downtown Shelter",
+        "address": "456 Oak Avenue, Anytown, USA",
+        "capacity": 100,
+        "occupancy": 80,
+        "status": "open",
+        "accomodations": ["food", "water", "medical assistance", "pet care"],
+        "lastUpdated": "2024-06-01T12:00:00Z",
+        "shelterOperators": ["Jim Doe", "Macy West"]
+    }
+]
