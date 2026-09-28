@@ -20,7 +20,7 @@
         "skills": ["first aid", "logistics", "communication"],
         "equipment": ["first aid kit", "walkie-talkie", "flashlight"],
         "backgroundCheckStatus": "verified",
-        "transportationStatus": true,
+        "transportationAccess": true,
         "availabilityStatus": "on_assignment"
     },
     {
