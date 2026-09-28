@@ -17,7 +17,7 @@
         "capacity": 100,
         "occupancy": 80,
         "status": "open",
-        "accomodations": ["food", "water", "medical assistance", "pet care"],
+        "accommodations": ["food", "water", "medical assistance", "pet care"],
         "lastUpdated": "2024-06-01T12:00:00Z",
         "shelterOperators": ["Jim Doe", "Macy West"]
     }
