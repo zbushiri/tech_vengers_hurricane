@@ -6,7 +6,7 @@
         "capacity": 50,
         "occupancy": 30,
         "status": "open",
-        "accomodations": ["food", "water", "medical assistance"],
+        "accommodations": ["food", "water", "medical assistance"],
         "lastUpdated": "2024-06-01T12:00:00Z",
         "shelterOperators": ["John Doe", "Jane Smith"]
     },
