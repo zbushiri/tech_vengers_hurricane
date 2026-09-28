@@ -78,12 +78,7 @@ The system supports emergency response through:
 
 - Safety status updates
 - Emergency contacts
-- Alerts and notifications
-- SOS requests
 - Hurricane event tracking
-- Emergency guidance content
-
-Alerts may include weather alerts, emergency requests, donation updates, safety status updates, and critical notifications.
 
 ## Hurricane Events
 
@@ -96,6 +91,12 @@ Hurricane events store information about an emergency, including:
 - Event status
 
 The system can also provide guidance content such as emergency instructions, preventative measures, and first-aid information.
+
+## Documents
+- [Requirements Document](docs/requirements.pdf)
+- [UML Class Diagram](docs/uml-class-diagram.pdf)
+- [UML Sequence Diagram 1 – Resident Submits a Relief Request](docs/uml-sequence-diagram1.pdf)
+- [UML Sequence Diagram 2 – Volunteer Claims a Relief Request](docs/uml-sequence-diagram2.pdf)
 
 ## Project Goal
 
