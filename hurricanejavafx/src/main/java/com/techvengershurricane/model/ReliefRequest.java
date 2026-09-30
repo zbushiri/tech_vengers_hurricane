@@ -1,6 +1,7 @@
 package com.techvengershurricane.model;
 
-public class ReliefRequest implements Identifiable {
+/* MODEL: add relief-request status and priority behavior here. */
+public class ReliefRequest {
     private String requestId;
     private String type;
     private String status;
@@ -29,8 +30,6 @@ public class ReliefRequest implements Identifiable {
         this.status = "SUBMITTED";
     }
 
-    @Override
-    public String getId() { return requestId; }
     public String getRequestId() { return requestId; }
     public void setRequestId(String requestId) { this.requestId = requestId; }
     public String getType() { return type; }

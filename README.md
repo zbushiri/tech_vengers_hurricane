@@ -107,8 +107,8 @@ The goal of Gamecock Relief Network is to create one organized place where peopl
 The original JavaFX screens and sample JSON files are preserved. A simple foundation now lives in `hurricanejavafx/src/main/java/com/techvengershurricane`:
 
 ```text
-model/   -> plain objects that match the JSON and UML
-data/    -> reusable JSON add, edit, delete, find, and load code
+model/   -> five core objects that match the existing JSON
+data/    -> one reusable JSON load, add, edit, and delete class
 system/  -> HurricaneReliefSystem facade used by controllers
 App      -> JavaFX runner
 Driver   -> console data check
@@ -117,17 +117,16 @@ Driver   -> console data check
 The intended connection is:
 
 ```text
-FXML screen -> Controller -> HurricaneReliefSystem -> Repository -> JSON file
+FXML screen -> Controller -> HurricaneReliefSystem -> JsonDataAccess -> JSON file
 ```
 
 Controllers should call the facade instead of opening JSON files directly. Short `/* ... */` comments mark where each part belongs.
 
-### Run and verify
+### Run
 
 From the `hurricanejavafx` folder:
 
 ```bash
-mvn test
 mvn javafx:run
 ```
 
@@ -135,7 +134,6 @@ Run `Driver.java` from an IDE for a quick count of all five JSON datasets. It al
 
 ### Team planning
 
-- [Developer Guide](docs/DEVELOPER_GUIDE.md)
 - [Proposed GitHub Projects Product Backlog](docs/PROJECT_BOARD_BACKLOG.md)
 
 The board document is ready to copy into GitHub issues. Keep every card in **Product Backlog** at first, then move only selected sprint work into **Sprint Backlog**.

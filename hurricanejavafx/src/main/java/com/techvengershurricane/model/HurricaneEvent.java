@@ -3,7 +3,8 @@ package com.techvengershurricane.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HurricaneEvent implements Identifiable {
+/* MODEL: add hurricane dates, areas, and status behavior here. */
+public class HurricaneEvent {
     private String name;
     private String startDate;
     private String endDate;
@@ -20,8 +21,6 @@ public class HurricaneEvent implements Identifiable {
         this.status = status;
     }
 
-    @Override
-    public String getId() { return name; }
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
     public String getStartDate() { return startDate; }

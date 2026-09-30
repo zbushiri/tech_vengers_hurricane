@@ -2,8 +2,10 @@ package com.techvengershurricane.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-public class User implements Identifiable {
+/* MODEL: add account, safety, and resident fields/methods here. */
+public class User {
     private int userId;
     private String firstName;
     private String lastName;
@@ -13,9 +15,9 @@ public class User implements Identifiable {
     private String username;
     private String passwordHash;
     private List<String> roles = new ArrayList<>();
-    private List<Person> associatedPeople = new ArrayList<>();
+    private List<Map<String, Object>> associatedPeople = new ArrayList<>();
     private String verificationStatus;
-    private Location lastKnownLocation;
+    private Map<String, Double> lastKnownLocation;
     private String safetyStatus;
     private String safetyStatusUpdatedAt;
 
@@ -31,8 +33,6 @@ public class User implements Identifiable {
         this.email = email;
     }
 
-    @Override
-    public String getId() { return String.valueOf(userId); }
     public int getUserId() { return userId; }
     public void setUserId(int userId) { this.userId = userId; }
     public String getFirstName() { return firstName; }
@@ -51,12 +51,12 @@ public class User implements Identifiable {
     public void setPasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
     public List<String> getRoles() { return roles; }
     public void setRoles(List<String> roles) { this.roles = roles; }
-    public List<Person> getAssociatedPeople() { return associatedPeople; }
-    public void setAssociatedPeople(List<Person> associatedPeople) { this.associatedPeople = associatedPeople; }
+    public List<Map<String, Object>> getAssociatedPeople() { return associatedPeople; }
+    public void setAssociatedPeople(List<Map<String, Object>> associatedPeople) { this.associatedPeople = associatedPeople; }
     public String getVerificationStatus() { return verificationStatus; }
     public void setVerificationStatus(String verificationStatus) { this.verificationStatus = verificationStatus; }
-    public Location getLastKnownLocation() { return lastKnownLocation; }
-    public void setLastKnownLocation(Location lastKnownLocation) { this.lastKnownLocation = lastKnownLocation; }
+    public Map<String, Double> getLastKnownLocation() { return lastKnownLocation; }
+    public void setLastKnownLocation(Map<String, Double> lastKnownLocation) { this.lastKnownLocation = lastKnownLocation; }
     public String getSafetyStatus() { return safetyStatus; }
     public void setSafetyStatus(String safetyStatus) { this.safetyStatus = safetyStatus; }
     public String getSafetyStatusUpdatedAt() { return safetyStatusUpdatedAt; }

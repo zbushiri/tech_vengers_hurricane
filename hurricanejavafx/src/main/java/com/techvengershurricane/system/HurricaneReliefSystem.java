@@ -1,10 +1,6 @@
 package com.techvengershurricane.system;
 
-import com.techvengershurricane.data.HurricaneRepository;
-import com.techvengershurricane.data.ReliefRequestRepository;
-import com.techvengershurricane.data.ShelterRepository;
-import com.techvengershurricane.data.UserRepository;
-import com.techvengershurricane.data.VolunteerRepository;
+import com.techvengershurricane.data.JsonDataAccess;
 import com.techvengershurricane.model.HurricaneEvent;
 import com.techvengershurricane.model.ReliefRequest;
 import com.techvengershurricane.model.Shelter;
@@ -13,82 +9,75 @@ import com.techvengershurricane.model.Volunteer;
 
 import java.nio.file.Path;
 import java.util.List;
-import java.util.Optional;
 
+/* FACADE: controllers call this class instead of opening JSON files. */
 public class HurricaneReliefSystem {
-    private final UserRepository users;
-    private final VolunteerRepository volunteers;
-    private final ShelterRepository shelters;
-    private final ReliefRequestRepository requests;
-    private final HurricaneRepository hurricanes;
+    private final JsonDataAccess<User> users;
+    private final JsonDataAccess<Volunteer> volunteers;
+    private final JsonDataAccess<Shelter> shelters;
+    private final JsonDataAccess<ReliefRequest> requests;
+    private final JsonDataAccess<HurricaneEvent> hurricanes;
 
-    public HurricaneReliefSystem(Path jsonDirectory) {
-        /* Facade: connects all JSON repositories in one place. */
-        users = new UserRepository(jsonDirectory);
-        volunteers = new VolunteerRepository(jsonDirectory);
-        shelters = new ShelterRepository(jsonDirectory);
-        requests = new ReliefRequestRepository(jsonDirectory);
-        hurricanes = new HurricaneRepository(jsonDirectory);
+    public HurricaneReliefSystem(Path jsonFolder) {
+        /* SETUP: connects each model to its original JSON file. */
+        users = new JsonDataAccess<>(jsonFolder.resolve("users.json"), User[].class,
+                user -> String.valueOf(user.getUserId()));
+        volunteers = new JsonDataAccess<>(jsonFolder.resolve("volunteers.json"), Volunteer[].class,
+                volunteer -> String.valueOf(volunteer.getUserId()));
+        shelters = new JsonDataAccess<>(jsonFolder.resolve("shelters.json"), Shelter[].class,
+                shelter -> String.valueOf(shelter.getShelterId()));
+        requests = new JsonDataAccess<>(jsonFolder.resolve("requests.json"), ReliefRequest[].class,
+                ReliefRequest::getRequestId);
+        hurricanes = new JsonDataAccess<>(jsonFolder.resolve("hurricanes.json"), HurricaneEvent[].class,
+                HurricaneEvent::getName);
     }
 
+    /* GET: screens use these methods to display saved data. */
     public List<User> getUsers() { return users.getAll(); }
     public List<Volunteer> getVolunteers() { return volunteers.getAll(); }
     public List<Shelter> getShelters() { return shelters.getAll(); }
     public List<ReliefRequest> getRequests() { return requests.getAll(); }
     public List<HurricaneEvent> getHurricanes() { return hurricanes.getAll(); }
 
-    public Optional<User> findUser(String id) { return users.findById(id); }
-    public Optional<Shelter> findShelter(String id) { return shelters.findById(id); }
-    public Optional<ReliefRequest> findRequest(String id) { return requests.findById(id); }
-
-    public void addUser(User user) { users.add(user); }
-    public boolean editUser(User user) { return users.edit(user); }
+    /* USER: put user rules before these JSON calls. */
+    public void addUser(User item) { users.add(item); }
+    public boolean editUser(User item) { return users.edit(item); }
     public boolean deleteUser(String id) { return users.delete(id); }
 
-    public void addVolunteer(Volunteer volunteer) { volunteers.add(volunteer); }
-    public boolean editVolunteer(Volunteer volunteer) { return volunteers.edit(volunteer); }
+    /* VOLUNTEER: put volunteer rules here. */
+    public void addVolunteer(Volunteer item) { volunteers.add(item); }
+    public boolean editVolunteer(Volunteer item) { return volunteers.edit(item); }
     public boolean deleteVolunteer(String id) { return volunteers.delete(id); }
 
-    public void addShelter(Shelter shelter) { shelters.add(shelter); }
-    public boolean editShelter(Shelter shelter) { return shelters.edit(shelter); }
+    /* SHELTER: put capacity and status rules here. */
+    public void addShelter(Shelter item) { shelters.add(item); }
+    public boolean editShelter(Shelter item) { return shelters.edit(item); }
     public boolean deleteShelter(String id) { return shelters.delete(id); }
 
-    public void addHurricane(HurricaneEvent event) { hurricanes.add(event); }
-    public boolean editHurricane(HurricaneEvent event) { return hurricanes.edit(event); }
+    /* REQUEST: resident request workflow starts here. */
+    public void addRequest(ReliefRequest item) { requests.add(item); }
+    public boolean editRequest(ReliefRequest item) { return requests.edit(item); }
+    public boolean deleteRequest(String id) { return requests.delete(id); }
+
+    /* HURRICANE: coordinator event workflow starts here. */
+    public void addHurricane(HurricaneEvent item) { hurricanes.add(item); }
+    public boolean editHurricane(HurricaneEvent item) { return hurricanes.edit(item); }
     public boolean deleteHurricane(String id) { return hurricanes.delete(id); }
 
     public void submitRequest(ReliefRequest request) {
-        /* Facade: the resident screen calls this method. */
-        /* TODO: validate, calculate priority, and check duplicates. */
-        requests.add(request);
+        /* TODO: validate, check duplicates, and calculate priority here. */
+        addRequest(request);
     }
-
-    public boolean editRequest(ReliefRequest request) { return requests.edit(request); }
-    public boolean deleteRequest(String id) { return requests.delete(id); }
 
     public boolean claimRequest(String requestId, int volunteerId) {
-        /* Facade: the volunteer screen calls this method. */
-        if (volunteers.findById(String.valueOf(volunteerId)).isEmpty()) {
-            return false;
+        /* TODO: check volunteer eligibility before assigning the request. */
+        for (ReliefRequest request : getRequests()) {
+            if (request.getRequestId().equals(requestId)) {
+                request.setAssignedVolunteerId(volunteerId);
+                request.setStatus("IN_PROGRESS");
+                return editRequest(request);
+            }
         }
-        Optional<ReliefRequest> match = requests.findById(requestId);
-        if (match.isEmpty()) {
-            return false;
-        }
-        ReliefRequest request = match.get();
-        request.setAssignedVolunteerId(volunteerId);
-        request.setStatus("IN_PROGRESS");
-        return requests.edit(request);
-    }
-
-    public boolean updateSafetyStatus(int userId, String newStatus) {
-        /* Facade: keeps UI code away from JSON details. */
-        Optional<User> match = users.findById(String.valueOf(userId));
-        if (match.isEmpty()) {
-            return false;
-        }
-        User user = match.get();
-        user.setSafetyStatus(newStatus);
-        return users.edit(user);
+        return false;
     }
 }

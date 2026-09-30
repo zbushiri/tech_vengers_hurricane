@@ -3,7 +3,8 @@ package com.techvengershurricane.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Shelter implements Identifiable {
+/* MODEL: add shelter capacity, status, and supply behavior here. */
+public class Shelter {
     private int shelterId;
     private String name;
     private String address;
@@ -25,8 +26,6 @@ public class Shelter implements Identifiable {
         this.capacity = capacity;
     }
 
-    @Override
-    public String getId() { return String.valueOf(shelterId); }
     public int getShelterId() { return shelterId; }
     public void setShelterId(int shelterId) { this.shelterId = shelterId; }
     public String getName() { return name; }

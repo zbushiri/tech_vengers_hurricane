@@ -3,6 +3,7 @@ package com.techvengershurricane.model;
 import java.util.ArrayList;
 import java.util.List;
 
+/* MODEL: add volunteer skills and availability behavior here. */
 public class Volunteer extends User {
     private List<String> skills = new ArrayList<>();
     private List<String> equipment = new ArrayList<>();
