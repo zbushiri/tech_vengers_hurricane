@@ -7,6 +7,7 @@ public class SecondaryController {
 
     @FXML
     private void switchToPrimary() throws IOException {
+        /* UI: returns to the starter screen. */
         App.setRoot("primary");
     }
 }

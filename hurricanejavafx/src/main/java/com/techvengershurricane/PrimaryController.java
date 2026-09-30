@@ -7,6 +7,7 @@ public class PrimaryController {
 
     @FXML
     private void switchToSecondary() throws IOException {
+        /* TODO UI: replace this with a facade call. */
         App.setRoot("secondary");
     }
 }
