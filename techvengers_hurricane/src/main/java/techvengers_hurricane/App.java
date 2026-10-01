@@ -1,4 +1,4 @@
-package com.techvengershurricane;
+package techvengers_hurricane;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -8,16 +8,16 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-/* UI runner: starts JavaFX. */
+/**
+ * JavaFX App
+ */
 public class App extends Application {
 
     private static Scene scene;
 
     @Override
     public void start(Stage stage) throws IOException {
-        /* UI runner: starts the current JavaFX screens. */
         scene = new Scene(loadFXML("primary"), 640, 480);
-        stage.setTitle("Gamecock Relief Network");
         stage.setScene(scene);
         stage.show();
     }
@@ -32,7 +32,6 @@ public class App extends Application {
     }
 
     public static void main(String[] args) {
-        /* Driver: use Driver.java for a console data check. */
         launch();
     }
 
