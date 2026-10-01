@@ -32,7 +32,7 @@ Think of it as a **command center for your community**. No more guessing where t
 
 ## Project Board
 
-📌 [Project Board](PASTE-PROJECT-BOARD-URL-HERE)
+📌 [Project Board](https://github.com/users/zbushiri/projects/2/views/1)
 
 ## Our Team
 
