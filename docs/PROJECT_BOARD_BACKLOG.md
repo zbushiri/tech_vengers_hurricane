@@ -1,6 +1,6 @@
 # GitHub Projects Product Backlog
 
-The live board is [tech_vengers_hurricane SCRUM Board](https://github.com/users/zbushiri/projects/2). All cards below were created in **Product Backlog** first. The workflow stages are **Product Backlog**, **Sprint Backlog**, **In Progress**, **Review**, and **Done**.
+The live board is [tech_vengers_hurricane SCRUM Board](https://github.com/users/zbushiri/projects/2/views/1). All cards below were created in **Product Backlog** first. The workflow stages are **Product Backlog**, **Sprint Backlog**, **In Progress**, **Review**, and **Done**.
 
 `PB` simply means **Product Backlog**. The number gives each task a short ID that matches its board card.
 
