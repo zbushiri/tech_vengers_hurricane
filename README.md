@@ -4,14 +4,6 @@
   <b>Team Tech-vengers</b> · CSCE 247 Software Engineering · University of South Carolina
 </p>
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Java-17-orange" alt="Java 17">
-  <img src="https://img.shields.io/badge/JavaFX-21-blue" alt="JavaFX 21">
-  <img src="https://img.shields.io/badge/Build-Maven-red" alt="Maven">
-</p>
-
----
-
 When a hurricane hits, help is everywhere, but it's scattered across group chats, phone calls, social media posts, and word of mouth. Residents don't know which shelters are open, volunteers don't know who needs them, and coordinators are left piecing it all together.
 
 Gamecock Relief Network exists to fix that. It is a Java-based disaster-relief coordination system that gives residents, volunteers, shelter operators, and coordinators **one organized place** to request help, locate resources, share safety information, and support their community during an emergency.
@@ -20,7 +12,9 @@ Think of it as a **command center for your community**. No more guessing where t
 
 ## Requirements
 
-📄 [Requirements Document](docs/requirements.pdf)
+📄 [Requirements Document](docs/requirements-document.pdf)
+
+📊 [Requirements Spreadsheet](https://docs.google.com/spreadsheets/d/1-6v7CzIGUt1K67bx0IGyv2CTm_Y1jSjVxjm9yyDrl70/edit?usp=sharing)
 
 ## Code Design
 
