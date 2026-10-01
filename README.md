@@ -1,102 +1,47 @@
-# Gamecock Relief Network
+<h1 align="center">Gamecock Relief Network</h1>
 
-## Overview
+<p align="center">
+  <b>Team Tech-vengers</b> · CSCE 247 Software Engineering · University of South Carolina
+</p>
 
-Gamecock Relief Network is a disaster-relief coordination system designed to help residents, volunteers, shelter operators, and coordinators communicate and organize resources during emergencies such as hurricanes.
+Gamecock Relief Network is a Java disaster-relief system for residents, volunteers, shelter operators, and coordinators. The current project includes JavaFX screens, model classes, JSON data access, a System/Facade class, a Driver, sample data, and the original requirements and UML documents.
 
-The system helps users find shelters, submit relief requests, share safety information, receive alerts, and coordinate volunteer support.
+## Build and Run
 
-## Main Features
+Use Java 17 and Maven:
 
-- Create and manage user accounts
-- Support different account roles:
-  - Resident
-  - Volunteer
-  - Shelter Operator
-  - Coordinator
-- Find nearby shelters and view their availability
-- Track shelter capacity, occupancy, status, and accommodations
-- Submit and manage relief requests
-- Share safety updates and emergency contact information
-- Send emergency alerts and notifications
-- Track hurricane events and provide safety guidance
-- Manage volunteer availability, skills, equipment, and transportation access
-- Save and load user and shelter data
+```bash
+cd hurricanejavafx
+mvn compile
+mvn exec:java
+```
 
-## Users and Roles
+## Project Documents
 
-### Residents
+📄 [Requirements Document](docs/requirements-document.pdf)
 
-Residents can create accounts, update their safety status, find nearby shelters, submit relief requests, and receive emergency information.
+📊 [Requirements Spreadsheet](https://docs.google.com/spreadsheets/d/1-6v7CzIGUt1K67bx0IGyv2CTm_Y1jSjVxjm9yyDrl70/edit?usp=sharing)
 
-### Volunteers
+📐 [UML Class Diagram](docs/uml-class-diagram.pdf)
 
-Volunteers can list their skills, equipment, transportation access, and availability. They can assist with relief requests during an emergency.
+🔁 [UML Sequence Diagram 1 – Resident Submits a Relief Request](docs/uml-sequence-diagram1.pdf)
 
-### Shelter Operators
+🔁 [UML Sequence Diagram 2 – Volunteer Claims a Relief Request](docs/uml-sequence-diagram2.pdf)
 
-Shelter operators manage shelter details such as capacity, occupancy, shelter status, accommodations, and address information.
+## Project Board
 
-### Coordinators
+📌 [Project Board](https://github.com/users/zbushiri/projects/2/views/1)
 
-Coordinators help oversee all users, shelters, relief requests, alerts, and emergency response activities.
+📝 [Product Backlog](docs/PROJECT_BOARD_BACKLOG.md)
 
-## Shelter Management
+`PB` means **Product Backlog**.
 
-Each shelter includes information such as:
+## Our Team
 
-- Shelter ID
-- Name
-- Address
-- Capacity
-- Current occupancy
-- Shelter status
-- Accommodations
-- Shelter operators
-- Last update time
-
-Shelters can be marked as open, full, or closed. Users can search for nearby shelters and view availability.
-
-## Relief Requests
-
-Residents can submit requests for emergency support. A relief request may include:
-
-- Request type
-- Description
-- Priority level
-- Location
-- Number of people needing help
-- Number of animals
-- Photo URL
-- Disaster-related status
-
-Request types include food, medical support, shelter, transportation, supplies, hazard reporting, and other needs.
-
-## Emergency and Safety Features
-
-The system supports emergency response through:
-
-- Safety status updates
-- Emergency contacts
-- Alerts and notifications
-- SOS requests
-- Hurricane event tracking
-- Emergency guidance content
-
-Alerts may include weather alerts, emergency requests, donation updates, safety status updates, and critical notifications.
-
-## Hurricane Events
-
-Hurricane events store information about an emergency, including:
-
-- Event ID
-- Name
-- Start and end dates
-- Affected areas
-- Event status
-
-The system can also provide guidance content such as emergency instructions, preventative measures, and first-aid information.
-
-## Project Goal
-
-The goal of Gamecock Relief Network is to create one organized place where people can request help, locate resources, communicate safety information, and support their community during a disaster.
+| Team Member | Role | GitHub |
+|-------------|------|--------|
+| Tavien Smith | Documentation & Repo Lead | [@CSE-TavienSmith](https://github.com/CSE-TavienSmith) |
+| Zaki Bushiri | Dev Lead | [@zbushiri](https://github.com/zbushiri) |
+| Nate Sheffield | Head Designer | [@nathanielsheffield775-jpg](https://github.com/nathanielsheffield775-jpg) |
+| Robert Albetel | Backend & Data Developer | [@algalda](https://github.com/algalda) |
+| Ryan Newhouse | QA & Testing Lead | [@ryannewhouse11](https://github.com/ryannewhouse11) |

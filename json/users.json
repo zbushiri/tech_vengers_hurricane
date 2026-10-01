@@ -1,6 +1,6 @@
 [
     {
-        "id": 1,
+        "userId": 1,
         "firstName": "John",
         "lastName": "Doe",
         "phoneNumber": "123-456-7890",
@@ -9,17 +9,17 @@
         "username": "johndoe",
         "passwordHash": "password123",
         "roles": ["resident", "shelter_operator"],
-        "associated_people": [{"firstName": "Jane", "lastName": "Doe", "age": 30, "specialNeeds": "mobility impaired"}, {"firstName": "Jim", "lastName": "Doe", "age": 25, "specialNeeds": "none"}],
-        "verification_status": "verified",
+        "associatedPeople": [{"firstName": "Jane", "lastName": "Doe", "age": 30, "specialNeeds": "mobility impaired"}, {"firstName": "Jim", "lastName": "Doe", "age": 25, "specialNeeds": "none"}],
+        "verificationStatus": "verified",
         "lastKnownLocation": {
             "latitude": 40.7128,
             "longitude": -74.0060
         },
-        "safety_status": "safe",
+        "safetyStatus": "safe",
         "safetyStatusUpdatedAt": "2024-06-01T12:00:00Z"
     },
     {
-        "id": 2,
+        "userId": 2,
         "firstName": "Jane",
         "lastName": "Smith",
         "phoneNumber": "987-654-3210",
@@ -28,13 +28,13 @@
         "username": "janesmith",
         "passwordHash": "password456",
         "roles": ["user"],
-        "associated_people": [{"firstName": "John", "lastName": "Doe", "age": 35, "specialNeeds": "none"}, {"firstName": "Jim", "lastName": "Doe", "age": 25, "specialNeeds": "none"}],
-        "verification_status": "verified",
+        "associatedPeople": [{"firstName": "John", "lastName": "Doe", "age": 35, "specialNeeds": "none"}, {"firstName": "Jim", "lastName": "Doe", "age": 25, "specialNeeds": "none"}],
+        "verificationStatus": "verified",
         "lastKnownLocation": {
             "latitude": 34.0522,
             "longitude": -118.2437
         },
-        "safety_status": "safe",
+        "safetyStatus": "safe",
         "safetyStatusUpdatedAt": "2024-06-01T12:00:00Z"
     },
     {
