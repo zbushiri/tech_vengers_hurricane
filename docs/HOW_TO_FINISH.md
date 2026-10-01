@@ -9,26 +9,27 @@ The instructor says this milestone is about a strong backend, not graphics. The 
 1. Use one meaningful GitHub repository for the whole semester.
 2. Create the project with JavaFX and Maven so dependencies are manageable.
 3. Match the Java version in `pom.xml` to the team's installed Java version.
-4. Add JSON Simple as a Maven dependency.
-5. Add `requires json.simple;` to `module-info.java`.
+4. Add a JSON library as a Maven dependency. The video demonstrates JSON Simple; this repository uses Gson for the same job.
+5. Add the matching module requirement. This project correctly uses `requires com.google.gson;`.
 6. Keep backend work in a separate `model` package.
 7. Export packages that another module or the later GUI will use.
 8. Run a small Driver/Hello World check before building more features.
 9. Finish and test the backend before connecting the GUI in a later sprint.
 10. Push the project to GitHub, enable Insights with a student account, add the TAs/ISAs as collaborators, create the Scrum project, and maintain a useful README.
 
-The original JavaFX project is unchanged. The added `backend-foundation` module applies those ideas without replacing any submitted file.
+The team integrated the backend foundation directly into the existing `hurricanejavafx` Maven project. This keeps one simple application structure and preserves the original FXML screens and JSON datasets.
 
 ## Foundation map
 
 ```text
-backend-foundation/
-  pom.xml                         Maven and JSON Simple
+hurricanejavafx/
+  pom.xml                         Maven, JavaFX, Gson, and Driver setup
   src/main/java/module-info.java  Module requirements and exports
-  .../Driver.java                 Backend runner/check
-  .../model/                      Class foundations
-  .../data/JsonDataStore.java     JSON load/add/edit/delete
-  .../system/HurricaneReliefSystem.java  System/Facade
+  src/main/java/com/techvengershurricane/
+    Driver.java                   Backend runner/check
+    model/                        Class foundations
+    data/JsonDataAccess.java      JSON load/add/edit/delete
+    system/HurricaneReliefSystem.java  System/Facade
 ```
 
 The connection is:
@@ -36,13 +37,13 @@ The connection is:
 ```text
 Driver now / JavaFX controller later
               -> HurricaneReliefSystem
-                  -> JsonDataStore
-                      -> original JSON files
+                  -> JsonDataAccess
+                      -> json/*.json
 ```
 
 ## Run the backend check
 
-From `backend-foundation`:
+From `hurricanejavafx`:
 
 ```bash
 mvn compile
@@ -89,7 +90,7 @@ Every model contains short `/* TODO ... */` comments showing the next work locat
 
 ## Finish JSON access
 
-`JsonDataStore` already provides working load, add, edit, and delete foundations for every model type.
+`JsonDataAccess` already provides working load, add, edit, and delete foundations for every model type.
 
 1. Copy the JSON folder before testing writes.
 2. Pass the copied folder to `Driver` or `HurricaneReliefSystem`.

@@ -34,6 +34,14 @@
 <version>3.11.0</version>
 </plugin>
 <plugin>
+<groupId>org.codehaus.mojo</groupId>
+<artifactId>exec-maven-plugin</artifactId>
+<version>3.5.0</version>
+<configuration>
+<mainClass>com.techvengershurricane.Driver</mainClass>
+</configuration>
+</plugin>
+<plugin>
 <groupId>org.openjfx</groupId>
 <artifactId>javafx-maven-plugin</artifactId>
 <version>${javafx.maven.plugin.version}</version>

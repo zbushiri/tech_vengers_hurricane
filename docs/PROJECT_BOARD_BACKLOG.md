@@ -19,7 +19,7 @@ Add a board-description table mapping each real name to the correct GitHub usern
 | PB-01 | Create and attach the GitHub Scrum Project | Project is linked to the team repository and contains the five columns. |
 | PB-02 | Add team, instructor, TA, and ISA access | Every required person can open the repository/project and real names map to usernames. |
 | PB-03 | Confirm Maven, JavaFX, and Java versions | A clean checkout compiles on team machines. |
-| PB-04 | Add and verify JSON Simple setup | Dependency resolves and `requires json.simple` compiles. |
+| PB-04 | Verify Gson JSON setup | Dependency resolves and `requires com.google.gson` compiles. |
 | PB-05 | Review/create User class and method stubs | Fields and signatures match the JSON/UML; unfinished behavior has short TODO comments. |
 | PB-06 | Review/create Volunteer class and method stubs | Skills, equipment, availability, transport, and check methods are represented. |
 | PB-07 | Review/create Shelter class and method stubs | Capacity, occupancy, status, accommodations, and operator methods are represented. |
