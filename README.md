@@ -1,139 +1,45 @@
-# Gamecock Relief Network
+<h1 align="center">Gamecock Relief Network</h1>
 
-## Overview
+<p align="center">
+  <b>Team Tech-vengers</b> · CSCE 247 Software Engineering · University of South Carolina
+</p>
 
-Gamecock Relief Network is a disaster-relief coordination system designed to help residents, volunteers, shelter operators, and coordinators communicate and organize resources during emergencies such as hurricanes.
+<p align="center">
+  <img src="https://img.shields.io/badge/Java-17-orange" alt="Java 17">
+  <img src="https://img.shields.io/badge/JavaFX-21-blue" alt="JavaFX 21">
+  <img src="https://img.shields.io/badge/Build-Maven-red" alt="Maven">
+</p>
 
-The system helps users find shelters, submit relief requests, share safety information, receive alerts, and coordinate volunteer support.
+---
 
-## Main Features
+When a hurricane hits, help is everywhere, but it's scattered across group chats, phone calls, social media posts, and word of mouth. Residents don't know which shelters are open, volunteers don't know who needs them, and coordinators are left piecing it all together.
 
-- Create and manage user accounts
-- Support different account roles:
-  - Resident
-  - Volunteer
-  - Shelter Operator
-  - Coordinator
-- Find nearby shelters and view their availability
-- Track shelter capacity, occupancy, status, and accommodations
-- Submit and manage relief requests
-- Share safety updates and emergency contact information
-- Send emergency alerts and notifications
-- Track hurricane events and provide safety guidance
-- Manage volunteer availability, skills, equipment, and transportation access
-- Save and load user and shelter data
+Gamecock Relief Network exists to fix that. It is a Java-based disaster-relief coordination system that gives residents, volunteers, shelter operators, and coordinators **one organized place** to request help, locate resources, share safety information, and support their community during an emergency.
 
-## Users and Roles
+Think of it as a **command center for your community**. No more guessing where to go or who to call, just one place to find shelter, ask for help, and show up for each other.
 
-### Residents
+## Requirements
 
-Residents can create accounts, update their safety status, find nearby shelters, submit relief requests, and receive emergency information.
+📄 [Requirements Document](docs/requirements.pdf)
 
-### Volunteers
+## Code Design
 
-Volunteers can list their skills, equipment, transportation access, and availability. They can assist with relief requests during an emergency.
+📐 [UML Class Diagram](docs/uml-class-diagram.pdf)
 
-### Shelter Operators
+🔁 [UML Sequence Diagram 1 – Resident Submits a Relief Request](docs/uml-sequence-diagram1.pdf)
 
-Shelter operators manage shelter details such as capacity, occupancy, shelter status, accommodations, and address information.
+🔁 [UML Sequence Diagram 2 – Volunteer Claims a Relief Request](docs/uml-sequence-diagram2.pdf)
 
-### Coordinators
+## Project Board
 
-Coordinators help oversee all users, shelters, relief requests, alerts, and emergency response activities.
+📌 [Project Board](PASTE-PROJECT-BOARD-URL-HERE)
 
-## Shelter Management
+## Our Team
 
-Each shelter includes information such as:
-
-- Shelter ID
-- Name
-- Address
-- Capacity
-- Current occupancy
-- Shelter status
-- Accommodations
-- Shelter operators
-- Last update time
-
-Shelters can be marked as open, full, or closed. Users can search for nearby shelters and view availability.
-
-## Relief Requests
-
-Residents can submit requests for emergency support. A relief request may include:
-
-- Request type
-- Description
-- Priority level
-- Location
-- Number of people needing help
-- Number of animals
-- Photo URL
-- Disaster-related status
-
-Request types include food, medical support, shelter, transportation, supplies, hazard reporting, and other needs.
-
-## Emergency and Safety Features
-
-The system supports emergency response through:
-
-- Safety status updates
-- Emergency contacts
-- Hurricane event tracking
-
-## Hurricane Events
-
-Hurricane events store information about an emergency, including:
-
-- Event ID
-- Name
-- Start and end dates
-- Affected areas
-- Event status
-
-The system can also provide guidance content such as emergency instructions, preventative measures, and first-aid information.
-
-## Documents
-- [Requirements Document](docs/requirements.pdf)
-- [UML Class Diagram](docs/uml-class-diagram.pdf)
-- [UML Sequence Diagram 1 – Resident Submits a Relief Request](docs/uml-sequence-diagram1.pdf)
-- [UML Sequence Diagram 2 – Volunteer Claims a Relief Request](docs/uml-sequence-diagram2.pdf)
-
-## Project Goal
-
-The goal of Gamecock Relief Network is to create one organized place where people can request help, locate resources, communicate safety information, and support their community during a disaster.
-
-## Semester Project Foundation
-
-The original JavaFX screens and sample JSON files are preserved. A simple foundation now lives in `hurricanejavafx/src/main/java/com/techvengershurricane`:
-
-```text
-model/   -> five core objects that match the existing JSON
-data/    -> one reusable JSON load, add, edit, and delete class
-system/  -> HurricaneReliefSystem facade used by controllers
-App      -> JavaFX runner
-Driver   -> console data check
-```
-
-The intended connection is:
-
-```text
-FXML screen -> Controller -> HurricaneReliefSystem -> JsonDataAccess -> JSON file
-```
-
-Controllers should call the facade instead of opening JSON files directly. Short `/* ... */` comments mark where each part belongs.
-
-### Run
-
-From the `hurricanejavafx` folder:
-
-```bash
-mvn javafx:run
-```
-
-Run `Driver.java` from an IDE for a quick count of all five JSON datasets. It also accepts the JSON folder as its first command-line argument.
-
-### Team planning
-
-- [Proposed GitHub Projects Product Backlog](docs/PROJECT_BOARD_BACKLOG.md)
-
-The board document is ready to copy into GitHub issues. Keep every card in **Product Backlog** at first, then move only selected sprint work into **Sprint Backlog**.
+| Team Member | Role | GitHub |
+|-------------|------|--------|
+| Tavien Smith | Documentation & Repo Lead | [@CSE-TavienSmith](https://github.com/CSE-TavienSmith) |
+| Zaki Bushiri | Dev Lead | [@zbushiri](https://github.com/zbushiri) |
+| Nate Sheffield | Head Designer | [@nathanielsheffield775-jpg](https://github.com/nathanielsheffield775-jpg) |
+| Robert Albetel | Backend & Data Developer | [@algalda](https://github.com/algalda) |
+| Ryan Newhouse | QA & Testing Lead | [@ryannewhouse11](https://github.com/ryannewhouse11) |
