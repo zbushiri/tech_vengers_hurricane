@@ -19,6 +19,7 @@ public class UserList {
     public ArrayList<User> getUsers() {
         return users;
     }
+    
     public void addUser(User user) {
         users.add(user);
     }

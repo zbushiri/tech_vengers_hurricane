@@ -1,31 +1,36 @@
 package model;
 
+import java.util.ArrayList;
+
 public class ShelterList {
     private static ShelterList instance;
     private ArrayList<Shelter> shelters;
-    private ShelterList() {
-        shelters = new ArrayList<>();
-    }
-    private static ShelterList getInstance() {
+
+    private ShelterList() {}
+
+
+    public static ShelterList getInstance() {
         if (instance == null) {
             instance = new ShelterList();
+            instance.shelters = new ArrayList<>();
         }
         return instance;
     }
+    
     public ArrayList<Shelter> searchByProximity(String location, double radius) {
         ArrayList<Shelter> nearbyShelters = new ArrayList<>();
         for (Shelter shelter : shelters) {
-            double distance = calculateDistance(location, shelter.getLocation());
+            double distance = calculateDistance(location, shelter.getAddress());
             if (distance <= radius) {
                 nearbyShelters.add(shelter);
             }
         }
         return nearbyShelters;
     }
-    public ArrayList<Shelter> filterByAccomodation(Accomodation criteria) {
+    public ArrayList<Shelter> filterByAccommodation(Accommodation criteria) {
         ArrayList<Shelter> filteredShelters = new ArrayList<>();
         for (Shelter shelter : shelters) {
-            if (shelter.getAccomodation().equals(criteria)) {
+            if (shelter.getAccommodations().contains(criteria)) {
                 filteredShelters.add(shelter);
             }
         }

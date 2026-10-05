@@ -5,4 +5,7 @@ module techvengers_hurricane {
     
     opens techvengers_hurricane to javafx.fxml;
     exports techvengers_hurricane;
+
+    opens model to javafx.fxml;
+    exports model;
 }
