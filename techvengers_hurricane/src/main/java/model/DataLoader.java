@@ -24,10 +24,9 @@ public class DataLoader {
      * 
      * @return the list of shelters or an empty list if none load
      */
-    public static ArrayList<?> getShelters() {
-        //  ? Change both ? to Shelter after the Shelter class is added.
+    public static ArrayList<Shelter> getShelters() {
 
-        ArrayList<?> shelters = new ArrayList<>();
+        ArrayList<Shelter> shelters = new ArrayList<>();
 
         // TODO: Read SHELTER_FILE and add each shelter to the list.
         return shelters;
@@ -39,9 +38,8 @@ public class DataLoader {
      * 
      * @return the list of users or an empty list if none load
      */
-    public static ArrayList<?> getUsers() {
-        // ? Change both ? to User after the User class is added.
-        ArrayList<?> users = new ArrayList<>();
+    public static ArrayList<User> getUsers() {
+        ArrayList<User> users = new ArrayList<>();
 
         // TODO: Read USER_FILE and add each user to the list.
         return users;
@@ -52,9 +50,8 @@ public class DataLoader {
      * 
      * @return the list of requests or an empty list if none load
      */
-    public static ArrayList<?> getRequests() {
-        // ? Change both ? to ReliefRequest after the ReliefRequest class is added.
-        ArrayList<?> requests = new ArrayList<>();
+    public static ArrayList<ReliefRequest> getRequests() {
+        ArrayList<ReliefRequest> requests = new ArrayList<>();
 
         // TODO: Read REQUEST_FILE and add each request to the list. 
         return requests;
