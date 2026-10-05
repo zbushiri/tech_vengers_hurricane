@@ -18,14 +18,16 @@ public class ShelterList {
     }
     
     public ArrayList<Shelter> searchByProximity(String location, double radius) {
-        ArrayList<Shelter> nearbyShelters = new ArrayList<>();
-        for (Shelter shelter : shelters) {
-            double distance = calculateDistance(location, shelter.getAddress());
-            if (distance <= radius) {
-                nearbyShelters.add(shelter);
-            }
-        }
-        return nearbyShelters;
+                      
+        // ArrayList<Shelter> nearbyShelters = new ArrayList<>();
+        // for (Shelter shelter : shelters) {
+            // double distance = calculateDistance(location, shelter.getAddress());
+            // if (distance <= radius) {
+                // nearbyShelters.add(shelter);
+            //}
+       // }
+        // return nearbyShelters;
+        return new ArrayList<>();
     }
     public ArrayList<Shelter> filterByAccommodation(Accommodation criteria) {
         ArrayList<Shelter> filteredShelters = new ArrayList<>();
@@ -40,14 +42,14 @@ public class ShelterList {
         return shelter.getStatus().equals(status);
     }
     public ArrayList<Shelter> getSheltersNeedingRefresh() {
-        ArrayList<Shelter> sheltersNeedingRefresh = new ArrayList<>();
-        for (Shelter shelter : shelters) {
-            if (shelter.needsRefresh()) {
-                sheltersNeedingRefresh.add(shelter);
-            }
-        }
-        return sheltersNeedingRefresh;
-    
+        //ArrayList<Shelter> sheltersNeedingRefresh = new ArrayList<>();
+        //for (Shelter shelter : shelters) {
+            //if (shelter.needsRefresh()) {
+                //sheltersNeedingRefresh.add(shelter);
+            //}
+        //}
+        //return sheltersNeedingRefresh;
+        return new ArrayList<>();
     }
     public boolean save() {
         // Implementation for saving the shelter list
