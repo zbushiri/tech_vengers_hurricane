@@ -8,7 +8,7 @@ Gamecock Relief Network is a Java disaster-relief system for residents, voluntee
 
 ## Build and Run
 
-Use Java 17 and Maven:
+Use Java 25 and Maven:
 
 ```bash
 cd hurricanejavafx
