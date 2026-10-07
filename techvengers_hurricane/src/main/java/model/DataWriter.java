@@ -17,6 +17,8 @@ import org.json.simple.JSONObject;
  */
 public class DataWriter {
     private static final String SHELTER_FILE = "../json/shelters.json";
+    private static final String USER_FILE = "../json/users.json";
+    private static final String REQUEST_FILE = "../json/requests.json";
 
     /**
      * Prevents a DataWriter object from being created.
@@ -33,53 +35,225 @@ public class DataWriter {
     public static void saveShelters(ArrayList<Shelter> shelters) {
         JSONArray shelterArray = new JSONArray();
 
-        // Convert each Shelter object into JSON.
         for (Shelter shelter : shelters) {
             shelterArray.add(shelterToJSON(shelter));
         }
 
-        // Write the finished JSON array to the file.
-        try (FileWriter file = new FileWriter(SHELTER_FILE)) {
-            file.write(shelterArray.toJSONString());
-            System.out.println("Shelters saved successfully.");
+        writeFile(SHELTER_FILE, shelterArray, "shelters");
+    }
+
+    /**
+     * Saves all users to users.json.
+     *
+     * @param users the users that will be saved
+     */
+    @SuppressWarnings("unchecked")
+    public static void saveUsers(ArrayList<User> users) {
+        JSONArray userArray = new JSONArray();
+
+        for (User user : users) {
+            userArray.add(userToJSON(user));
+        }
+
+        writeFile(USER_FILE, userArray, "users");
+    }
+
+    /**
+     * Saves all relief requests to requests.json.
+     *
+     * @param requests the relief requests that will be saved
+     */
+    @SuppressWarnings("unchecked")
+    public static void saveRequests(ArrayList<ReliefRequest> requests) {
+        JSONArray requestArray = new JSONArray();
+
+        for (ReliefRequest request : requests) {
+            requestArray.add(requestToJSON(request));
+        }
+
+        writeFile(REQUEST_FILE, requestArray, "requests");
+    }
+
+    /**
+     * Writes a finished JSON array to a file.
+     *
+     * @param fileName the JSON file being written
+     * @param data the JSON data being saved
+     * @param dataName simple name used for the message
+     */
+    private static void writeFile(String fileName, JSONArray data, String dataName) {
+        try (FileWriter file = new FileWriter(fileName)) {
+            file.write(data.toJSONString());
+            System.out.println(dataName + " saved successfully.");
         } catch (IOException exception) {
-            System.out.println("Could not save shelters.");
+            System.out.println("Could not save " + dataName + ".");
         }
     }
 
     /**
-     * Converts one Shelter object into a JSON object.
+     * Converts one Shelter into JSON.
      *
      * @param shelter the shelter being converted
      * @return the shelter as JSON
      */
     @SuppressWarnings("unchecked")
     private static JSONObject shelterToJSON(Shelter shelter) {
-        JSONObject shelterJSON = new JSONObject();
+        JSONObject json = new JSONObject();
 
-        shelterJSON.put("shelterId", shelter.getShelterId().toString());
-        shelterJSON.put("name", shelter.getName());
-        shelterJSON.put("address", shelter.getAddress());
-        shelterJSON.put("capacity", shelter.getCapacity());
-        shelterJSON.put("occupancy", shelter.getOccupancy());
-        shelterJSON.put("status", shelter.getStatus().toString().toLowerCase());
+        json.put("shelterId", shelter.getShelterId().toString());
+        json.put("name", shelter.getName());
+        json.put("address", shelter.getAddress());
+        json.put("capacity", shelter.getCapacity());
+        json.put("occupancy", shelter.getOccupancy());
+        json.put("status", shelter.getStatus().toString().toLowerCase());
 
-        // Save the shelter accommodations.
         JSONArray accommodations = new JSONArray();
         for (Accommodation accommodation : shelter.getAccommodations()) {
             accommodations.add(accommodation.toString().toLowerCase());
         }
-        shelterJSON.put("accommodations", accommodations);
+        json.put("accommodations", accommodations);
 
-        shelterJSON.put("lastUpdated", shelter.getLastUpdated().toString());
+        json.put("lastUpdated", shelter.getLastUpdated().toString());
 
-        // Save shelter operators by username.
         JSONArray operators = new JSONArray();
         for (User operator : shelter.getShelterOperators()) {
             operators.add(operator.getUsername());
         }
-        shelterJSON.put("shelterOperators", operators);
+        json.put("shelterOperators", operators);
 
-        return shelterJSON;
+        return json;
+    }
+
+    /**
+     * Converts one User into JSON.
+     *
+     * @param user the user being converted
+     * @return the user as JSON
+     */
+    @SuppressWarnings("unchecked")
+    private static JSONObject userToJSON(User user) {
+        JSONObject json = new JSONObject();
+
+        json.put("userId", user.getUserId().toString());
+        json.put("firstName", user.getFirstName());
+        json.put("lastName", user.getLastName());
+        json.put("email", user.getEmail());
+        json.put("address", user.getAddress());
+        json.put("username", user.getUsername());
+        json.put("passwordHash", user.getPasswordHash());
+
+        JSONArray roles = new JSONArray();
+        for (AccountRole role : user.getRoles()) {
+            roles.add(role.toString().toLowerCase());
+        }
+        json.put("roles", roles);
+
+        JSONArray people = new JSONArray();
+        for (Person person : user.getAssociatedPersons()) {
+            people.add(personToJSON(person));
+        }
+        json.put("associatedPeople", people);
+
+        json.put("verificationStatus", user.getVerificationStatus().toString().toLowerCase());
+        json.put("lastKnownLocation", user.getLastKnownLocation());
+        json.put("safetyStatus", user.getSafetyStatus().toString().toLowerCase());
+        json.put("safetyStatusUpdatedAt", user.getSafetyStatusUpdatedAt().toString());
+
+        // VolunteerProfile has extra fields that a normal User does not have.
+        if (user instanceof VolunteerProfile) {
+            VolunteerProfile volunteer = (VolunteerProfile) user;
+            json.put("skills", new JSONArray());
+            ((JSONArray) json.get("skills")).addAll(volunteer.getSkills());
+            json.put("equipment", new JSONArray());
+            ((JSONArray) json.get("equipment")).addAll(volunteer.getEquipment());
+            json.put("backgroundCheckStatus",
+                    volunteer.getBackgroundCheckStatus().toString().toLowerCase());
+            json.put("transportationStatus", volunteer.hasTransportationAccess());
+            json.put("availabilityStatus",
+                    volunteer.getAvailabilityStatus().toString().toLowerCase());
+        }
+
+        return json;
+    }
+
+    /**
+     * Converts one associated Person into JSON.
+     *
+     * @param person the person being converted
+     * @return the person as JSON
+     */
+    @SuppressWarnings("unchecked")
+    private static JSONObject personToJSON(Person person) {
+        JSONObject json = new JSONObject();
+
+        json.put("firstName", person.getFirstName());
+        json.put("lastName", person.getLastName());
+        json.put("age", person.getAge());
+
+        JSONArray specialNeeds = new JSONArray();
+        specialNeeds.addAll(person.getSpecialNeeds());
+        json.put("specialNeeds", specialNeeds);
+
+        return json;
+    }
+
+    /**
+     * Converts one ReliefRequest into JSON.
+     *
+     * @param request the relief request being converted
+     * @return the request as JSON
+     */
+    @SuppressWarnings("unchecked")
+    private static JSONObject requestToJSON(ReliefRequest request) {
+        JSONObject json = new JSONObject();
+
+        json.put("requestId", request.getRequestId().toString());
+        json.put("type", request.getType().toString().toLowerCase());
+        json.put("status", request.getStatus().toString());
+        json.put("location", request.getLocation());
+        json.put("description", request.getDescription());
+        json.put("priority", request.getPriority().toString().toLowerCase());
+        json.put("dateSubmitted", request.getDateSubmitted().toString());
+        json.put("numberOfPeopleNeeded", request.getNumberOfPeopleNeeded());
+        json.put("numberOfAnimals", request.getNumberOfAnimals());
+        json.put("animalNotes", request.getAnimalNotes());
+        json.put("photoUrl", request.getPhotoUrl());
+        json.put("isSuspicious", request.isSuspicious());
+
+        if (request.getIsDuplicateOf() == null) {
+            json.put("isDuplicateOf", null);
+        } else {
+            json.put("isDuplicateOf", request.getIsDuplicateOf().getRequestId().toString());
+        }
+
+        if (request.getForHurricane() == null) {
+            json.put("forHurricane", null);
+        } else {
+            json.put("forHurricane", hurricaneToJSON(request.getForHurricane()));
+        }
+
+        return json;
+    }
+
+    /**
+     * Converts a HurricaneEvent used by a relief request into JSON.
+     *
+     * @param hurricane the hurricane being converted
+     * @return the hurricane as JSON
+     */
+    @SuppressWarnings("unchecked")
+    private static JSONObject hurricaneToJSON(HurricaneEvent hurricane) {
+        JSONObject json = new JSONObject();
+
+        json.put("name", hurricane.getName());
+        json.put("startDate", hurricane.getStartDate().toString());
+        json.put("endDate", hurricane.getEndDate().toString());
+        json.put("status", hurricane.getStatus().toString().toLowerCase());
+
+        JSONArray affectedAreas = new JSONArray();
+        affectedAreas.addAll(hurricane.getAffectedAreas());
+        json.put("affectedAreas", affectedAreas);
+
+        return json;
     }
 }
