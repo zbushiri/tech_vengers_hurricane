@@ -1,22 +1,19 @@
 package model;
 
 import java.util.ArrayList;
+import java.io.FileReader;
+
+import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
+import org.json.simple.parser.JSONParser;
 
 /**
  * Loads project data from JSON files.
  *
  * @author Tavien Smith
  */
-public class DataLoader {
-    private static final String SHELTER_FILE = "../json/shelters.json";
-    private static final String USER_FILE = "../json/users.json";
-    private static final String REQUEST_FILE = "../json/requests.json";
-    /**
-     * Prevents a DataLoader object from being created.
-     */
+public class DataLoader extends DataConstants {
     private DataLoader() {
-
     }
 
     /**
@@ -28,7 +25,19 @@ public class DataLoader {
 
         ArrayList<Shelter> shelters = new ArrayList<>();
 
-        // TODO: Read SHELTER_FILE and add each shelter to the list.
+        try {
+            FileReader reader = new FileReader(SHELTER_FILE);
+            JSONArray sheltersJSON = (JSONArray) new JSONParser().parse(reader);
+
+            for (int i = 0; i < sheltersJSON.size(); i++) {
+                JSONObject shelterJSON = (JSONObject) sheltersJSON.get(i);
+                String name = (String) shelterJSON.get("name");
+
+                System.out.println(name);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return shelters;
     }
 
@@ -41,7 +50,25 @@ public class DataLoader {
     public static ArrayList<User> getUsers() {
         ArrayList<User> users = new ArrayList<>();
 
-        // TODO: Read USER_FILE and add each user to the list.
+        try {
+            FileReader reader = new FileReader(USER_FILE);
+            JSONArray usersJSON = (JSONArray) new JSONParser().parse(reader);
+
+            for (int i = 0; i < usersJSON.size(); i++) {
+                JSONObject userJSON = (JSONObject) usersJSON.get(i);
+                String username = (String) userJSON.get(USER_USERNAME);
+                String password = (String) userJSON.get(USER_PASSWORD);
+
+                User user = new User(username, password);
+                user.setFirstName((String) userJSON.get(USER_FIRST_NAME));
+                user.setLastName((String) userJSON.get(USER_LAST_NAME));
+                user.setEmail((String) userJSON.get(USER_EMAIL));
+                user.setAddress((String) userJSON.get(USER_ADDRESS));
+                users.add(user);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return users;
     }
 
@@ -53,7 +80,23 @@ public class DataLoader {
     public static ArrayList<ReliefRequest> getRequests() {
         ArrayList<ReliefRequest> requests = new ArrayList<>();
 
-        // TODO: Read REQUEST_FILE and add each request to the list. 
+        // TODO: Read REQUEST_FILE and add each request to the list.
         return requests;
+    }
+
+    /**
+     * Loads the Hurricane Event from the hurricanes JSON file.
+     * 
+     * @return the list of hurricanes or an empty list if none load.
+     */
+    public static ArrayList<HurricaneEvent> getHurricanes() {
+        ArrayList<HurricaneEvent> hurricanes = new ArrayList<>();
+
+        // TODO: Read HURRICANE_FILE and add each hurricane to the list.
+        return hurricanes;
+    }
+
+    public static void main(String[] args) {
+        System.out.println("Users loaded: " + getUsers().size());
     }
 }

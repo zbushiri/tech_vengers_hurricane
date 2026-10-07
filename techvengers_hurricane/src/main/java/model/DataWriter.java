@@ -15,17 +15,8 @@ import org.json.simple.JSONObject;
  *
  * @author Zaki
  */
-public class DataWriter {
-    private static final String SHELTER_FILE = "../json/shelters.json";
-    private static final String USER_FILE = "../json/users.json";
-    private static final String REQUEST_FILE = "../json/requests.json";
-
-    /**
-     * Prevents a DataWriter object from being created.
-     */
-    private DataWriter() {
-    }
-
+public class DataWriter extends DataConstants {
+    private DataWriter() { }
     /**
      * Saves all shelters to shelters.json.
      *
@@ -134,13 +125,13 @@ public class DataWriter {
     private static JSONObject userToJSON(User user) {
         JSONObject json = new JSONObject();
 
-        json.put("userId", user.getUserId().toString());
-        json.put("firstName", user.getFirstName());
-        json.put("lastName", user.getLastName());
-        json.put("email", user.getEmail());
-        json.put("address", user.getAddress());
-        json.put("username", user.getUsername());
-        json.put("passwordHash", user.getPasswordHash());
+        json.put(USER_ID, user.getUserId().toString());
+        json.put(USER_FIRST_NAME, user.getFirstName());
+        json.put(USER_LAST_NAME, user.getLastName());
+        json.put(USER_EMAIL, user.getEmail());
+        json.put(USER_ADDRESS, user.getAddress());
+        json.put(USER_USERNAME, user.getUsername());
+        json.put(USER_PASSWORD, user.getPasswordHash());
 
         JSONArray roles = new JSONArray();
         for (AccountRole role : safeList(user.getRoles())) {
