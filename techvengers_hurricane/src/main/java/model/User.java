@@ -4,6 +4,11 @@ import java.util.List;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+/**
+ * User's profile and account information.
+ * @author CharlesNewhouse
+ */
+
 public class User {
     private UUID userId;
     private String firstName;
