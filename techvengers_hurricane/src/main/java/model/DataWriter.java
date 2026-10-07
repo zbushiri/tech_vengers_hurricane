@@ -108,7 +108,7 @@ public class DataWriter {
         json.put("status", shelter.getStatus().toString().toLowerCase());
 
         JSONArray accommodations = new JSONArray();
-        for (Accommodation accommodation : shelter.getAccommodations()) {
+        for (Accommodation accommodation : safeList(shelter.getAccommodations())) {
             accommodations.add(accommodation.toString().toLowerCase());
         }
         json.put("accommodations", accommodations);
@@ -116,7 +116,7 @@ public class DataWriter {
         json.put("lastUpdated", shelter.getLastUpdated().toString());
 
         JSONArray operators = new JSONArray();
-        for (User operator : shelter.getShelterOperators()) {
+        for (User operator : safeList(shelter.getShelterOperators())) {
             operators.add(operator.getUsername());
         }
         json.put("shelterOperators", operators);
@@ -143,13 +143,13 @@ public class DataWriter {
         json.put("passwordHash", user.getPasswordHash());
 
         JSONArray roles = new JSONArray();
-        for (AccountRole role : user.getRoles()) {
+        for (AccountRole role : safeList(user.getRoles())) {
             roles.add(role.toString().toLowerCase());
         }
         json.put("roles", roles);
 
         JSONArray people = new JSONArray();
-        for (Person person : user.getAssociatedPersons()) {
+        for (Person person : safeList(user.getAssociatedPersons())) {
             people.add(personToJSON(person));
         }
         json.put("associatedPeople", people);
@@ -163,9 +163,9 @@ public class DataWriter {
         if (user instanceof VolunteerProfile) {
             VolunteerProfile volunteer = (VolunteerProfile) user;
             json.put("skills", new JSONArray());
-            ((JSONArray) json.get("skills")).addAll(volunteer.getSkills());
+            ((JSONArray) json.get("skills")).addAll(safeList(volunteer.getSkills()));
             json.put("equipment", new JSONArray());
-            ((JSONArray) json.get("equipment")).addAll(volunteer.getEquipment());
+            ((JSONArray) json.get("equipment")).addAll(safeList(volunteer.getEquipment()));
             json.put("backgroundCheckStatus",
                     volunteer.getBackgroundCheckStatus().toString().toLowerCase());
             json.put("transportationStatus", volunteer.hasTransportationAccess());
@@ -191,7 +191,7 @@ public class DataWriter {
         json.put("age", person.getAge());
 
         JSONArray specialNeeds = new JSONArray();
-        specialNeeds.addAll(person.getSpecialNeeds());
+        specialNeeds.addAll(safeList(person.getSpecialNeeds()));
         json.put("specialNeeds", specialNeeds);
 
         return json;
@@ -251,9 +251,19 @@ public class DataWriter {
         json.put("status", hurricane.getStatus().toString().toLowerCase());
 
         JSONArray affectedAreas = new JSONArray();
-        affectedAreas.addAll(hurricane.getAffectedAreas());
+        affectedAreas.addAll(safeList(hurricane.getAffectedAreas()));
         json.put("affectedAreas", affectedAreas);
 
         return json;
+    }
+    /**
+     * Returns an empty list when a model list has not been set yet.
+     * This keeps saving simple and prevents null list errors.
+     *
+     * @param list the list being checked
+     * @return the original list, or an empty list when null
+     */
+    private static <T> java.util.List<T> safeList(java.util.List<T> list) {
+        return list == null ? java.util.Collections.emptyList() : list;
     }
 }
