@@ -4,16 +4,15 @@
   <b>Team Tech-vengers</b> · CSCE 247 Software Engineering · University of South Carolina
 </p>
 
-Gamecock Relief Network is a Java disaster-relief system for residents, volunteers, shelter operators, and coordinators. The current project includes JavaFX screens, model classes, JSON data access, a System/Facade class, a Driver, sample data, and the original requirements and UML documents.
+Gamecock Relief Network is a Java disaster-relief system for residents, volunteers, shelter operators, and coordinators. The current project includes JavaFX screens, model classes, JSON data access, sample data, and the original requirements and UML documents.
 
 ## Build and Run
 
 Use Java 25 and Maven:
 
 ```bash
-cd hurricanejavafx
+cd techvengers_hurricane
 mvn compile
-mvn exec:java
 ```
 
 ## Project Documents
@@ -31,8 +30,6 @@ mvn exec:java
 ## Project Board
 
 📌 [Project Board](https://github.com/users/zbushiri/projects/2/views/1)
-
-📝 [Product Backlog](docs/PROJECT_BOARD_BACKLOG.md)
 
 `PB` means **Product Backlog**.
 
