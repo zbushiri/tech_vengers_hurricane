@@ -1,10 +1,10 @@
 package model;
 
-import java.util.ArrayList;
 import java.io.FileReader;
+import java.util.ArrayList;
 
-import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 /**
@@ -21,9 +21,8 @@ public class DataLoader extends DataConstants {
      * 
      * @return the list of shelters or an empty list if none load
      */
-    public static ArrayList<Shelter> getShelters() {
-
-        ArrayList<Shelter> shelters = new ArrayList<>();
+    public static ShelterList getShelters() {
+        ShelterList shelters = ShelterList.getInstance();
 
         try {
             FileReader reader = new FileReader(SHELTER_FILE);
@@ -47,8 +46,8 @@ public class DataLoader extends DataConstants {
      * 
      * @return the list of users or an empty list if none load
      */
-    public static ArrayList<User> getUsers() {
-        ArrayList<User> users = new ArrayList<>();
+    public static UserList getUsers() {
+        UserList users = UserList.getInstance();
 
         try {
             FileReader reader = new FileReader(USER_FILE);
@@ -64,7 +63,7 @@ public class DataLoader extends DataConstants {
                 user.setLastName((String) userJSON.get(USER_LAST_NAME));
                 user.setEmail((String) userJSON.get(USER_EMAIL));
                 user.setAddress((String) userJSON.get(USER_ADDRESS));
-                users.add(user);
+                users.addUser(user);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -77,8 +76,8 @@ public class DataLoader extends DataConstants {
      * 
      * @return the list of requests or an empty list if none load
      */
-    public static ArrayList<ReliefRequest> getRequests() {
-        ArrayList<ReliefRequest> requests = new ArrayList<>();
+    public static ReliefRequestCatalog getRequests() {
+        ReliefRequestCatalog requests = ReliefRequestCatalog.getInstance();
 
         // TODO: Read REQUEST_FILE and add each request to the list.
         return requests;
@@ -97,6 +96,10 @@ public class DataLoader extends DataConstants {
     }
 
     public static void main(String[] args) {
-        System.out.println("Users loaded: " + getUsers().size());
+        int count = 0;
+        for (User user : getUsers().getUsers()) {
+            count++;
+        }
+        System.out.println("Users loaded: " + count);
     }
 }
