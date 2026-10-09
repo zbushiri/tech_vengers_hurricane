@@ -11,9 +11,7 @@ public class HurricaneReliefApp {
         userList = UserList.getInstance();
         reliefRequestCatalog = ReliefRequestCatalog.getInstance();
         shelterList = ShelterList.getInstance();
-        /*dataLoader = new DataLoader();
-        dataWriter = new DataWriter();
-        currentUser = null;*/
+        currentUser = null;
     }
     public void initialize() {
         userList.getUsers();
@@ -21,23 +19,23 @@ public class HurricaneReliefApp {
             reliefRequestCatalog = ReliefRequestCatalog.getInstance();
         }
         shelterList = ShelterList.getInstance();
-        /*dataLoader = new DataLoader();
-        dataWriter = new DataWriter();
-        currentUser = null;*/
+        currentUser = null;
     }
     public void run() {
         // Main application logic goes here
     }
     public void loadData() {
         dataLoader.getUsers();
-        dataLoader.getRequests();
+        if (currentUser.getVerificationStatus() == VerificationStatus.VERIFIED) {
+            dataLoader.getRequests();
+        }
         dataLoader.getHurricanes();
         System.out.println("Data loaded successfully.");
     }
     public void saveData() {
         dataWriter.saveUsers(userList.getUsers());
         if (currentUser.getVerificationStatus() == VerificationStatus.VERIFIED) {
-            //dataWriter.saveRequests(reliefRequestCatalog.getOpenRequestsForVolunteers());
+            dataWriter.saveRequests(reliefRequestCatalog.getOpenRequestsForVolunteers());
         }
     }
     public boolean login(String username, String password) {
@@ -59,7 +57,7 @@ public class HurricaneReliefApp {
             System.out.println("No user is currently logged in.");
         }
     }
-    /*public boolean createAccount(AccountRole role, Map details, String username = "", String password = "") {
+    public boolean createAccount(AccountRole role, Map details, String username = "", String password = "") {
         for (User user : userList.getUsers()) {
             if (user.getUsername().equals(username)) {
                 System.out.println("Username already exists. Please choose a different username.");
@@ -70,8 +68,8 @@ public class HurricaneReliefApp {
         userList.addUser(newUser);
         System.out.println("Account created successfully for user: " + username);
         return true;
-    }*/
-   /*public boolean submitReliefRequest(RequestType type, String location, String description, boolean forVolunteers) {
+    }
+   public boolean submitReliefRequest(RequestType type, String location, String description, boolean forVolunteers) {
         if (currentUser != null && currentUser.getVerificationStatus() == VerificationStatus.VERIFIED) {
             reliefRequestCatalog.submitRequest(new ReliefRequest(type, location, description, forVolunteers));
             System.out.println("Relief request submitted successfully.");
@@ -80,7 +78,7 @@ public class HurricaneReliefApp {
             System.out.println("You must be logged in and verified to submit a relief request.");
             return false;
         }
-    }*/
+    }
    public List<Shelter> findNearestShelters(String location, double radiusMiles) {
         return shelterList.searchByProximity(location, radiusMiles);
     }
