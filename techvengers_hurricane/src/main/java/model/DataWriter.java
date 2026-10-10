@@ -17,52 +17,68 @@ import org.json.simple.JSONObject;
  */
 public class DataWriter extends DataConstants {
     private DataWriter() { }
+
     /**
      * Saves all shelters to shelters.json.
      *
      * @param shelters the shelters that will be saved
+     * @return true if the shelters were saved, otherwise false
      */
     @SuppressWarnings("unchecked")
-    public static void saveShelters(ArrayList<Shelter> shelters) {
+    public static boolean saveShelters(ArrayList<Shelter> shelters) {
+        if (shelters == null) {
+            return false;
+        }
+
         JSONArray shelterArray = new JSONArray();
 
         for (Shelter shelter : shelters) {
             shelterArray.add(shelterToJSON(shelter));
         }
 
-        writeFile(SHELTER_FILE, shelterArray, "shelters");
+        return writeFile(SHELTER_FILE, shelterArray, "shelters");
     }
 
     /**
      * Saves all users to users.json.
      *
      * @param users the users that will be saved
+     * @return true if the users were saved, otherwise false
      */
     @SuppressWarnings("unchecked")
-    public static void saveUsers(ArrayList<User> users) {
+    public static boolean saveUsers(ArrayList<User> users) {
+        if (users == null) {
+            return false;
+        }
+
         JSONArray userArray = new JSONArray();
 
         for (User user : users) {
             userArray.add(userToJSON(user));
         }
 
-        writeFile(USER_FILE, userArray, "users");
+        return writeFile(USER_FILE, userArray, "users");
     }
 
     /**
      * Saves all relief requests to requests.json.
      *
      * @param requests the relief requests that will be saved
+     * @return true if the requests were saved, otherwise false
      */
     @SuppressWarnings("unchecked")
-    public static void saveRequests(ArrayList<ReliefRequest> requests) {
+    public static boolean saveRequests(ArrayList<ReliefRequest> requests) {
+        if (requests == null) {
+            return false;
+        }
+
         JSONArray requestArray = new JSONArray();
 
         for (ReliefRequest request : requests) {
             requestArray.add(requestToJSON(request));
         }
 
-        writeFile(REQUEST_FILE, requestArray, "requests");
+        return writeFile(REQUEST_FILE, requestArray, "requests");
     }
 
     /**
@@ -71,13 +87,16 @@ public class DataWriter extends DataConstants {
      * @param fileName the JSON file being written
      * @param data the JSON data being saved
      * @param dataName simple name used for the message
+     * @return true if the file was written, otherwise false
      */
-    private static void writeFile(String fileName, JSONArray data, String dataName) {
+    private static boolean writeFile(String fileName, JSONArray data, String dataName) {
         try (FileWriter file = new FileWriter(fileName)) {
             file.write(data.toJSONString());
             System.out.println(dataName + " saved successfully.");
+            return true;
         } catch (IOException exception) {
             System.out.println("Could not save " + dataName + ".");
+            return false;
         }
     }
 
@@ -204,7 +223,7 @@ public class DataWriter extends DataConstants {
         json.put("location", request.getLocation());
         json.put("description", request.getDescription());
         json.put("priority", request.getPriority().toString().toLowerCase());
-        json.put("dateSubmitted", request.getDateSubmitted().toString());
+        json.put("dateSubmitted", request.getDateSubmitted().toInstant().toString());
         json.put("numberOfPeopleNeeded", request.getNumberOfPeopleNeeded());
         json.put("numberOfAnimals", request.getNumberOfAnimals());
         json.put("animalNotes", request.getAnimalNotes());
@@ -237,8 +256,8 @@ public class DataWriter extends DataConstants {
         JSONObject json = new JSONObject();
 
         json.put("name", hurricane.getName());
-        json.put("startDate", hurricane.getStartDate().toString());
-        json.put("endDate", hurricane.getEndDate().toString());
+        json.put("startDate", hurricane.getStartDate().toInstant().toString());
+        json.put("endDate", hurricane.getEndDate().toInstant().toString());
         json.put("status", hurricane.getStatus().toString().toLowerCase());
 
         JSONArray affectedAreas = new JSONArray();
