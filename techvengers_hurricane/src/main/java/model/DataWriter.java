@@ -2,18 +2,19 @@ package model;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-/** Converts project objects to JSON and saves them to files. */
+// * Saves project information in JSON files.
 public class DataWriter extends DataConstants {
     private DataWriter() { }
 
-    /** Saves all shelters to shelters.json. */
-    public static boolean saveShelters(ArrayList<Shelter> shelters) {
+    // * Saves every shelter.
+    public static boolean saveShelters(List<Shelter> shelters) {
         if (shelters == null) {
+            // ! There is no list to save.
             return false;
         }
 
@@ -26,9 +27,10 @@ public class DataWriter extends DataConstants {
         return writeFile(SHELTER_FILE, shelterArray, "shelters");
     }
 
-    /** Saves all users to users.json. */
-    public static boolean saveUsers(ArrayList<User> users) {
+    // * Saves every user.
+    public static boolean saveUsers(List<User> users) {
         if (users == null) {
+            // ! There is no list to save.
             return false;
         }
 
@@ -41,9 +43,10 @@ public class DataWriter extends DataConstants {
         return writeFile(USER_FILE, userArray, "users");
     }
 
-    /** Saves all relief requests to requests.json. */
-    public static boolean saveRequests(ArrayList<ReliefRequest> requests) {
+    // * Saves every relief request.
+    public static boolean saveRequests(List<ReliefRequest> requests) {
         if (requests == null) {
+            // ! There is no list to save.
             return false;
         }
 
@@ -56,7 +59,7 @@ public class DataWriter extends DataConstants {
         return writeFile(REQUEST_FILE, requestArray, "requests");
     }
 
-    /** Writes a finished JSON array to a file. */
+    // * Writes the JSON information to a file.
     private static boolean writeFile(String fileName, JSONArray data, String dataName) {
         try (FileWriter file = new FileWriter(fileName)) {
             file.write(data.toJSONString());
@@ -68,7 +71,7 @@ public class DataWriter extends DataConstants {
         }
     }
 
-    /** Converts one shelter into JSON. */
+    // * Builds the JSON for one shelter.
     private static JSONObject shelterToJSON(Shelter shelter) {
         JSONObject json = new JSONObject();
 
@@ -100,7 +103,7 @@ public class DataWriter extends DataConstants {
         return json;
     }
 
-    /** Converts one user into JSON. */
+    // * Builds the JSON for one user.
     private static JSONObject userToJSON(User user) {
         JSONObject json = new JSONObject();
 
@@ -133,7 +136,7 @@ public class DataWriter extends DataConstants {
         json.put("safetyStatus", user.getSafetyStatus().toString().toLowerCase());
         json.put("safetyStatusUpdatedAt", user.getSafetyStatusUpdatedAt().toString());
 
-        // VolunteerProfile has extra fields that a normal User does not have.
+        // * Adds information that only volunteers have.
         if (user instanceof VolunteerProfile) {
             VolunteerProfile volunteer = (VolunteerProfile) user;
 
@@ -159,7 +162,7 @@ public class DataWriter extends DataConstants {
         return json;
     }
 
-    /** Converts one associated person into JSON. */
+    // * Builds the JSON for one person.
     private static JSONObject personToJSON(Person person) {
         JSONObject json = new JSONObject();
 
@@ -176,7 +179,7 @@ public class DataWriter extends DataConstants {
         return json;
     }
 
-    /** Converts one relief request into JSON. */
+    // * Builds the JSON for one relief request.
     private static JSONObject requestToJSON(ReliefRequest request) {
         JSONObject json = new JSONObject();
 
@@ -208,7 +211,7 @@ public class DataWriter extends DataConstants {
         return json;
     }
 
-    /** Converts one hurricane into JSON. */
+    // * Builds the JSON for one hurricane.
     private static JSONObject hurricaneToJSON(HurricaneEvent hurricane) {
         JSONObject json = new JSONObject();
 
