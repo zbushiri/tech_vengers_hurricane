@@ -7,24 +7,11 @@ import java.util.ArrayList;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-/**
- * Saves project data to JSON files.
- *
- * DataWriter takes Java objects and converts them into JSON
- * so changes can be saved after the program closes.
- *
- * @author Zaki
- */
+/** Converts project objects to JSON and saves them to files. */
 public class DataWriter extends DataConstants {
     private DataWriter() { }
 
-    /**
-     * Saves all shelters to shelters.json.
-     *
-     * @param shelters the shelters that will be saved
-     * @return true if the shelters were saved, otherwise false
-     */
-    @SuppressWarnings("unchecked")
+    /** Saves all shelters to shelters.json. */
     public static boolean saveShelters(ArrayList<Shelter> shelters) {
         if (shelters == null) {
             return false;
@@ -39,13 +26,7 @@ public class DataWriter extends DataConstants {
         return writeFile(SHELTER_FILE, shelterArray, "shelters");
     }
 
-    /**
-     * Saves all users to users.json.
-     *
-     * @param users the users that will be saved
-     * @return true if the users were saved, otherwise false
-     */
-    @SuppressWarnings("unchecked")
+    /** Saves all users to users.json. */
     public static boolean saveUsers(ArrayList<User> users) {
         if (users == null) {
             return false;
@@ -60,13 +41,7 @@ public class DataWriter extends DataConstants {
         return writeFile(USER_FILE, userArray, "users");
     }
 
-    /**
-     * Saves all relief requests to requests.json.
-     *
-     * @param requests the relief requests that will be saved
-     * @return true if the requests were saved, otherwise false
-     */
-    @SuppressWarnings("unchecked")
+    /** Saves all relief requests to requests.json. */
     public static boolean saveRequests(ArrayList<ReliefRequest> requests) {
         if (requests == null) {
             return false;
@@ -81,14 +56,7 @@ public class DataWriter extends DataConstants {
         return writeFile(REQUEST_FILE, requestArray, "requests");
     }
 
-    /**
-     * Writes a finished JSON array to a file.
-     *
-     * @param fileName the JSON file being written
-     * @param data the JSON data being saved
-     * @param dataName simple name used for the message
-     * @return true if the file was written, otherwise false
-     */
+    /** Writes a finished JSON array to a file. */
     private static boolean writeFile(String fileName, JSONArray data, String dataName) {
         try (FileWriter file = new FileWriter(fileName)) {
             file.write(data.toJSONString());
@@ -100,13 +68,7 @@ public class DataWriter extends DataConstants {
         }
     }
 
-    /**
-     * Converts one Shelter into JSON.
-     *
-     * @param shelter the shelter being converted
-     * @return the shelter as JSON
-     */
-    @SuppressWarnings("unchecked")
+    /** Converts one shelter into JSON. */
     private static JSONObject shelterToJSON(Shelter shelter) {
         JSONObject json = new JSONObject();
 
@@ -118,29 +80,27 @@ public class DataWriter extends DataConstants {
         json.put("status", shelter.getStatus().toString().toLowerCase());
 
         JSONArray accommodations = new JSONArray();
-        for (Accommodation accommodation : safeList(shelter.getAccommodations())) {
-            accommodations.add(accommodation.toString().toLowerCase());
+        if (shelter.getAccommodations() != null) {
+            for (Accommodation accommodation : shelter.getAccommodations()) {
+                accommodations.add(accommodation.toString().toLowerCase());
+            }
         }
         json.put("accommodations", accommodations);
 
         json.put("lastUpdated", shelter.getLastUpdated().toString());
 
         JSONArray operators = new JSONArray();
-        for (User operator : safeList(shelter.getShelterOperators())) {
-            operators.add(operator.getUsername());
+        if (shelter.getShelterOperators() != null) {
+            for (User operator : shelter.getShelterOperators()) {
+                operators.add(operator.getUsername());
+            }
         }
         json.put("shelterOperators", operators);
 
         return json;
     }
 
-    /**
-     * Converts one User into JSON.
-     *
-     * @param user the user being converted
-     * @return the user as JSON
-     */
-    @SuppressWarnings("unchecked")
+    /** Converts one user into JSON. */
     private static JSONObject userToJSON(User user) {
         JSONObject json = new JSONObject();
 
@@ -153,14 +113,18 @@ public class DataWriter extends DataConstants {
         json.put(USER_PASSWORD, user.getPasswordHash());
 
         JSONArray roles = new JSONArray();
-        for (AccountRole role : safeList(user.getRoles())) {
-            roles.add(role.toString().toLowerCase());
+        if (user.getRoles() != null) {
+            for (AccountRole role : user.getRoles()) {
+                roles.add(role.toString().toLowerCase());
+            }
         }
         json.put("roles", roles);
 
         JSONArray people = new JSONArray();
-        for (Person person : safeList(user.getAssociatedPersons())) {
-            people.add(personToJSON(person));
+        if (user.getAssociatedPersons() != null) {
+            for (Person person : user.getAssociatedPersons()) {
+                people.add(personToJSON(person));
+            }
         }
         json.put("associatedPeople", people);
 
@@ -172,10 +136,19 @@ public class DataWriter extends DataConstants {
         // VolunteerProfile has extra fields that a normal User does not have.
         if (user instanceof VolunteerProfile) {
             VolunteerProfile volunteer = (VolunteerProfile) user;
-            json.put("skills", new JSONArray());
-            ((JSONArray) json.get("skills")).addAll(safeList(volunteer.getSkills()));
-            json.put("equipment", new JSONArray());
-            ((JSONArray) json.get("equipment")).addAll(safeList(volunteer.getEquipment()));
+
+            JSONArray skills = new JSONArray();
+            if (volunteer.getSkills() != null) {
+                skills.addAll(volunteer.getSkills());
+            }
+            json.put("skills", skills);
+
+            JSONArray equipment = new JSONArray();
+            if (volunteer.getEquipment() != null) {
+                equipment.addAll(volunteer.getEquipment());
+            }
+            json.put("equipment", equipment);
+
             json.put("backgroundCheckStatus",
                     volunteer.getBackgroundCheckStatus().toString().toLowerCase());
             json.put("transportationStatus", volunteer.hasTransportationAccess());
@@ -186,13 +159,7 @@ public class DataWriter extends DataConstants {
         return json;
     }
 
-    /**
-     * Converts one associated Person into JSON.
-     *
-     * @param person the person being converted
-     * @return the person as JSON
-     */
-    @SuppressWarnings("unchecked")
+    /** Converts one associated person into JSON. */
     private static JSONObject personToJSON(Person person) {
         JSONObject json = new JSONObject();
 
@@ -201,19 +168,15 @@ public class DataWriter extends DataConstants {
         json.put("age", person.getAge());
 
         JSONArray specialNeeds = new JSONArray();
-        specialNeeds.addAll(safeList(person.getSpecialNeeds()));
+        if (person.getSpecialNeeds() != null) {
+            specialNeeds.addAll(person.getSpecialNeeds());
+        }
         json.put("specialNeeds", specialNeeds);
 
         return json;
     }
 
-    /**
-     * Converts one ReliefRequest into JSON.
-     *
-     * @param request the relief request being converted
-     * @return the request as JSON
-     */
-    @SuppressWarnings("unchecked")
+    /** Converts one relief request into JSON. */
     private static JSONObject requestToJSON(ReliefRequest request) {
         JSONObject json = new JSONObject();
 
@@ -245,13 +208,7 @@ public class DataWriter extends DataConstants {
         return json;
     }
 
-    /**
-     * Converts a HurricaneEvent used by a relief request into JSON.
-     *
-     * @param hurricane the hurricane being converted
-     * @return the hurricane as JSON
-     */
-    @SuppressWarnings("unchecked")
+    /** Converts one hurricane into JSON. */
     private static JSONObject hurricaneToJSON(HurricaneEvent hurricane) {
         JSONObject json = new JSONObject();
 
@@ -261,19 +218,11 @@ public class DataWriter extends DataConstants {
         json.put("status", hurricane.getStatus().toString().toLowerCase());
 
         JSONArray affectedAreas = new JSONArray();
-        affectedAreas.addAll(safeList(hurricane.getAffectedAreas()));
+        if (hurricane.getAffectedAreas() != null) {
+            affectedAreas.addAll(hurricane.getAffectedAreas());
+        }
         json.put("affectedAreas", affectedAreas);
 
         return json;
-    }
-    /**
-     * Returns an empty list when a model list has not been set yet.
-     * This keeps saving simple and prevents null list errors.
-     *
-     * @param list the list being checked
-     * @return the original list, or an empty list when null
-     */
-    private static <T> java.util.List<T> safeList(java.util.List<T> list) {
-        return list == null ? java.util.Collections.emptyList() : list;
     }
 }
