@@ -1,4 +1,5 @@
 package model;
+import java.util.ArrayList;
 import java.util.List;
 
 public class VolunteerProfile extends User {
@@ -12,7 +13,7 @@ public class VolunteerProfile extends User {
                             boolean transportationAccess, AvailabilityStatus availabilityStatus) {
         
         // TODO: Initialize the User part 
-        super("", "");
+        super("", "", "", "", "", "", new ArrayList<>(), null);
         setSkills(skills);
         setEquipment(equipment);
         setBackgroundCheckStatus(backgroundCheckStatus);
