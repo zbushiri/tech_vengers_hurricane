@@ -55,14 +55,17 @@ public class DataLoader extends DataConstants {
 
             for (int i = 0; i < usersJSON.size(); i++) {
                 JSONObject userJSON = (JSONObject) usersJSON.get(i);
+                String firstName = (String) userJSON.get(USER_FIRST_NAME);
+                String lastName = (String) userJSON.get(USER_LAST_NAME);
+                String email = (String) userJSON.get(USER_EMAIL);
+                String address = (String) userJSON.get(USER_ADDRESS);
                 String username = (String) userJSON.get(USER_USERNAME);
                 String password = (String) userJSON.get(USER_PASSWORD);
 
-                User user = new User(username, password);
-                user.setFirstName((String) userJSON.get(USER_FIRST_NAME));
-                user.setLastName((String) userJSON.get(USER_LAST_NAME));
-                user.setEmail((String) userJSON.get(USER_EMAIL));
-                user.setAddress((String) userJSON.get(USER_ADDRESS));
+                ArrayList<AccountRole> roles = new ArrayList<>();
+                String lastKnownLocation = null;
+
+                User user = new User(firstName, lastName, email, address, username, password, roles, lastKnownLocation); 
                 users.addUser(user);
             }
         } catch (Exception e) {
