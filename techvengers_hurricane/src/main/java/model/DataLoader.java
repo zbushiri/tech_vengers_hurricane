@@ -58,7 +58,7 @@ public class DataLoader extends DataConstants {
                 String username = (String) userJSON.get(USER_USERNAME);
                 String password = (String) userJSON.get(USER_PASSWORD);
 
-                User user = new User(username, password);
+                User user = new User(username, password, "", "", "", "", null, ""); //we need to make more constructors for the user class to make this work
                 user.setFirstName((String) userJSON.get(USER_FIRST_NAME));
                 user.setLastName((String) userJSON.get(USER_LAST_NAME));
                 user.setEmail((String) userJSON.get(USER_EMAIL));

@@ -1,6 +1,5 @@
 package model;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -50,13 +49,11 @@ public class ShelterList {
         }
         return nearbyShelters;
     }
+
     private double calculateDistance(Location start, Location end) {
-        BigDecimal startLat = new BigDecimal(start.latitude);
-        BigDecimal startLon = new BigDecimal(start.longitude);
-        BigDecimal endLat = new BigDecimal(end.latitude);
-        BigDecimal endLon = new BigDecimal(end.longitude);
         return Math.sqrt(Math.pow(start.latitude - end.latitude, 2) + Math.pow(start.longitude - end.longitude, 2));
     }
+
     public ArrayList<Shelter> filterByAccommodation(Accommodation criteria) {
         ArrayList<Shelter> filteredShelters = new ArrayList<>();
         for (Shelter shelter : shelters) {
