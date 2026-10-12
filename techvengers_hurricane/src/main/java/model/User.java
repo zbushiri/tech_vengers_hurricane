@@ -17,32 +17,34 @@ public class User {
     private String address;
     private String username;
     private String passwordHash;
-    private List <AccountRole> roles;
-    private List <Person> associatedPersons;
+    private ArrayList <AccountRole> roles;
+    private ArrayList <Person> associatedPersons;
     private VerificationStatus verificationStatus;
     private String lastKnownLocation;
     private SafetyStatusType safetyStatus;
     private LocalDateTime safetyStatusUpdatedAt;
 
-    public User(String username, String passwordHash) {
+    public User(String firstName, String lastName, String email,
+        String address, String username, String passwordHash, ArrayList<AccountRole> roles,
+        String lastKnownLocation) {
         setUserId(UUID.randomUUID());
-        setFirstName("");
-        setLastName("");
-        setEmail("");
-        setAddress("");
+        setFirstName(firstName);
+        setLastName(lastName);
+        setEmail(email);
+        setAddress(address);
         setUsername(username);
         setPasswordHash(passwordHash);
-        setRoles(new ArrayList<>());
+        setRoles(roles);
         setAssociatedPersons(new ArrayList<>());
         setVerificationStatus(VerificationStatus.UNVERIFIED);
-        setLastKnownLocation("");
+        setLastKnownLocation(lastKnownLocation);
         setSafetyStatus(SafetyStatusType.UNKNOWN);
         setSafetyStatusUpdatedAt(LocalDateTime.now());
     }
 
     public User(UUID userId, String firstName, String lastName, String email, 
-        String address, String username, String passwordHash, List<AccountRole> roles, 
-        List<Person> associatedPersons, VerificationStatus verificationStatus, String lastKnownLocation, 
+        String address, String username, String passwordHash, ArrayList<AccountRole> roles, 
+        ArrayList<Person> associatedPersons, VerificationStatus verificationStatus, String lastKnownLocation, 
         SafetyStatusType safetyStatus, LocalDateTime safetyStatusUpdatedAt) {
         setUserId(userId);
         setFirstName(firstName);
@@ -59,24 +61,10 @@ public class User {
         setSafetyStatusUpdatedAt(safetyStatusUpdatedAt);
     }
 
-    public boolean login(String username, String passwordHash) {
-        return this.username.equals(username) && this.passwordHash.equals(passwordHash);
-    }
-
-    public void logout() {
-        this.username = null;
-        this.passwordHash = null;
-    }
-
 
     // TODO: Clarify the purpose of this method and implement it accordingly
     public void updateProfile() {
         System.out.println("Updating profile for user: " + this.username);
-    }
-
-    public static void submitReliefRequest(ReliefRequest request) {
-        // Implementation for submitting a relief request goes here
-        new ReliefRequest(request);
     }
 
     public boolean verifyIdentity(VerificationMethod verificationMethod) {
@@ -97,18 +85,6 @@ public class User {
     public static void getLatestInfo(HurricaneEvent hurricane) {
         System.out.println(hurricane.toString());
     }
-
-   public static void searchGuidanceContent() {
-        // TODO: Implementation for searching guidance content goes here
-        System.out.println("Searching guidance content...");
-
-   }
-
-   public ArrayList<Shelter> findNearestShelters() {
-       // TODO: Implementation for finding nearest shelter goes here
-       return new ArrayList<Shelter>();
-       
-   }
 
     public UUID getUserId() {
         return userId;
@@ -190,11 +166,11 @@ public class User {
         this.passwordHash = passwordHash;
     }
 
-    public void setRoles(List<AccountRole> roles) {
+    public void setRoles(ArrayList<AccountRole> roles) {
         this.roles = roles;
     }
 
-    public void setAssociatedPersons(List<Person> associatedPersons) {
+    public void setAssociatedPersons(ArrayList<Person> associatedPersons) {
         this.associatedPersons = associatedPersons;
     }
 

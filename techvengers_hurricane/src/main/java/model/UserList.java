@@ -23,8 +23,19 @@ public class UserList {
     public void addUser(User user) {
         users.add(user);
     }
-    public void addUser(String userName, String password) {
-        User user = new User(userName, password);
+    
+    public User authenticate(String username, String password) {
+        for (User user : users) {
+            if (user.getUsername().equals(username) && user.getPasswordHash().equals(password)) {
+                return user;
+            }
+        }
+        return null;
+    }
+
+    public void addUser(String firstname, String lastname, String email, String address,
+                        String username, String password, ArrayList<AccountRole> roles, String lastKnownLocation) {
+        User user = new User(firstname, lastname, email, address, username, password, roles, lastKnownLocation);
         users.add(user);
     }
 }
