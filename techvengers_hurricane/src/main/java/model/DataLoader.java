@@ -49,6 +49,10 @@ public class DataLoader extends DataConstants {
     public static UserList getUsers() {
         UserList users = UserList.getInstance();
 
+        if (!users.getUsers().isEmpty()) {
+            return users;
+        }
+        
         try {
             FileReader reader = new FileReader(USER_FILE);
             JSONArray usersJSON = (JSONArray) new JSONParser().parse(reader);
@@ -98,11 +102,8 @@ public class DataLoader extends DataConstants {
         return hurricanes;
     }
 
-    public static void main(String[] args) {
-        int count = 0;
-        for (User user : getUsers().getUsers()) {
-            count++;
+        public static void main(String[] args) {
+            getUsers();
+        System.out.println("Users loaded: " + getUsers().getUsers().size());
         }
-        System.out.println("Users loaded: " + count);
-    }
 }
