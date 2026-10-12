@@ -39,6 +39,14 @@ public class ShelterList {
         }
         return instance;
     }
+
+    public void addShelter(Shelter shelter) {
+        shelters.add(shelter);
+    }
+
+    public ArrayList<Shelter> getShelters() {
+        return shelters;
+    }
     
     public ArrayList<Shelter> searchByProximity(Location from, double radius) {
         ArrayList<Shelter> nearbyShelters = new ArrayList<>();
