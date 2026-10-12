@@ -12,6 +12,11 @@ public class HurricaneReliefApp {
         userList = UserList.getInstance();
         //shelterList = ShelterList.getInstance();
         reliefRequestCatalog = ReliefRequestCatalog.getInstance();
+        loadData();
+    }
+
+    private void loadData() {
+        DataLoader.getUsers();
     }
 
     public boolean login(String username, String password) {
