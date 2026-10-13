@@ -16,6 +16,12 @@
         <artifactId>json-simple</artifactId>
         <version>1.1.1</version>
     </dependency>
+    <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>4.13.2</version>
+        <scope>test</scope>
+    </dependency>
 
 <dependency>
 <groupId>org.openjfx</groupId>
@@ -50,7 +56,7 @@
 <configuration>
 <jlinkImageName>hurricanejavafx</jlinkImageName>
 <launcher>launcher</launcher>
-<mainClass>hellofx/org.openjfx.hellofx.App</mainClass>
+<mainClass>com.techvengershurricane.App</mainClass>
 </configuration>
 </plugin>
 </plugins>
