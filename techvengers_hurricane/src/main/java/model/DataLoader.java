@@ -43,11 +43,37 @@ public class DataLoader extends DataConstants {
     public static ArrayList<User> getUsers() {
         ArrayList<User> users = new ArrayList<>();
 
+<<<<<<< HEAD
         for (JSONObject userJSON : readArray(USER_FILE)) {
             try {
                 users.add(userFromJSON(userJSON));
             } catch (RuntimeException e) {
                 System.out.println("Skipped a user that could not be read: " + e.getMessage());
+=======
+        if (!users.getUsers().isEmpty()) {
+            return users;
+        }
+        
+        try {
+            FileReader reader = new FileReader(USER_FILE);
+            JSONArray usersJSON = (JSONArray) new JSONParser().parse(reader);
+
+            for (int i = 0; i < usersJSON.size(); i++) {
+                JSONObject userJSON = (JSONObject) usersJSON.get(i);
+                String firstName = (String) userJSON.get(USER_FIRST_NAME);
+                String lastName = (String) userJSON.get(USER_LAST_NAME);
+                String email = (String) userJSON.get(USER_EMAIL);
+                String phoneNumber = (String) userJSON.get(USER_PHONE_NUMBER);
+                String address = (String) userJSON.get(USER_ADDRESS);
+                String username = (String) userJSON.get(USER_USERNAME);
+                String password = (String) userJSON.get(USER_PASSWORD);
+
+                ArrayList<AccountRole> roles = new ArrayList<>();
+                String lastKnownLocation = null;
+
+                User user = new User(firstName, lastName, email, phoneNumber, address, username, password, roles, lastKnownLocation); 
+                users.addUser(user);
+>>>>>>> 10043cc5d4a9b45cb863e7cb7f14e3a8d74f9f28
             }
         }
         return users;
@@ -124,6 +150,7 @@ public class DataLoader extends DataConstants {
         return hurricanes;
     }
 
+<<<<<<< HEAD
     private static ArrayList<JSONObject> readArray(String fileName) {
         ArrayList<JSONObject> objects = new ArrayList<>();
         try (FileReader reader = new FileReader(fileName)) {
@@ -424,4 +451,10 @@ public class DataLoader extends DataConstants {
         System.out.println("Requests loaded: " + getRequests().size());
         System.out.println("Hurricanes loaded: " + getHurricanes().size());
     }
+=======
+        public static void main(String[] args) {
+            getUsers();
+        System.out.println("Users loaded: " + getUsers().getUsers().size());
+        }
+>>>>>>> 10043cc5d4a9b45cb863e7cb7f14e3a8d74f9f28
 }

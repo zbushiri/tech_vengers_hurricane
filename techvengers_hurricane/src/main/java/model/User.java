@@ -16,42 +16,60 @@ public class User {
     private String lastName;
     private String phoneNumber;
     private String email;
+    private String phoneNumber;
     private String address;
     private String username;
     private String passwordHash;
-    private List <AccountRole> roles;
-    private List <Person> associatedPersons;
+    private ArrayList <AccountRole> roles;
+    private ArrayList <Person> associatedPersons;
     private VerificationStatus verificationStatus;
     private String lastKnownLocation;
     private SafetyStatusType safetyStatus;
     private LocalDateTime safetyStatusUpdatedAt;
 
-    public User(String username, String passwordHash) {
+    public User(String firstName, String lastName, String email, String phoneNumber,
+        String address, String username, String passwordHash, ArrayList<AccountRole> roles,
+        String lastKnownLocation) {
         setUserId(UUID.randomUUID());
+<<<<<<< HEAD
         setFirstName("");
         setLastName("");
         setPhoneNumber("");
         setEmail("");
         setAddress("");
+=======
+        setFirstName(firstName);
+        setLastName(lastName);
+        setEmail(email);
+        setPhoneNumber(phoneNumber);
+        setAddress(address);
+>>>>>>> 10043cc5d4a9b45cb863e7cb7f14e3a8d74f9f28
         setUsername(username);
         setPasswordHash(passwordHash);
-        setRoles(new ArrayList<>());
+        setRoles(roles);
         setAssociatedPersons(new ArrayList<>());
         setVerificationStatus(VerificationStatus.UNVERIFIED);
-        setLastKnownLocation("");
+        setLastKnownLocation(lastKnownLocation);
         setSafetyStatus(SafetyStatusType.UNKNOWN);
         setSafetyStatusUpdatedAt(LocalDateTime.now());
     }
 
+<<<<<<< HEAD
     public User(UUID userId, String firstName, String lastName, String phoneNumber, String email, 
         String address, String username, String passwordHash, List<AccountRole> roles, 
         List<Person> associatedPersons, VerificationStatus verificationStatus, String lastKnownLocation, 
+=======
+    public User(UUID userId, String firstName, String lastName, String email, String phoneNumber,
+        String address, String username, String passwordHash, ArrayList<AccountRole> roles, 
+        ArrayList<Person> associatedPersons, VerificationStatus verificationStatus, String lastKnownLocation, 
+>>>>>>> 10043cc5d4a9b45cb863e7cb7f14e3a8d74f9f28
         SafetyStatusType safetyStatus, LocalDateTime safetyStatusUpdatedAt) {
         setUserId(userId);
         setFirstName(firstName);
         setLastName(lastName);
         setPhoneNumber(phoneNumber);
         setEmail(email);
+        setPhoneNumber(phoneNumber);
         setAddress(address);
         setUsername(username);
         setPasswordHash(passwordHash);
@@ -63,6 +81,7 @@ public class User {
         setSafetyStatusUpdatedAt(safetyStatusUpdatedAt);
     }
 
+<<<<<<< HEAD
     public boolean login(String username, String passwordHash) {
         return this.username != null && this.username.equalsIgnoreCase(username)
                 && Objects.equals(this.passwordHash, passwordHash);
@@ -76,16 +95,21 @@ public class User {
         System.out.println("Logged out: " + this.username);
     }
 
+=======
+>>>>>>> 10043cc5d4a9b45cb863e7cb7f14e3a8d74f9f28
 
     // TODO: Clarify the purpose of this method and implement it accordingly
     public void updateProfile() {
         System.out.println("Updating profile for user: " + this.username);
     }
 
+<<<<<<< HEAD
     public void submitReliefRequest(ReliefRequest request) {
         ReliefRequestCatalog.getInstance().submitRequest(request);
     }
 
+=======
+>>>>>>> 10043cc5d4a9b45cb863e7cb7f14e3a8d74f9f28
     public boolean verifyIdentity(VerificationMethod verificationMethod) {
         setVerificationStatus(VerificationStatus.VERIFIED);
         return true;
@@ -105,6 +129,7 @@ public class User {
         System.out.println(hurricane.toString());
     }
 
+<<<<<<< HEAD
    public static void searchGuidanceContent() {
         // TODO: Implementation for searching guidance content goes here
         System.out.println("Searching guidance content...");
@@ -122,6 +147,8 @@ public class User {
        return roles != null && roles.contains(role);
    }
 
+=======
+>>>>>>> 10043cc5d4a9b45cb863e7cb7f14e3a8d74f9f28
     public UUID getUserId() {
         return userId;
     }
@@ -140,6 +167,10 @@ public class User {
 
     public String getEmail() {
         return email;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
     public String getAddress() {
@@ -190,6 +221,7 @@ public class User {
         this.lastName = lastName;
     }
 
+<<<<<<< HEAD
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
@@ -198,8 +230,18 @@ public class User {
         this.email = email;
     }
 
+=======
+>>>>>>> 10043cc5d4a9b45cb863e7cb7f14e3a8d74f9f28
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public void setUsername(String username) {
@@ -210,11 +252,11 @@ public class User {
         this.passwordHash = passwordHash;
     }
 
-    public void setRoles(List<AccountRole> roles) {
+    public void setRoles(ArrayList<AccountRole> roles) {
         this.roles = roles;
     }
 
-    public void setAssociatedPersons(List<Person> associatedPersons) {
+    public void setAssociatedPersons(ArrayList<Person> associatedPersons) {
         this.associatedPersons = associatedPersons;
     }
 
@@ -242,6 +284,7 @@ public class User {
                 "lastName='" + lastName + "\n" +
                 "phoneNumber='" + phoneNumber + "\n" +
                 "email='" + email + "\n" +
+                "phoneNumber='" + phoneNumber + "\n" +
                 "address='" + address + "\n" +
                 "username='" + username + "\n" +
                 "roles=" + roles + "\n" +

@@ -36,6 +36,7 @@ public class UserList {
         }
         return null;
     }
+<<<<<<< HEAD
 
     /**
      * Finds the user whose username and password both match.
@@ -48,6 +49,22 @@ public class UserList {
             return user;
         }
         return null;
+=======
+    
+    public User authenticate(String username, String password) {
+        for (User user : users) {
+            if (user.getUsername().equals(username) && user.getPasswordHash().equals(password)) {
+                return user;
+            }
+        }
+        return null;
+    }
+
+    public void addUser(String firstname, String lastname, String email, String phoneNumber, String address,
+                        String username, String password, ArrayList<AccountRole> roles, String lastKnownLocation) {
+        User user = new User(firstname, lastname, email, phoneNumber, address, username, password, roles, lastKnownLocation);
+        users.add(user);
+>>>>>>> 10043cc5d4a9b45cb863e7cb7f14e3a8d74f9f28
     }
 
     /**

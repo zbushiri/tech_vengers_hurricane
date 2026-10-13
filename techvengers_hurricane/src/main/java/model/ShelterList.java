@@ -1,8 +1,13 @@
 package model;
 
+<<<<<<< HEAD
 import java.time.LocalDateTime;
+=======
+import java.math.BigDecimal;
+>>>>>>> 10043cc5d4a9b45cb863e7cb7f14e3a8d74f9f28
 import java.util.ArrayList;
-
+import java.util.HashMap;
+import java.util.Random;
 public class ShelterList {
     public static final double DEFAULT_RADIUS_MILES = 25;
     /** A shelter whose status is older than this many hours needs a refresh. */
@@ -10,20 +15,68 @@ public class ShelterList {
 
     private static ShelterList instance;
     private ArrayList<Shelter> shelters;
+    private class Location {
+        double latitude;
+        double longitude;
+        Random rand = new Random();
+        public Location() {
+            latitude = rand.nextDouble() * 30;
+            longitude = rand.nextDouble() * 60;
+        }
+    }
 
-    private ShelterList() {}
-
+    private HashMap<String, Location> locations;
+    private ShelterList() {
+        shelters = new ArrayList<>();
+        locations = new HashMap<>();
+    }
 
     public static ShelterList getInstance() {
         if (instance == null) {
             instance = new ShelterList();
             instance.shelters = new ArrayList<>();
+            instance.locations = new HashMap<>();
+            for (Shelter shelter : instance.shelters) {
+                for (String location : instance.locations.keySet()) {
+                    if (shelter.getAddress().equals(location)) {
+                        break;
+                    }
+                }
+                instance.locations.put(shelter.getAddress(), instance.new Location());
+            }
         }
         return instance;
     }
 
+<<<<<<< HEAD
     public ArrayList<Shelter> getShelters() {
         return shelters;
+=======
+    public void addShelter(Shelter shelter) {
+        shelters.add(shelter);
+    }
+
+    public ArrayList<Shelter> getShelters() {
+        return shelters;
+    }
+    
+    public ArrayList<Shelter> searchByProximity(Location from, double radius) {
+        ArrayList<Shelter> nearbyShelters = new ArrayList<>();
+         for (Shelter shelter : shelters) {
+            double distance = calculateDistance(from, instance.locations.get(shelter.getAddress()));
+             if (distance <= radius) {
+                 nearbyShelters.add(shelter);
+             }
+        }
+        return nearbyShelters;
+    }
+    private double calculateDistance(Location start, Location end) {
+        BigDecimal startLat = new BigDecimal(start.latitude);
+        BigDecimal startLon = new BigDecimal(start.longitude);
+        BigDecimal endLat = new BigDecimal(end.latitude);
+        BigDecimal endLon = new BigDecimal(end.longitude);
+        return Math.sqrt(Math.pow(start.latitude - end.latitude, 2) + Math.pow(start.longitude - end.longitude, 2));
+>>>>>>> 10043cc5d4a9b45cb863e7cb7f14e3a8d74f9f28
     }
 
     /**
@@ -105,16 +158,28 @@ public class ShelterList {
      * REFRESH_HOURS, or has never been updated.
      */
     public ArrayList<Shelter> getSheltersNeedingRefresh() {
+<<<<<<< HEAD
         LocalDateTime cutoff = LocalDateTime.now().minusHours(REFRESH_HOURS);
         ArrayList<Shelter> sheltersNeedingRefresh = new ArrayList<>();
         for (Shelter shelter : shelters) {
             if (shelter.getLastUpdated() == null || shelter.getLastUpdated().isBefore(cutoff)) {
                 sheltersNeedingRefresh.add(shelter);
             }
+=======
+        ArrayList<Shelter> sheltersNeedingRefresh = new ArrayList<>();
+        for (Shelter shelter : shelters) {
+            //if (shelter.needsRefresh()) {
+                //sheltersNeedingRefresh.add(shelter);
+            //}
+>>>>>>> 10043cc5d4a9b45cb863e7cb7f14e3a8d74f9f28
         }
         return sheltersNeedingRefresh;
     }
     public boolean save() {
+<<<<<<< HEAD
         return DataWriter.saveShelters();
+=======
+        return true;
+>>>>>>> 10043cc5d4a9b45cb863e7cb7f14e3a8d74f9f28
     }
 }
