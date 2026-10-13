@@ -7,7 +7,7 @@ package model;
  */
 public abstract class DataConstants {
     protected static final String SHELTER_FILE = "../json/shelters.json";
-    protected static final String USER_FILE = "users.json";
+    protected static final String USER_FILE = "json/users.json";
     protected static final String REQUEST_FILE = "../json/requests.json";
     protected static final String HURRICANE_FILE = "../json/hurricanes.json";
 

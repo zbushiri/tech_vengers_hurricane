@@ -20,7 +20,7 @@ class TestUI {
 		User myUser = app.getCurrentUser();
         this.createdUserToString = myUser.toString();
         System.out.println(createdUserToString);
-        DataWriterNew.saveUsers();
+        DataWriter.saveUsers();
         app.logout();
 	}
 
@@ -31,7 +31,7 @@ class TestUI {
         System.out.println(myUser.getUsername().equals("emarks") + ": " + myUser.getUsername() + " is logged in.");
         this.loginUserToString = myUser.toString();
         System.out.println(this.loginUserToString);
-        DataWriterNew.saveUsers();
+        DataWriter.saveUsers();
         app.logout();
     }
 

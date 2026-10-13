@@ -21,6 +21,11 @@ public class UserList {
     }
     
     public void addUser(User user) {
+        for (User existingUser : users) {
+            if (existingUser.getUsername().equals(user.getUsername())) {
+                throw new IllegalArgumentException("Username already exists");
+            }
+        }
         users.add(user);
     }
     
