@@ -19,6 +19,7 @@ public class UserList {
     public ArrayList<User> getUsers() {
         return users;
     }
+<<<<<<< HEAD
 
     /**
      * Finds a user by username, ignoring case.
@@ -35,6 +36,16 @@ public class UserList {
             }
         }
         return null;
+=======
+    
+    public void addUser(User user) {
+        for (User existingUser : users) {
+            if (existingUser.getUsername().equals(user.getUsername())) {
+                throw new IllegalArgumentException("Username already exists");
+            }
+        }
+        users.add(user);
+>>>>>>> 98cbbb07fa0642878c53e1dbdb521d11413bec6b
     }
 <<<<<<< HEAD
 
