@@ -28,6 +28,11 @@ public class DataWriter extends DataConstants {
     }
 
     // * Saves every user.
+    public static boolean saveUsers() {
+        return saveUsers(UserList.getInstance().getUsers());
+    }
+
+    // * Saves the given users.
     public static boolean saveUsers(List<User> users) {
         if (users == null) {
             // ! There is no list to save.
@@ -110,6 +115,7 @@ public class DataWriter extends DataConstants {
         json.put(USER_ID, user.getUserId().toString());
         json.put(USER_FIRST_NAME, user.getFirstName());
         json.put(USER_LAST_NAME, user.getLastName());
+        json.put(USER_PHONE_NUMBER, user.getPhoneNumber());
         json.put(USER_EMAIL, user.getEmail());
         json.put(USER_ADDRESS, user.getAddress());
         json.put(USER_USERNAME, user.getUsername());
@@ -121,7 +127,7 @@ public class DataWriter extends DataConstants {
                 roles.add(role.toString().toLowerCase());
             }
         }
-        json.put("roles", roles);
+        json.put(USER_ROLES, roles);
 
         JSONArray people = new JSONArray();
         if (user.getAssociatedPersons() != null) {
@@ -129,12 +135,12 @@ public class DataWriter extends DataConstants {
                 people.add(personToJSON(person));
             }
         }
-        json.put("associatedPeople", people);
+        json.put(ASSOCIATED_PERSONS, people);
 
-        json.put("verificationStatus", user.getVerificationStatus().toString().toLowerCase());
-        json.put("lastKnownLocation", user.getLastKnownLocation());
-        json.put("safetyStatus", user.getSafetyStatus().toString().toLowerCase());
-        json.put("safetyStatusUpdatedAt", user.getSafetyStatusUpdatedAt().toString());
+        json.put(VERIFICATION_STATUS, user.getVerificationStatus().toString().toLowerCase());
+        json.put(USER_LAST_KNOWN_LOCATION, user.getLastKnownLocation());
+        json.put(SAFETY_STATUS, user.getSafetyStatus().toString().toLowerCase());
+        json.put(SAFETY_STATUS_UPDATED_AT, user.getSafetyStatusUpdatedAt().toString());
 
         // * Adds information that only volunteers have.
         if (user instanceof VolunteerProfile) {
