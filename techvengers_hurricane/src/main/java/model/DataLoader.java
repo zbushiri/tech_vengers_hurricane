@@ -62,6 +62,7 @@ public class DataLoader extends DataConstants {
                 String firstName = (String) userJSON.get(USER_FIRST_NAME);
                 String lastName = (String) userJSON.get(USER_LAST_NAME);
                 String email = (String) userJSON.get(USER_EMAIL);
+                String phoneNumber = (String) userJSON.get(USER_PHONE_NUMBER);
                 String address = (String) userJSON.get(USER_ADDRESS);
                 String username = (String) userJSON.get(USER_USERNAME);
                 String password = (String) userJSON.get(USER_PASSWORD);
@@ -69,7 +70,7 @@ public class DataLoader extends DataConstants {
                 ArrayList<AccountRole> roles = new ArrayList<>();
                 String lastKnownLocation = null;
 
-                User user = new User(firstName, lastName, email, address, username, password, roles, lastKnownLocation); 
+                User user = new User(firstName, lastName, email, phoneNumber, address, username, password, roles, lastKnownLocation); 
                 users.addUser(user);
             }
         } catch (Exception e) {

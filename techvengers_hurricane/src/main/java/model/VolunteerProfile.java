@@ -13,7 +13,7 @@ public class VolunteerProfile extends User {
                             boolean transportationAccess, AvailabilityStatus availabilityStatus) {
         
         // TODO: Initialize the User part 
-        super("", "", "", "", "", "", new ArrayList<>(), null);
+        super("", "", "", "", "", "", "", new ArrayList<>(), null);
         setSkills(skills);
         setEquipment(equipment);
         setBackgroundCheckStatus(backgroundCheckStatus);

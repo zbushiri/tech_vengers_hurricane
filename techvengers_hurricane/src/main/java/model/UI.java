@@ -64,6 +64,7 @@ public class UI {
         String firstName = getField("First Name");
         String lastName = getField("Last Name");
         String email = getField("Email");
+        String phoneNumber = getField("Phone Number");
         String address = getField("Address");
         String username = getField("Username");
         String password = getField("Password");
@@ -73,7 +74,7 @@ public class UI {
         ArrayList<AccountRole> roles = new ArrayList<>();
         roles.add(role);
 
-        app.createAccount(firstName, lastName, email, address, username, password, roles, lastKnownLocation);
+        app.createAccount(firstName, lastName, email, phoneNumber, address, username, password, roles, lastKnownLocation);
     }
 
     private void login() {

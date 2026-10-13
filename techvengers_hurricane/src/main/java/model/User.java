@@ -14,6 +14,7 @@ public class User {
     private String firstName;
     private String lastName;
     private String email;
+    private String phoneNumber;
     private String address;
     private String username;
     private String passwordHash;
@@ -24,13 +25,14 @@ public class User {
     private SafetyStatusType safetyStatus;
     private LocalDateTime safetyStatusUpdatedAt;
 
-    public User(String firstName, String lastName, String email,
+    public User(String firstName, String lastName, String email, String phoneNumber,
         String address, String username, String passwordHash, ArrayList<AccountRole> roles,
         String lastKnownLocation) {
         setUserId(UUID.randomUUID());
         setFirstName(firstName);
         setLastName(lastName);
         setEmail(email);
+        setPhoneNumber(phoneNumber);
         setAddress(address);
         setUsername(username);
         setPasswordHash(passwordHash);
@@ -42,7 +44,7 @@ public class User {
         setSafetyStatusUpdatedAt(LocalDateTime.now());
     }
 
-    public User(UUID userId, String firstName, String lastName, String email, 
+    public User(UUID userId, String firstName, String lastName, String email, String phoneNumber,
         String address, String username, String passwordHash, ArrayList<AccountRole> roles, 
         ArrayList<Person> associatedPersons, VerificationStatus verificationStatus, String lastKnownLocation, 
         SafetyStatusType safetyStatus, LocalDateTime safetyStatusUpdatedAt) {
@@ -50,6 +52,7 @@ public class User {
         setFirstName(firstName);
         setLastName(lastName);
         setEmail(email);
+        setPhoneNumber(phoneNumber);
         setAddress(address);
         setUsername(username);
         setPasswordHash(passwordHash);
@@ -102,6 +105,10 @@ public class User {
         return email;
     }
 
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
     public String getAddress() {
         return address;
     }
@@ -150,12 +157,16 @@ public class User {
         this.lastName = lastName;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public void setUsername(String username) {
@@ -197,6 +208,7 @@ public class User {
                 "firstName='" + firstName + "\n" +
                 "lastName='" + lastName + "\n" +
                 "email='" + email + "\n" +
+                "phoneNumber='" + phoneNumber + "\n" +
                 "address='" + address + "\n" +
                 "username='" + username + "\n" +
                 "password='" + passwordHash + "\n" +
