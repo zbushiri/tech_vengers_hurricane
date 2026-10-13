@@ -9,6 +9,12 @@ public class SupplyItem {
         setQuantity(quantity);
     }
 
+    public void restock(int amount) {
+        if (amount > 0) {
+            setQuantity(quantity + amount);
+        }
+    }
+
     public String getName() {
         return name;
     }

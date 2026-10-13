@@ -2,7 +2,9 @@ package model;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -17,52 +19,83 @@ import org.json.simple.JSONObject;
  */
 public class DataWriter extends DataConstants {
     private DataWriter() { }
+
+    /**
+     * Saves every user in UserList to users.json.
+     *
+     * @return true if the file was written
+     */
+    public static boolean saveUsers() {
+        return saveUsers(UserList.getInstance().getUsers());
+    }
+
+    /**
+     * Saves every shelter in ShelterList to shelters.json.
+     *
+     * @return true if the file was written
+     */
+    public static boolean saveShelters() {
+        return saveShelters(ShelterList.getInstance().getShelters());
+    }
+
+    /**
+     * Saves every request in ReliefRequestCatalog to requests.json.
+     *
+     * @return true if the file was written
+     */
+    public static boolean saveRequests() {
+        return saveRequests(ReliefRequestCatalog.getInstance().getRequests());
+    }
+
     /**
      * Saves all shelters to shelters.json.
      *
      * @param shelters the shelters that will be saved
+     * @return true if the file was written
      */
     @SuppressWarnings("unchecked")
-    public static void saveShelters(ArrayList<Shelter> shelters) {
+    public static boolean saveShelters(ArrayList<Shelter> shelters) {
         JSONArray shelterArray = new JSONArray();
 
         for (Shelter shelter : shelters) {
             shelterArray.add(shelterToJSON(shelter));
         }
 
-        writeFile(SHELTER_FILE, shelterArray, "shelters");
+        return writeFile(SHELTER_FILE, shelterArray, "shelters");
     }
 
     /**
      * Saves all users to users.json.
      *
      * @param users the users that will be saved
+     * @return true if the file was written
      */
     @SuppressWarnings("unchecked")
-    public static void saveUsers(ArrayList<User> users) {
+    public static boolean saveUsers(ArrayList<User> users) {
         JSONArray userArray = new JSONArray();
 
         for (User user : users) {
             userArray.add(userToJSON(user));
         }
 
-        writeFile(USER_FILE, userArray, "users");
+        return writeFile(USER_FILE, userArray, "users");
     }
 
     /**
      * Saves all relief requests to requests.json.
      *
      * @param requests the relief requests that will be saved
+     * @return true if the file was written
      */
     @SuppressWarnings("unchecked")
-    public static void saveRequests(ArrayList<ReliefRequest> requests) {
+    public static boolean saveRequests(ArrayList<ReliefRequest> requests) {
         JSONArray requestArray = new JSONArray();
 
         for (ReliefRequest request : requests) {
             requestArray.add(requestToJSON(request));
         }
 
-        writeFile(REQUEST_FILE, requestArray, "requests");
+        return writeFile(REQUEST_FILE, requestArray, "requests");
     }
 
     /**
@@ -71,13 +104,16 @@ public class DataWriter extends DataConstants {
      * @param fileName the JSON file being written
      * @param data the JSON data being saved
      * @param dataName simple name used for the message
+     * @return true if the file was written
      */
-    private static void writeFile(String fileName, JSONArray data, String dataName) {
+    private static boolean writeFile(String fileName, JSONArray data, String dataName) {
         try (FileWriter file = new FileWriter(fileName)) {
             file.write(data.toJSONString());
             System.out.println(dataName + " saved successfully.");
+            return true;
         } catch (IOException exception) {
             System.out.println("Could not save " + dataName + ".");
+            return false;
         }
     }
 
@@ -96,7 +132,7 @@ public class DataWriter extends DataConstants {
         json.put("address", shelter.getAddress());
         json.put("capacity", shelter.getCapacity());
         json.put("occupancy", shelter.getOccupancy());
-        json.put("status", shelter.getStatus().toString().toLowerCase());
+        json.put("status", enumText(shelter.getStatus()));
 
         JSONArray accommodations = new JSONArray();
         for (Accommodation accommodation : safeList(shelter.getAccommodations())) {
@@ -104,7 +140,7 @@ public class DataWriter extends DataConstants {
         }
         json.put("accommodations", accommodations);
 
-        json.put("lastUpdated", shelter.getLastUpdated().toString());
+        json.put("lastUpdated", String.valueOf(shelter.getLastUpdated()));
 
         JSONArray operators = new JSONArray();
         for (User operator : safeList(shelter.getShelterOperators())) {
@@ -128,6 +164,7 @@ public class DataWriter extends DataConstants {
         json.put(USER_ID, user.getUserId().toString());
         json.put(USER_FIRST_NAME, user.getFirstName());
         json.put(USER_LAST_NAME, user.getLastName());
+        json.put(USER_PHONE, user.getPhoneNumber());
         json.put(USER_EMAIL, user.getEmail());
         json.put(USER_ADDRESS, user.getAddress());
         json.put(USER_USERNAME, user.getUsername());
@@ -137,31 +174,31 @@ public class DataWriter extends DataConstants {
         for (AccountRole role : safeList(user.getRoles())) {
             roles.add(role.toString().toLowerCase());
         }
-        json.put("roles", roles);
+        json.put(USER_ROLES, roles);
 
         JSONArray people = new JSONArray();
         for (Person person : safeList(user.getAssociatedPersons())) {
             people.add(personToJSON(person));
         }
-        json.put("associatedPeople", people);
+        json.put(USER_ASSOCIATED_PEOPLE, people);
 
-        json.put("verificationStatus", user.getVerificationStatus().toString().toLowerCase());
-        json.put("lastKnownLocation", user.getLastKnownLocation());
-        json.put("safetyStatus", user.getSafetyStatus().toString().toLowerCase());
-        json.put("safetyStatusUpdatedAt", user.getSafetyStatusUpdatedAt().toString());
+        json.put(USER_VERIFICATION, enumText(user.getVerificationStatus()));
+        json.put(USER_LOCATION, user.getLastKnownLocation());
+        json.put(USER_SAFETY, enumText(user.getSafetyStatus()));
+        json.put(USER_SAFETY_UPDATED, String.valueOf(user.getSafetyStatusUpdatedAt()));
 
         // VolunteerProfile has extra fields that a normal User does not have.
         if (user instanceof VolunteerProfile) {
             VolunteerProfile volunteer = (VolunteerProfile) user;
-            json.put("skills", new JSONArray());
-            ((JSONArray) json.get("skills")).addAll(safeList(volunteer.getSkills()));
-            json.put("equipment", new JSONArray());
-            ((JSONArray) json.get("equipment")).addAll(safeList(volunteer.getEquipment()));
-            json.put("backgroundCheckStatus",
-                    volunteer.getBackgroundCheckStatus().toString().toLowerCase());
-            json.put("transportationStatus", volunteer.hasTransportationAccess());
-            json.put("availabilityStatus",
-                    volunteer.getAvailabilityStatus().toString().toLowerCase());
+            JSONArray skills = new JSONArray();
+            skills.addAll(safeList(volunteer.getSkills()));
+            json.put(VOLUNTEER_SKILLS, skills);
+            JSONArray equipment = new JSONArray();
+            equipment.addAll(safeList(volunteer.getEquipment()));
+            json.put(VOLUNTEER_EQUIPMENT, equipment);
+            json.put(VOLUNTEER_BACKGROUND, enumText(volunteer.getBackgroundCheckStatus()));
+            json.put(VOLUNTEER_TRANSPORTATION, volunteer.hasTransportationAccess());
+            json.put(VOLUNTEER_AVAILABILITY, enumText(volunteer.getAvailabilityStatus()));
         }
 
         return json;
@@ -199,12 +236,13 @@ public class DataWriter extends DataConstants {
         JSONObject json = new JSONObject();
 
         json.put("requestId", request.getRequestId().toString());
-        json.put("type", request.getType().toString().toLowerCase());
-        json.put("status", request.getStatus().toString());
+        json.put("type", enumText(request.getType()));
+        json.put("status", enumText(request.getStatus()));
         json.put("location", request.getLocation());
         json.put("description", request.getDescription());
-        json.put("priority", request.getPriority().toString().toLowerCase());
-        json.put("dateSubmitted", request.getDateSubmitted().toString());
+        json.put("priority", enumText(request.getPriority()));
+        json.put("dateSubmitted", request.getDateSubmitted() == null
+                ? null : request.getDateSubmitted().toInstant().toString());
         json.put("numberOfPeopleNeeded", request.getNumberOfPeopleNeeded());
         json.put("numberOfAnimals", request.getNumberOfAnimals());
         json.put("animalNotes", request.getAnimalNotes());
@@ -237,9 +275,9 @@ public class DataWriter extends DataConstants {
         JSONObject json = new JSONObject();
 
         json.put("name", hurricane.getName());
-        json.put("startDate", hurricane.getStartDate().toString());
-        json.put("endDate", hurricane.getEndDate().toString());
-        json.put("status", hurricane.getStatus().toString().toLowerCase());
+        json.put("startDate", dayText(hurricane.getStartDate()));
+        json.put("endDate", dayText(hurricane.getEndDate()));
+        json.put("status", enumText(hurricane.getStatus()));
 
         JSONArray affectedAreas = new JSONArray();
         affectedAreas.addAll(safeList(hurricane.getAffectedAreas()));
@@ -247,6 +285,22 @@ public class DataWriter extends DataConstants {
 
         return json;
     }
+    /**
+     * Writes an enum value in lower case, the same way the JSON files store it.
+     */
+    private static String enumText(Enum<?> value) {
+        return value == null ? null : value.name().toLowerCase();
+    }
+
+    /**
+     * Writes a date as "2005-08-23" so DataLoader can read it back.
+     * Date.toString() gives text like "Tue Aug 23 00:00:00 EDT 2005" that
+     * cannot be loaded again.
+     */
+    private static String dayText(Date date) {
+        return date == null ? null : date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().toString();
+    }
+
     /**
      * Returns an empty list when a model list has not been set yet.
      * This keeps saving simple and prevents null list errors.

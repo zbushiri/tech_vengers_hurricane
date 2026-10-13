@@ -40,7 +40,7 @@
 <artifactId>exec-maven-plugin</artifactId>
 <version>3.5.0</version>
 <configuration>
-<mainClass>com.techvengershurricane.Driver</mainClass>
+<mainClass>model.HurricaneReliefApp</mainClass>
 </configuration>
 </plugin>
 <plugin>
@@ -50,7 +50,7 @@
 <configuration>
 <jlinkImageName>hurricanejavafx</jlinkImageName>
 <launcher>launcher</launcher>
-<mainClass>hellofx/org.openjfx.hellofx.App</mainClass>
+<mainClass>techvengers_hurricane/techvengers_hurricane.App</mainClass>
 </configuration>
 </plugin>
 </plugins>
