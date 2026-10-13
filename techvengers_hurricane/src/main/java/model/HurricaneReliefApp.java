@@ -12,6 +12,11 @@ public class HurricaneReliefApp {
         userList = UserList.getInstance();
         shelterList = ShelterList.getInstance();
         reliefRequestCatalog = ReliefRequestCatalog.getInstance();
+        loadData();
+    }
+
+    private void loadData() {
+        DataLoader.getUsers();
     }
 
     public boolean login(String username, String password) {
@@ -19,9 +24,9 @@ public class HurricaneReliefApp {
         return currentUser != null;
     }
 
-    public void createAccount(String firstName, String lastName, String email, String address,
+    public void createAccount(String firstName, String lastName, String email, String phoneNumber, String address,
         String username, String password, ArrayList<AccountRole> roles,String lastKnownLocation) {
-        userList.addUser(firstName, lastName, email, address, username, password, roles, lastKnownLocation);
+        userList.addUser(firstName, lastName, email, phoneNumber, address, username, password, roles, lastKnownLocation);
     }
 
     public boolean submitReliefRequest(ReliefRequest request) {

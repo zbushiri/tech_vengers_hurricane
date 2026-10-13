@@ -49,20 +49,29 @@ public class DataLoader extends DataConstants {
     public static UserList getUsers() {
         UserList users = UserList.getInstance();
 
+        if (!users.getUsers().isEmpty()) {
+            return users;
+        }
+        
         try {
             FileReader reader = new FileReader(USER_FILE);
             JSONArray usersJSON = (JSONArray) new JSONParser().parse(reader);
 
             for (int i = 0; i < usersJSON.size(); i++) {
                 JSONObject userJSON = (JSONObject) usersJSON.get(i);
+                String firstName = (String) userJSON.get(USER_FIRST_NAME);
+                String lastName = (String) userJSON.get(USER_LAST_NAME);
+                String email = (String) userJSON.get(USER_EMAIL);
+                String phoneNumber = (String) userJSON.get(USER_PHONE_NUMBER);
+                String address = (String) userJSON.get(USER_ADDRESS);
                 String username = (String) userJSON.get(USER_USERNAME);
                 String password = (String) userJSON.get(USER_PASSWORD);
 
-                User user = new User(username, password, "", "", "", "", null, ""); //we need to make more constructors for the user class to make this work
-                user.setFirstName((String) userJSON.get(USER_FIRST_NAME));
-                user.setLastName((String) userJSON.get(USER_LAST_NAME));
-                user.setEmail((String) userJSON.get(USER_EMAIL));
-                user.setAddress((String) userJSON.get(USER_ADDRESS));
+                ArrayList<AccountRole> roles = new ArrayList<>();
+                String lastKnownLocation = null;
+
+                User user = new User(firstName, lastName, email, phoneNumber, address, username, password, roles,
+                        lastKnownLocation);
                 users.addUser(user);
             }
         } catch (Exception e) {
@@ -95,11 +104,8 @@ public class DataLoader extends DataConstants {
         return hurricanes;
     }
 
-    public static void main(String[] args) {
-        int count = 0;
-        for (User user : getUsers().getUsers()) {
-            count++;
+        public static void main(String[] args) {
+            getUsers();
+        System.out.println("Users loaded: " + getUsers().getUsers().size());
         }
-        System.out.println("Users loaded: " + count);
-    }
 }

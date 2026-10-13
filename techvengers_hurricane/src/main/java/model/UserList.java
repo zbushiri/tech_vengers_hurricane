@@ -33,9 +33,9 @@ public class UserList {
         return null;
     }
 
-    public void addUser(String firstname, String lastname, String email, String address,
+    public void addUser(String firstname, String lastname, String email, String phoneNumber, String address,
                         String username, String password, ArrayList<AccountRole> roles, String lastKnownLocation) {
-        User user = new User(firstname, lastname, email, address, username, password, roles, lastKnownLocation);
+        User user = new User(firstname, lastname, email, phoneNumber, address, username, password, roles, lastKnownLocation);
         users.add(user);
     }
 }
