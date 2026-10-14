@@ -26,4 +26,11 @@ public abstract class DataConstants {
     protected static final String SAFETY_STATUS = "safetyStatus";
     protected static final String SAFETY_STATUS_UPDATED_AT = "safetyStatusUpdatedAt";
     
+    protected static final String PERSON_FIRST_NAME = "firstName";
+    protected static final String PERSON_LAST_NAME = "lastName";
+    protected static final String PERSON_AGE = "age";
+    protected static final String PERSON_SPECIAL_NEEDS = "specialNeeds";
+    protected static final String LATITUDE = "latitude";
+    protected static final String LONGITUDE = "longitude";
+    
 }
