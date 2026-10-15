@@ -26,21 +26,82 @@ public class DataLoader extends DataConstants {
     public static ShelterList getShelters() {
         ShelterList shelters = ShelterList.getInstance();
 
-        try {
-            FileReader reader = new FileReader(SHELTER_FILE);
+        if (!shelters.getShelters().isEmpty()) {
+            return shelters;
+        }
+
+        UserList users = getUsers();
+
+        try(FileReader reader = new FileReader(SHELTER_FILE)) {
             JSONArray sheltersJSON = (JSONArray) new JSONParser().parse(reader);
 
             for (int i = 0; i < sheltersJSON.size(); i++) {
                 JSONObject shelterJSON = (JSONObject) sheltersJSON.get(i);
-                String name = (String) shelterJSON.get("name");
+                
+                UUID shelterId = readID(shelterJSON.get(SHELTER_ID));
+                String name = (String) shelterJSON.get(SHELTER_NAME);
+                String address = (String) shelterJSON.get(SHELTER_ADDRESS);
+                int capacity = ((Long) shelterJSON.get(SHELTER_CAPACITY)).intValue();
+                int occupancy = ((Long) shelterJSON.get(SHELTER_OCCUPANCY)).intValue();
 
-                System.out.println(name);
+                ShelterStatus status = ShelterStatus.OPEN;
+                String statusText = (String) shelterJSON.get(SHELTER_STATUS);
+                if (statusText != null) {
+                    status = ShelterStatus.valueOf(statusText.toUpperCase());
+                }
+
+                ArrayList<Accommodation> accommodations = readAccommodations (shelterJSON.get(SHELTER_ACCOMMODATIONS));
+
+                Shelter shelter = new Shelter(shelterId, name, address, capacity,
+                        occupancy, status, accommodations);
+                shelter.setLastUpdated(readDateTime((String) shelterJSON.get(SHELTER_LAST_UPDATED)));
+                shelter.setShelterOperators(readOperators(shelterJSON.get(SHELTER_OPERATORS), users));
+                shelters.addShelter(shelter);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return shelters;
     }
+
+    /**
+     * Turns a JSON array of names like"pet_friendly" into Accommodations.
+     * Names that are not an Accommodation are skipped.
+    */
+   private static ArrayList<Accommodation> readAccommodations(Object accommodationsValue) {
+       ArrayList<Accommodation> accommodations = new ArrayList<>();
+       if (!(accommodationsValue instanceof JSONArray)) {
+        return accommodations;
+       }
+
+       for (Object accommodation : (JSONArray) accommodationsValue) {
+           try {
+               accommodations.add(Accommodation.valueOf(((String) accommodation).toUpperCase()));
+           } catch (IllegalArgumentException e) {
+               // not an Accommodation, so skip it
+           }
+       }
+       return accommodations;
+   }
+
+   /**
+    * Turns a JSON array of usernames into the matching Users.
+    * Usernames that match no user are skipped.
+   */
+  private static ArrayList<User> readOperators(Object operatorsValue, UserList users) {
+      ArrayList<User> operators = new ArrayList<>();
+      if (!(operatorsValue instanceof JSONArray)) {
+          return operators;
+      }
+      for (Object username : (JSONArray) operatorsValue) {
+          for (User user : users.getUsers()) {
+              if (user.getUsername().equals(username)) {
+                  operators.add(user);
+              }
+          }
+      }
+      return operators;
+  }
 
     /**
      * Loads the users from the users JSON file.

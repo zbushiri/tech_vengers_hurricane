@@ -6,10 +6,10 @@ package model;
  * @author Tavien Smith
  */
 public abstract class DataConstants {
-    protected static final String SHELTER_FILE = "../json/shelters.json";
+    protected static final String SHELTER_FILE ="json/shelters.json";
     protected static final String USER_FILE = "json/users.json";
-    protected static final String REQUEST_FILE = "../json/requests.json";
-    protected static final String HURRICANE_FILE = "../json/hurricanes.json";
+    protected static final String REQUEST_FILE = "json/requests.json";
+    protected static final String HURRICANE_FILE = "json/hurricanes.json";
 
     protected static final String USER_ID = "userId";
     protected static final String USER_FIRST_NAME = "firstName";
@@ -33,4 +33,13 @@ public abstract class DataConstants {
     protected static final String LATITUDE = "latitude";
     protected static final String LONGITUDE = "longitude";
     
+    protected static final String SHELTER_ID = "shelterId";
+    protected static final String SHELTER_NAME = "name";
+    protected static final String SHELTER_ADDRESS = "address";
+    protected static final String SHELTER_CAPACITY = "capacity";
+    protected static final String SHELTER_OCCUPANCY = "occupancy";
+    protected static final String SHELTER_STATUS = "status";
+    protected static final String SHELTER_ACCOMMODATIONS = "accommodations";
+    protected static final String SHELTER_LAST_UPDATED = "lastUpdated";
+    protected static final String SHELTER_OPERATORS = "shelterOperators";
 }
