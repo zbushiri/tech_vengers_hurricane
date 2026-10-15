@@ -50,7 +50,11 @@ public class ShelterList {
     public ArrayList<Shelter> searchByProximity(Location from, double radius) {
         ArrayList<Shelter> nearbyShelters = new ArrayList<>();
          for (Shelter shelter : shelters) {
-            double distance = calculateDistance(from, instance.locations.get(shelter.getAddress()));
+            Location location = instance.locations.get(shelter.getAddress());
+            if (location == null) {
+                continue;
+            }
+            double distance = calculateDistance(from, location);
              if (distance <= radius) {
                  nearbyShelters.add(shelter);
              }
@@ -74,16 +78,8 @@ public class ShelterList {
     public boolean verifyStatusReport(Shelter shelter, ShelterStatus status) {
         return shelter.getStatus().equals(status);
     }
-    public ArrayList<Shelter> getSheltersNeedingRefresh() {
-        ArrayList<Shelter> sheltersNeedingRefresh = new ArrayList<>();
-        for (Shelter shelter : shelters) {
-            //if (shelter.needsRefresh()) {
-                //sheltersNeedingRefresh.add(shelter);
-            //}
-        }
-        return sheltersNeedingRefresh;
-    }
     public boolean save() {
+        DataWriter.saveShelters(shelters);
         return true;
     }
 }
