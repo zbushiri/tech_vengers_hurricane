@@ -3,115 +3,51 @@ package model;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-// * Saves project information in JSON files.
+/** Saves project data in JSON files. */
 public class DataWriter extends DataConstants {
     private DataWriter() { }
 
-    // * Saves every shelter.
-    public static boolean saveShelters(List<Shelter> shelters) {
-        if (shelters == null) {
-            // ! There is no list to save.
-            return false;
-        }
-
-        JSONArray shelterArray = new JSONArray();
-
-        for (Shelter shelter : shelters) {
-            shelterArray.add(shelterToJSON(shelter));
-        }
-
-        return writeFile(SHELTER_FILE, shelterArray, "shelters");
+    public static boolean saveUsers(List<User> users) {
+        JSONArray data = new JSONArray();
+        for (User user : users) data.add(userToJSON(user));
+        return writeFile(USER_FILE, data);
     }
 
-    // * Saves every user.
     public static boolean saveUsers() {
         return saveUsers(UserList.getInstance().getUsers());
     }
 
-    // * Saves the given users.
-    public static boolean saveUsers(List<User> users) {
-        if (users == null) {
-            // ! There is no list to save.
-            return false;
-        }
-
-        JSONArray userArray = new JSONArray();
-
-        for (User user : users) {
-            userArray.add(userToJSON(user));
-        }
-
-        return writeFile(USER_FILE, userArray, "users");
+    public static boolean saveShelters(List<Shelter> shelters) {
+        JSONArray data = new JSONArray();
+        for (Shelter shelter : shelters) data.add(shelterToJSON(shelter));
+        return writeFile(SHELTER_FILE, data);
     }
 
-    // * Saves every relief request.
     public static boolean saveRequests(List<ReliefRequest> requests) {
-        if (requests == null) {
-            // ! There is no list to save.
-            return false;
-        }
-
-        JSONArray requestArray = new JSONArray();
-
-        for (ReliefRequest request : requests) {
-            requestArray.add(requestToJSON(request));
-        }
-
-        return writeFile(REQUEST_FILE, requestArray, "requests");
+        JSONArray data = new JSONArray();
+        for (ReliefRequest request : requests) data.add(requestToJSON(request));
+        return writeFile(REQUEST_FILE, data);
     }
 
-    // * Writes the JSON information to a file.
-    private static boolean writeFile(String fileName, JSONArray data, String dataName) {
+    public static boolean saveRequests() {
+        return saveRequests(ReliefRequestCatalog.getInstance().getRequests());
+    }
+
+    private static boolean writeFile(String fileName, JSONArray data) {
         try (FileWriter file = new FileWriter(fileName)) {
             file.write(data.toJSONString());
-            System.out.println(dataName + " saved successfully.");
             return true;
-        } catch (IOException exception) {
-            System.out.println("Could not save " + dataName + ".");
+        } catch (IOException e) {
+            System.out.println("Could not save " + fileName + ".");
             return false;
         }
     }
 
-    // * Builds the JSON for one shelter.
-    private static JSONObject shelterToJSON(Shelter shelter) {
-        JSONObject json = new JSONObject();
-
-        json.put("shelterId", shelter.getShelterId().toString());
-        json.put("name", shelter.getName());
-        json.put("address", shelter.getAddress());
-        json.put("capacity", shelter.getCapacity());
-        json.put("occupancy", shelter.getOccupancy());
-        json.put("status", shelter.getStatus().toString().toLowerCase());
-
-        JSONArray accommodations = new JSONArray();
-        if (shelter.getAccommodations() != null) {
-            for (Accommodation accommodation : shelter.getAccommodations()) {
-                accommodations.add(accommodation.toString().toLowerCase());
-            }
-        }
-        json.put("accommodations", accommodations);
-
-        json.put("lastUpdated", shelter.getLastUpdated().toString());
-
-        JSONArray operators = new JSONArray();
-        if (shelter.getShelterOperators() != null) {
-            for (User operator : shelter.getShelterOperators()) {
-                operators.add(operator.getUsername());
-            }
-        }
-        json.put("shelterOperators", operators);
-
-        return json;
-    }
-
-    // * Builds the JSON for one user.
     private static JSONObject userToJSON(User user) {
         JSONObject json = new JSONObject();
-
         json.put(USER_ID, user.getUserId().toString());
         json.put(USER_FIRST_NAME, user.getFirstName());
         json.put(USER_LAST_NAME, user.getLastName());
@@ -120,118 +56,62 @@ public class DataWriter extends DataConstants {
         json.put(USER_ADDRESS, user.getAddress());
         json.put(USER_USERNAME, user.getUsername());
         json.put(USER_PASSWORD, user.getPasswordHash());
-
-        JSONArray roles = new JSONArray();
-        if (user.getRoles() != null) {
-            for (AccountRole role : user.getRoles()) {
-                roles.add(role.toString().toLowerCase());
-            }
-        }
-        json.put(USER_ROLES, roles);
-
+        json.put(USER_ROLES, enumArray(user.getRoles()));
         JSONArray people = new JSONArray();
-        if (user.getAssociatedPersons() != null) {
-            for (Person person : user.getAssociatedPersons()) {
-                people.add(personToJSON(person));
-            }
-        }
+        for (Person person : user.getAssociatedPersons()) people.add(personToJSON(person));
         json.put(ASSOCIATED_PERSONS, people);
-
-        json.put(VERIFICATION_STATUS, user.getVerificationStatus().toString().toLowerCase());
+        json.put(VERIFICATION_STATUS, enumText(user.getVerificationStatus()));
         json.put(USER_LAST_KNOWN_LOCATION, user.getLastKnownLocation());
-        json.put(SAFETY_STATUS, user.getSafetyStatus().toString().toLowerCase());
-        json.put(SAFETY_STATUS_UPDATED_AT, user.getSafetyStatusUpdatedAt().toString());
-
-        // * Adds information that only volunteers have.
-        if (user instanceof VolunteerProfile) {
-            VolunteerProfile volunteer = (VolunteerProfile) user;
-
-            JSONArray skills = new JSONArray();
-            if (volunteer.getSkills() != null) {
-                skills.addAll(volunteer.getSkills());
-            }
-            json.put("skills", skills);
-
-            JSONArray equipment = new JSONArray();
-            if (volunteer.getEquipment() != null) {
-                equipment.addAll(volunteer.getEquipment());
-            }
-            json.put("equipment", equipment);
-
-            json.put("backgroundCheckStatus",
-                    volunteer.getBackgroundCheckStatus().toString().toLowerCase());
-            json.put("transportationStatus", volunteer.hasTransportationAccess());
-            json.put("availabilityStatus",
-                    volunteer.getAvailabilityStatus().toString().toLowerCase());
-        }
-
+        json.put(SAFETY_STATUS, enumText(user.getSafetyStatus()));
+        json.put(SAFETY_STATUS_UPDATED_AT, String.valueOf(user.getSafetyStatusUpdatedAt()));
         return json;
     }
 
-    // * Builds the JSON for one person.
     private static JSONObject personToJSON(Person person) {
         JSONObject json = new JSONObject();
-
-        json.put("firstName", person.getFirstName());
-        json.put("lastName", person.getLastName());
-        json.put("age", person.getAge());
-
-        JSONArray specialNeeds = new JSONArray();
-        if (person.getSpecialNeeds() != null) {
-            specialNeeds.addAll(person.getSpecialNeeds());
-        }
-        json.put("specialNeeds", specialNeeds);
-
+        json.put(PERSON_FIRST_NAME, person.getFirstName());
+        json.put(PERSON_LAST_NAME, person.getLastName());
+        json.put(PERSON_AGE, person.getAge());
+        JSONArray needs = new JSONArray();
+        needs.addAll(person.getSpecialNeeds());
+        json.put(PERSON_SPECIAL_NEEDS, needs);
         return json;
     }
 
-    // * Builds the JSON for one relief request.
+    private static JSONObject shelterToJSON(Shelter shelter) {
+        JSONObject json = new JSONObject();
+        json.put(SHELTER_ID, shelter.getShelterId().toString());
+        json.put(SHELTER_NAME, shelter.getName());
+        json.put(SHELTER_ADDRESS, shelter.getAddress());
+        json.put(SHELTER_CAPACITY, shelter.getCapacity());
+        json.put(SHELTER_OCCUPANCY, shelter.getOccupancy());
+        json.put(SHELTER_STATUS, enumText(shelter.getStatus()));
+        json.put(SHELTER_ACCOMMODATIONS, enumArray(shelter.getAccommodations()));
+        json.put(SHELTER_LAST_UPDATED, String.valueOf(shelter.getLastUpdated()));
+        JSONArray operators = new JSONArray();
+        for (User user : shelter.getShelterOperators()) operators.add(user.getUsername());
+        json.put(SHELTER_OPERATORS, operators);
+        return json;
+    }
+
     private static JSONObject requestToJSON(ReliefRequest request) {
         JSONObject json = new JSONObject();
-
         json.put("requestId", request.getRequestId().toString());
-        json.put("type", request.getType().toString().toLowerCase());
-        json.put("status", request.getStatus().toString());
+        json.put("type", enumText(request.getType()));
+        json.put("status", enumText(request.getStatus()));
         json.put("location", request.getLocation());
         json.put("description", request.getDescription());
-        json.put("priority", request.getPriority().toString().toLowerCase());
-        json.put("dateSubmitted", request.getDateSubmitted().toInstant().toString());
-        json.put("numberOfPeopleNeeded", request.getNumberOfPeopleNeeded());
-        json.put("numberOfAnimals", request.getNumberOfAnimals());
-        json.put("animalNotes", request.getAnimalNotes());
-        json.put("photoUrl", request.getPhotoUrl());
-        json.put("isSuspicious", request.isSuspicious());
-
-        if (request.getIsDuplicateOf() == null) {
-            json.put("isDuplicateOf", null);
-        } else {
-            json.put("isDuplicateOf", request.getIsDuplicateOf().getRequestId().toString());
-        }
-
-        if (request.getForHurricane() == null) {
-            json.put("forHurricane", null);
-        } else {
-            json.put("forHurricane", hurricaneToJSON(request.getForHurricane()));
-        }
-
+        json.put("priority", enumText(request.getPriority()));
         return json;
     }
 
-    // * Builds the JSON for one hurricane.
-    private static JSONObject hurricaneToJSON(HurricaneEvent hurricane) {
-        JSONObject json = new JSONObject();
+    private static String enumText(Enum<?> value) {
+        return value == null ? "" : value.name().toLowerCase();
+    }
 
-        json.put("name", hurricane.getName());
-        json.put("startDate", hurricane.getStartDate().toInstant().toString());
-        json.put("endDate", hurricane.getEndDate().toInstant().toString());
-        json.put("status", hurricane.getStatus().toString().toLowerCase());
-
-        JSONArray affectedAreas = new JSONArray();
-        if (hurricane.getAffectedAreas() != null) {
-            affectedAreas.addAll(hurricane.getAffectedAreas());
-        }
-        json.put("affectedAreas", affectedAreas);
-
-        return json;
+    private static JSONArray enumArray(List<? extends Enum<?>> values) {
+        JSONArray data = new JSONArray();
+        if (values != null) for (Enum<?> value : values) data.add(enumText(value));
+        return data;
     }
 }

@@ -1,0 +1,30 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "MapUI",
+      "request": "launch",
+      "mainClass": "techvengers_hurricane/model.MapUI",
+      "projectName": "techvengers_hurricane"
+    },
+    {
+      "type": "java",
+      "name": "Run UI",
+      "request": "launch",
+      "mainClass": "model.UI",
+      "env": {
+        "HURRICANE_API": "${env:HURRICANE_API}"
+      }
+    },
+    {
+      "type": "java",
+      "name": "Run Map App",
+      "request": "launch",
+      "mainClass": "techvengers_hurricane.App",
+      "env": {
+        "HURRICANE_API": "${env:HURRICANE_API}"
+      }
+    }
+  ]
+}

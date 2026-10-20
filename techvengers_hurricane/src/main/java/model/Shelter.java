@@ -21,45 +21,82 @@ public class Shelter {
             setName(name);
             setAddress(address);
             setCapacity(capacity);
-            setOccupancy(occupancy);
             setStatus(status);
+            setOccupancy(occupancy);
             setAccommodations(accomodations);
             setLastUpdated(LocalDateTime.now());
             setShelterOperators(new ArrayList<User>());
     }
 
-    public void updateStatus(ShelterStatus status, User requestedBy) {
+    /**
+     * Changes the shelter's status. Only this shelter's operators or a
+     * coordinator may do this.
+     *
+     * @return true if the status was changed
+     */
+    public boolean updateStatus(ShelterStatus status, User requestedBy) {
+        if (status == null || !canManage(requestedBy)) {
+            return false;
+        }
         setStatus(status);
         setLastUpdated(LocalDateTime.now());
-        // TODO: Log the user who requested the status update
-        // This should be expanded to actually record the user in a log 
         System.out.println("Status updated by user: " + requestedBy.getUsername());
+        return true;
     }
 
-    public void addAccommodations(Accommodation accommodation, User requestedBy) {
+    /**
+     * Adds an accommodation. Only this shelter's operators or a coordinator
+     * may do this.
+     *
+     * @return true if the accommodation was added
+     */
+    public boolean addAccommodation(Accommodation accommodation, User requestedBy) {
+        if (accommodation == null || !canManage(requestedBy)) {
+            return false;
+        }
         if (accommodations == null) {
             accommodations = new ArrayList<>();
         }
+        if (accommodations.contains(accommodation)) {
+            return false;
+        }
         accommodations.add(accommodation);
         setLastUpdated(LocalDateTime.now());
-        // TODO: Log the user who requested the addition
-        // This should be expanded to actually record the user in a log 
         System.out.println("Accommodation added by user: " + requestedBy.getUsername());
+        return true;
     }
 
     public void reportStatusFlag(ShelterStatus status, User reportedBy) {
         // TODO:Log the status flag report
         // This should be expanded to actually record the user in a log 
-        System.out.println("Status flag reported by user: " + reportedBy.getUsername() + " for status: " + status);
+        String reporter = reportedBy == null ? "unknown" : reportedBy.getUsername();
+        System.out.println("Status flag reported by user: " + reporter + " for status: " + status);
     }
 
+    /**
+     * Operators are matched by username, since the operator list may hold
+     * a different User object than the one that is logged in.
+     */
     public boolean isShelterOperator(User user) {
-        if (shelterOperators == null) {
+        if (shelterOperators == null || user == null || user.getUsername() == null) {
             return false;
         }
-        return shelterOperators.contains(user);
+        for (User operator : shelterOperators) {
+            if (user.getUsername().equalsIgnoreCase(operator.getUsername())) {
+                return true;
+            }
+        }
+        return false;
     }
-    
+
+    private boolean canManage(User user) {
+        return user != null && (isShelterOperator(user) || user.hasRole(AccountRole.COORDINATOR));
+    }
+
+    public boolean hasSpace() {
+        return status == ShelterStatus.OPEN && occupancy < capacity;
+    }
+
     public UUID getShelterId() {
         return shelterId;
     }
@@ -96,8 +133,17 @@ public class Shelter {
         return occupancy;
     }
 
+    /**
+     * Sets how many people are in the shelter. An open shelter that reaches
+     * capacity becomes FULL, and a full shelter with space again reopens.
+     */
     public void setOccupancy(int occupancy) {
-        this.occupancy = occupancy;
+        this.occupancy = Math.max(0, occupancy);
+        if (status == ShelterStatus.OPEN && this.occupancy >= capacity) {
+            status = ShelterStatus.FULL;
+        } else if (status == ShelterStatus.FULL && this.occupancy < capacity) {
+            status = ShelterStatus.OPEN;
+        }
     }
 
     public ShelterStatus getStatus() {
