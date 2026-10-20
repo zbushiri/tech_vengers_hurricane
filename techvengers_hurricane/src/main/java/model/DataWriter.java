@@ -10,6 +10,7 @@ import org.json.simple.JSONObject;
 public class DataWriter extends DataConstants {
     private DataWriter() { }
 
+    @SuppressWarnings("unchecked")
     public static boolean saveUsers(List<User> users) {
         JSONArray data = new JSONArray();
         for (User user : users) data.add(userToJSON(user));
@@ -20,12 +21,14 @@ public class DataWriter extends DataConstants {
         return saveUsers(UserList.getInstance().getUsers());
     }
 
+    @SuppressWarnings("unchecked")
     public static boolean saveShelters(List<Shelter> shelters) {
         JSONArray data = new JSONArray();
         for (Shelter shelter : shelters) data.add(shelterToJSON(shelter));
         return writeFile(SHELTER_FILE, data);
     }
 
+    @SuppressWarnings("unchecked")
     public static boolean saveRequests(List<ReliefRequest> requests) {
         JSONArray data = new JSONArray();
         for (ReliefRequest request : requests) data.add(requestToJSON(request));
@@ -46,6 +49,7 @@ public class DataWriter extends DataConstants {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private static JSONObject userToJSON(User user) {
         JSONObject json = new JSONObject();
         json.put(USER_ID, user.getUserId().toString());
@@ -67,6 +71,7 @@ public class DataWriter extends DataConstants {
         return json;
     }
 
+    @SuppressWarnings("unchecked")
     private static JSONObject personToJSON(Person person) {
         JSONObject json = new JSONObject();
         json.put(PERSON_FIRST_NAME, person.getFirstName());
@@ -78,6 +83,7 @@ public class DataWriter extends DataConstants {
         return json;
     }
 
+    @SuppressWarnings("unchecked")
     private static JSONObject shelterToJSON(Shelter shelter) {
         JSONObject json = new JSONObject();
         json.put(SHELTER_ID, shelter.getShelterId().toString());
@@ -94,6 +100,7 @@ public class DataWriter extends DataConstants {
         return json;
     }
 
+    @SuppressWarnings("unchecked")
     private static JSONObject requestToJSON(ReliefRequest request) {
         JSONObject json = new JSONObject();
         json.put("requestId", request.getRequestId().toString());
@@ -109,6 +116,7 @@ public class DataWriter extends DataConstants {
         return value == null ? "" : value.name().toLowerCase();
     }
 
+    @SuppressWarnings("unchecked")
     private static JSONArray enumArray(List<? extends Enum<?>> values) {
         JSONArray data = new JSONArray();
         if (values != null) for (Enum<?> value : values) data.add(enumText(value));
