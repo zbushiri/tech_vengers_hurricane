@@ -1,85 +1,44 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Random;
+
+/** Stores and searches shelters. */
 public class ShelterList {
+    public static final double DEFAULT_RADIUS_MILES = 25;
     private static ShelterList instance;
-    private ArrayList<Shelter> shelters;
-    private class Location {
-        double latitude;
-        double longitude;
-        Random rand = new Random();
-        public Location() {
-            latitude = rand.nextDouble() * 30;
-            longitude = rand.nextDouble() * 60;
-        }
-    }
+    private final ArrayList<Shelter> shelters = new ArrayList<>();
 
-    private HashMap<String, Location> locations;
-    private ShelterList() {
-        shelters = new ArrayList<>();
-        locations = new HashMap<>();
-    }
-
+    private ShelterList() { }
     public static ShelterList getInstance() {
-        if (instance == null) {
-            instance = new ShelterList();
-            instance.shelters = new ArrayList<>();
-            instance.locations = new HashMap<>();
-            for (Shelter shelter : instance.shelters) {
-                for (String location : instance.locations.keySet()) {
-                    if (shelter.getAddress().equals(location)) {
-                        break;
-                    }
-                }
-                instance.locations.put(shelter.getAddress(), instance.new Location());
-            }
-        }
+        if (instance == null) instance = new ShelterList();
         return instance;
     }
-
+    public ArrayList<Shelter> getShelters() { return shelters; }
     public void addShelter(Shelter shelter) {
-        shelters.add(shelter);
+        if (shelter != null && !shelters.contains(shelter)) shelters.add(shelter);
     }
 
-    public ArrayList<Shelter> getShelters() {
-        return shelters;
-    }
-    
-    public ArrayList<Shelter> searchByProximity(Location from, double radius) {
-        ArrayList<Shelter> nearbyShelters = new ArrayList<>();
-         for (Shelter shelter : shelters) {
-            Location location = instance.locations.get(shelter.getAddress());
-            if (location == null) {
-                continue;
-            }
-            double distance = calculateDistance(from, location);
-             if (distance <= radius) {
-                 nearbyShelters.add(shelter);
-             }
-        }
-        return nearbyShelters;
-    }
-
-    private double calculateDistance(Location start, Location end) {
-        return Math.sqrt(Math.pow(start.latitude - end.latitude, 2) + Math.pow(start.longitude - end.longitude, 2));
-    }
-
-    public ArrayList<Shelter> filterByAccommodation(Accommodation criteria) {
-        ArrayList<Shelter> filteredShelters = new ArrayList<>();
+    public ArrayList<Shelter> searchByProximity(String location, double radius) {
+        ArrayList<Shelter> matches = new ArrayList<>();
+        String wanted = location == null ? "" : location.trim().toLowerCase();
         for (Shelter shelter : shelters) {
-            if (shelter.getAccommodations().contains(criteria)) {
-                filteredShelters.add(shelter);
-            }
+            boolean sameArea = wanted.isEmpty() || shelter.getAddress().toLowerCase().contains(wanted);
+            if (sameArea && shelter.hasSpace()) matches.add(shelter);
         }
-        return filteredShelters;
+        return matches;
     }
+
+    public ArrayList<Shelter> filterByAccommodation(Accommodation accommodation) {
+        ArrayList<Shelter> matches = new ArrayList<>();
+        for (Shelter shelter : shelters) {
+            if (shelter.getAccommodations().contains(accommodation)) matches.add(shelter);
+        }
+        return matches;
+    }
+
     public boolean verifyStatusReport(Shelter shelter, ShelterStatus status) {
-        return shelter.getStatus().equals(status);
+        return shelter != null && shelter.getStatus() == status;
     }
-    public boolean save() {
-        DataWriter.saveShelters(shelters);
-        return true;
-    }
+
+    public boolean save() { return DataWriter.saveShelters(shelters); }
 }
