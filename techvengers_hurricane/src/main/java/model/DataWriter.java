@@ -2,7 +2,7 @@ package model;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -10,13 +10,14 @@ import org.json.simple.JSONObject;
 // * Saves project information in JSON files.
 public class DataWriter extends DataConstants {
     private DataWriter() { }
-    /**
-     * Saves all shelters to shelters.json.
-     *
-     * @param shelters the shelters that will be saved
-     */
-    @SuppressWarnings("unchecked")
-    public static void saveShelters(ArrayList<Shelter> shelters) {
+
+    // * Saves every shelter.
+    public static boolean saveShelters(List<Shelter> shelters) {
+        if (shelters == null) {
+            // ! There is no list to save.
+            return false;
+        }
+
         JSONArray shelterArray = new JSONArray();
 
         for (Shelter shelter : shelters) {
@@ -27,6 +28,11 @@ public class DataWriter extends DataConstants {
     }
 
     // * Saves every user.
+    public static boolean saveUsers() {
+        return saveUsers(UserList.getInstance().getUsers());
+    }
+
+    // * Saves the given users.
     public static boolean saveUsers(List<User> users) {
         if (users == null) {
             // ! There is no list to save.
@@ -42,13 +48,13 @@ public class DataWriter extends DataConstants {
         return writeFile(USER_FILE, userArray, "users");
     }
 
-    /**
-     * Saves all relief requests to requests.json.
-     *
-     * @param requests the relief requests that will be saved
-     */
-    @SuppressWarnings("unchecked")
-    public static void saveRequests(ArrayList<ReliefRequest> requests) {
+    // * Saves every relief request.
+    public static boolean saveRequests(List<ReliefRequest> requests) {
+        if (requests == null) {
+            // ! There is no list to save.
+            return false;
+        }
+
         JSONArray requestArray = new JSONArray();
 
         for (ReliefRequest request : requests) {
@@ -58,14 +64,8 @@ public class DataWriter extends DataConstants {
         return writeFile(REQUEST_FILE, requestArray, "requests");
     }
 
-    /**
-     * Writes a finished JSON array to a file.
-     *
-     * @param fileName the JSON file being written
-     * @param data the JSON data being saved
-     * @param dataName simple name used for the message
-     */
-    private static void writeFile(String fileName, JSONArray data, String dataName) {
+    // * Writes the JSON information to a file.
+    private static boolean writeFile(String fileName, JSONArray data, String dataName) {
         try (FileWriter file = new FileWriter(fileName)) {
             file.write(data.toJSONString());
             System.out.println(dataName + " saved successfully.");
@@ -85,7 +85,7 @@ public class DataWriter extends DataConstants {
         json.put("address", shelter.getAddress());
         json.put("capacity", shelter.getCapacity());
         json.put("occupancy", shelter.getOccupancy());
-        json.put("status", enumText(shelter.getStatus()));
+        json.put("status", shelter.getStatus().toString().toLowerCase());
 
         JSONArray accommodations = new JSONArray();
         if (shelter.getAccommodations() != null) {
@@ -95,7 +95,7 @@ public class DataWriter extends DataConstants {
         }
         json.put("accommodations", accommodations);
 
-        json.put("lastUpdated", String.valueOf(shelter.getLastUpdated()));
+        json.put("lastUpdated", shelter.getLastUpdated().toString());
 
         JSONArray operators = new JSONArray();
         if (shelter.getShelterOperators() != null) {
@@ -115,6 +115,7 @@ public class DataWriter extends DataConstants {
         json.put(USER_ID, user.getUserId().toString());
         json.put(USER_FIRST_NAME, user.getFirstName());
         json.put(USER_LAST_NAME, user.getLastName());
+        json.put(USER_PHONE_NUMBER, user.getPhoneNumber());
         json.put(USER_EMAIL, user.getEmail());
         json.put(USER_ADDRESS, user.getAddress());
         json.put(USER_USERNAME, user.getUsername());
@@ -134,20 +135,29 @@ public class DataWriter extends DataConstants {
                 people.add(personToJSON(person));
             }
         }
-        json.put("associatedPeople", people);
+        json.put(ASSOCIATED_PERSONS, people);
 
-        json.put("verificationStatus", user.getVerificationStatus().toString().toLowerCase());
-        json.put("lastKnownLocation", user.getLastKnownLocation());
-        json.put("safetyStatus", user.getSafetyStatus().toString().toLowerCase());
-        json.put("safetyStatusUpdatedAt", user.getSafetyStatusUpdatedAt().toString());
+        json.put(VERIFICATION_STATUS, user.getVerificationStatus().toString().toLowerCase());
+        json.put(USER_LAST_KNOWN_LOCATION, user.getLastKnownLocation());
+        json.put(SAFETY_STATUS, user.getSafetyStatus().toString().toLowerCase());
+        json.put(SAFETY_STATUS_UPDATED_AT, user.getSafetyStatusUpdatedAt().toString());
 
         // * Adds information that only volunteers have.
         if (user instanceof VolunteerProfile) {
             VolunteerProfile volunteer = (VolunteerProfile) user;
-            json.put("skills", new JSONArray());
-            ((JSONArray) json.get("skills")).addAll(safeList(volunteer.getSkills()));
-            json.put("equipment", new JSONArray());
-            ((JSONArray) json.get("equipment")).addAll(safeList(volunteer.getEquipment()));
+
+            JSONArray skills = new JSONArray();
+            if (volunteer.getSkills() != null) {
+                skills.addAll(volunteer.getSkills());
+            }
+            json.put("skills", skills);
+
+            JSONArray equipment = new JSONArray();
+            if (volunteer.getEquipment() != null) {
+                equipment.addAll(volunteer.getEquipment());
+            }
+            json.put("equipment", equipment);
+
             json.put("backgroundCheckStatus",
                     volunteer.getBackgroundCheckStatus().toString().toLowerCase());
             json.put("transportationStatus", volunteer.hasTransportationAccess());
@@ -180,12 +190,12 @@ public class DataWriter extends DataConstants {
         JSONObject json = new JSONObject();
 
         json.put("requestId", request.getRequestId().toString());
-        json.put("type", enumText(request.getType()));
-        json.put("status", enumText(request.getStatus()));
+        json.put("type", request.getType().toString().toLowerCase());
+        json.put("status", request.getStatus().toString());
         json.put("location", request.getLocation());
         json.put("description", request.getDescription());
         json.put("priority", request.getPriority().toString().toLowerCase());
-        json.put("dateSubmitted", request.getDateSubmitted().toString());
+        json.put("dateSubmitted", request.getDateSubmitted().toInstant().toString());
         json.put("numberOfPeopleNeeded", request.getNumberOfPeopleNeeded());
         json.put("numberOfAnimals", request.getNumberOfAnimals());
         json.put("animalNotes", request.getAnimalNotes());
@@ -212,8 +222,8 @@ public class DataWriter extends DataConstants {
         JSONObject json = new JSONObject();
 
         json.put("name", hurricane.getName());
-        json.put("startDate", hurricane.getStartDate().toString());
-        json.put("endDate", hurricane.getEndDate().toString());
+        json.put("startDate", hurricane.getStartDate().toInstant().toString());
+        json.put("endDate", hurricane.getEndDate().toInstant().toString());
         json.put("status", hurricane.getStatus().toString().toLowerCase());
 
         JSONArray affectedAreas = new JSONArray();
@@ -223,15 +233,5 @@ public class DataWriter extends DataConstants {
         json.put("affectedAreas", affectedAreas);
 
         return json;
-    }
-    /**
-     * Returns an empty list when a model list has not been set yet.
-     * This keeps saving simple and prevents null list errors.
-     *
-     * @param list the list being checked
-     * @return the original list, or an empty list when null
-     */
-    private static <T> java.util.List<T> safeList(java.util.List<T> list) {
-        return list == null ? java.util.Collections.emptyList() : list;
     }
 }

@@ -4,9 +4,6 @@ import java.util.Date;
 
 // TODO: Messages!
 public class ReliefRequest {
-    /** A request for at least this many people moves up one priority level. */
-    public static final int LARGE_GROUP_SIZE = 10;
-
     private UUID requestId;
     private RequestType type;
     private String description;
@@ -22,21 +19,10 @@ public class ReliefRequest {
     private ReliefRequest isDuplicateOf;
     private HurricaneEvent forHurricane;
 
-    public ReliefRequest(RequestType type, String description, String location, int numberOfPeopleNeeded) {
-        this(UUID.randomUUID(), type, description, location, numberOfPeopleNeeded,
-             0, "", "", false, null, null);
-    }
-
-    /**
-     * Copies another request, including its status, priority and date.
-     */
     public ReliefRequest(ReliefRequest request) {
         this(request.getRequestId(), request.getType(), request.getDescription(), request.getLocation(),
              request.getNumberOfPeopleNeeded(), request.getNumberOfAnimals(), request.getAnimalNotes(),
              request.getPhotoUrl(), request.isSuspicious(), request.getIsDuplicateOf(), request.getForHurricane());
-        setStatus(request.getStatus());
-        setPriority(request.getPriority());
-        setDateSubmitted(request.getDateSubmitted());
     }
 
 
@@ -46,6 +32,7 @@ public class ReliefRequest {
         setType(type);
         setDescription(description);
         setStatus(RequestStatus.SUBMITTED);
+        setPriority(calculatePriority());
         setDateSubmitted(new Date());
         setLocation(location);
         setNumberOfPeopleNeeded(numberOfPeopleNeeded);
@@ -55,64 +42,29 @@ public class ReliefRequest {
         setSuspicious(isSuspicious);
         setIsDuplicateOf(isDuplicateOf);
         setForHurricane(forHurricane);
-        // Priority depends on the fields above, so it is set last.
-        setPriority(calculatePriority());
     }
 
-    /**
-     * Cancels the request. A request that is already fulfilled stays fulfilled.
-     */
     public void cancel() {
-        if (isOpen()) {
-            setStatus(RequestStatus.CANCELLED);
-        }
+        setStatus(RequestStatus.CANCELLED);
+        // TODO: Additional logic for canceling the request can be added here
     }
 
     public void addDetail(String detail) {
-        if (detail == null || detail.trim().isEmpty()) {
-            return;
-        }
-        if (description == null || description.isEmpty()) {
-            setDescription(detail);
-        } else {
-            setDescription(description + "\n" + detail);
-        }
+        setDescription(getDescription() + "\n" + detail);
     }
 
     public void flagAsSuspicious() {
         setSuspicious(true);
     }
 
-    /**
-     * Lets a volunteer take this request. It only works when the request has
-     * not been claimed yet and the volunteer is available and verified.
-     * The volunteer is then marked as on assignment.
-     */
     public void claimRequest(VolunteerProfile volunteer) {
-        if (status != RequestStatus.SUBMITTED || volunteer == null || !volunteer.canClaimRequests()) {
-            return;
-        }
         setStatus(RequestStatus.IN_PROGRESS);
-        volunteer.setAvailability(AvailabilityStatus.ON_ASSIGNMENT);
+        // TODO: Additional logic for claiming the request by a volunteer can be added here
     }
 
-    /**
-     * Medical and hazard requests start at HIGH, shelter and food at MEDIUM,
-     * and everything else at LOW. Large groups move up one level.
-     */
     public PriorityLevel calculatePriority() {
-        PriorityLevel level;
-        if (type == RequestType.MEDICAL || type == RequestType.HAZARD) {
-            level = PriorityLevel.HIGH;
-        } else if (type == RequestType.SHELTER || type == RequestType.FOOD) {
-            level = PriorityLevel.MEDIUM;
-        } else {
-            level = PriorityLevel.LOW;
-        }
-        if (numberOfPeopleNeeded >= LARGE_GROUP_SIZE && level != PriorityLevel.CRITICAL) {
-            level = PriorityLevel.values()[level.ordinal() + 1];
-        }
-        return level;
+        // TODO: Implement the priority calculation logic here
+        return PriorityLevel.LOW;
     }
     public boolean isOpen() {
         return status == RequestStatus.SUBMITTED || status == RequestStatus.IN_PROGRESS;

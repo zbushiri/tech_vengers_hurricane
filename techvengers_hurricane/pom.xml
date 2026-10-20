@@ -46,7 +46,7 @@
 <artifactId>exec-maven-plugin</artifactId>
 <version>3.5.0</version>
 <configuration>
-<mainClass>model.HurricaneReliefApp</mainClass>
+<mainClass>com.techvengershurricane.Driver</mainClass>
 </configuration>
 </plugin>
 <plugin>
@@ -56,7 +56,7 @@
 <configuration>
 <jlinkImageName>hurricanejavafx</jlinkImageName>
 <launcher>launcher</launcher>
-<mainClass>techvengers_hurricane/techvengers_hurricane.App</mainClass>
+<mainClass>com.techvengershurricane.App</mainClass>
 </configuration>
 </plugin>
 </plugins>

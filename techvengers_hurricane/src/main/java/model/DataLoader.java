@@ -1,7 +1,9 @@
 package model;
 
 import java.io.FileReader;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.UUID;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -9,15 +11,6 @@ import org.json.simple.parser.JSONParser;
 
 /**
  * Loads project data from JSON files.
- *
- * The loader only reads the files and builds objects. It does not add them
- * to UserList, ShelterList or ReliefRequestCatalog; HurricaneReliefApp does
- * that, so loading twice never creates duplicates.
- *
- * Some of the sample JSON uses different key spellings (for example
- * "associated_people" and "id"), numeric ids, and words that are not enum
- * values. Those are all accepted here, and DataWriter saves them back in
- * one consistent format.
  *
  * @author Tavien Smith
  */
@@ -33,15 +26,37 @@ public class DataLoader extends DataConstants {
     public static ShelterList getShelters() {
         ShelterList shelters = ShelterList.getInstance();
 
-        try {
-            FileReader reader = new FileReader(SHELTER_FILE);
+        if (!shelters.getShelters().isEmpty()) {
+            return shelters;
+        }
+
+        UserList users = getUsers();
+
+        try(FileReader reader = new FileReader(SHELTER_FILE)) {
             JSONArray sheltersJSON = (JSONArray) new JSONParser().parse(reader);
 
             for (int i = 0; i < sheltersJSON.size(); i++) {
                 JSONObject shelterJSON = (JSONObject) sheltersJSON.get(i);
-                String name = (String) shelterJSON.get("name");
+                
+                UUID shelterId = readID(shelterJSON.get(SHELTER_ID));
+                String name = (String) shelterJSON.get(SHELTER_NAME);
+                String address = (String) shelterJSON.get(SHELTER_ADDRESS);
+                int capacity = ((Long) shelterJSON.get(SHELTER_CAPACITY)).intValue();
+                int occupancy = ((Long) shelterJSON.get(SHELTER_OCCUPANCY)).intValue();
 
-                System.out.println(name);
+                ShelterStatus status = ShelterStatus.OPEN;
+                String statusText = (String) shelterJSON.get(SHELTER_STATUS);
+                if (statusText != null) {
+                    status = ShelterStatus.valueOf(statusText.toUpperCase());
+                }
+
+                ArrayList<Accommodation> accommodations = readAccommodations (shelterJSON.get(SHELTER_ACCOMMODATIONS));
+
+                Shelter shelter = new Shelter(shelterId, name, address, capacity,
+                        occupancy, status, accommodations);
+                shelter.setLastUpdated(readDateTime((String) shelterJSON.get(SHELTER_LAST_UPDATED)));
+                shelter.setShelterOperators(readOperators(shelterJSON.get(SHELTER_OPERATORS), users));
+                shelters.addShelter(shelter);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -50,21 +65,53 @@ public class DataLoader extends DataConstants {
     }
 
     /**
+     * Turns a JSON array of names like"pet_friendly" into Accommodations.
+     * Names that are not an Accommodation are skipped.
+    */
+   private static ArrayList<Accommodation> readAccommodations(Object accommodationsValue) {
+       ArrayList<Accommodation> accommodations = new ArrayList<>();
+       if (!(accommodationsValue instanceof JSONArray)) {
+        return accommodations;
+       }
+
+       for (Object accommodation : (JSONArray) accommodationsValue) {
+           try {
+               accommodations.add(Accommodation.valueOf(((String) accommodation).toUpperCase()));
+           } catch (IllegalArgumentException e) {
+               // not an Accommodation, so skip it
+           }
+       }
+       return accommodations;
+   }
+
+   /**
+    * Turns a JSON array of usernames into the matching Users.
+    * Usernames that match no user are skipped.
+   */
+  private static ArrayList<User> readOperators(Object operatorsValue, UserList users) {
+      ArrayList<User> operators = new ArrayList<>();
+      if (!(operatorsValue instanceof JSONArray)) {
+          return operators;
+      }
+      for (Object username : (JSONArray) operatorsValue) {
+          for (User user : users.getUsers()) {
+              if (user.getUsername().equals(username)) {
+                  operators.add(user);
+              }
+          }
+      }
+      return operators;
+  }
+
+    /**
      * Loads the users from the users JSON file.
-     * Volunteers are stored in this file too and are loaded as VolunteerProfile.
-     *
+     * Volunteers are stored in this file too.
+     * 
      * @return the list of users or an empty list if none load
      */
-    public static ArrayList<User> getUsers() {
-        ArrayList<User> users = new ArrayList<>();
+    public static UserList getUsers() {
+        UserList users = UserList.getInstance();
 
-<<<<<<< HEAD
-        for (JSONObject userJSON : readArray(USER_FILE)) {
-            try {
-                users.add(userFromJSON(userJSON));
-            } catch (RuntimeException e) {
-                System.out.println("Skipped a user that could not be read: " + e.getMessage());
-=======
         if (!users.getUsers().isEmpty()) {
             return users;
         }
@@ -107,66 +154,122 @@ public class DataLoader extends DataConstants {
                         username, password, roles, associatedPersons, verificationStatus,
                         lastKnownLocation, safetyStatus, safetyStatusUpdatedAt);
                 users.addUser(user);
->>>>>>> 10043cc5d4a9b45cb863e7cb7f14e3a8d74f9f28
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return users;
     }
+    
+    /**
+     * Turns a saved id into a UUID.
+     * Old data uses numbers for ids, so those get a new UUID.
+     */
+    private static UUID readID(Object idValue) {
+        if (idValue instanceof String) {
+            return UUID.fromString((String) idValue);
+        }
+        return UUID.randomUUID();
+    }
+
+    /**
+     * Turns a JSON array of role names like "resident" into AccountRoles.
+     * Names that are not a role (like "user") are skipped.
+     */
+    private static ArrayList<AccountRole> readRoles(Object rolesValue) {
+        ArrayList<AccountRole> roles = new ArrayList<>();
+        if (!(rolesValue instanceof JSONArray)) {
+            return roles;
+        }
+
+        for (Object role : (JSONArray) rolesValue) {
+            try {
+                roles.add(AccountRole.valueOf(((String) role).toUpperCase()));
+            } catch (IllegalArgumentException e) {
+                // not a role in AccountRole, so skip it
+            }
+        }
+        return roles;
+    }
+
+    /**
+     * Turns a JSON array of people into Person objects.
+     */
+    private static ArrayList<Person> readPeople(Object peopleValue) {
+        ArrayList<Person> people = new ArrayList<>();
+        if (!(peopleValue instanceof JSONArray)) {
+            return people;
+        }
+
+        for (Object item : (JSONArray) peopleValue) {
+            JSONObject personJSON = (JSONObject) item;
+            String firstName = (String) personJSON.get(PERSON_FIRST_NAME);
+            String lastName = (String) personJSON.get(PERSON_LAST_NAME);
+            int age = ((Long) personJSON.get(PERSON_AGE)).intValue();
+
+            // SpecialNeeds is a list in DataWriter's format and a single string in older data
+            ArrayList<String> specialNeeds = new ArrayList<>();
+            Object needsValue = personJSON.get(PERSON_SPECIAL_NEEDS);
+            if (needsValue instanceof JSONArray) {
+                for (Object need : (JSONArray) needsValue) {
+                    specialNeeds.add((String) need);
+                }
+            } else if (needsValue instanceof String && !needsValue.equals("none")) {
+                specialNeeds.add((String) needsValue);
+            }
+
+            people.add(new Person(firstName, lastName, age, specialNeeds));
+        }
+        return people;
+    }
+
+    /**
+     * Reads a date like "2026-10-13T13:58:27" or "2024-06-01T12:00:00Z".
+     * Returns the current time if there is no date.
+    */
+   private static LocalDateTime readDateTime(String text) {
+       if (text == null) {
+           return LocalDateTime.now();
+       }
+       if (text.endsWith("Z")) {
+           text = text.substring(0, text.length() - 1);
+       }
+       return LocalDateTime.parse(text);
+   }
+
+   /**
+    * Reads the last known location. Older data stores it as
+    * {"latitude": ..., "longitude": ...}, so that becomes "latitude, longitude".
+   */
+  private static String readLocation(Object locationValue) {
+    if (locationValue instanceof JSONObject) {
+        JSONObject locationJSON = (JSONObject) locationValue;
+        return locationJSON.get(LATITUDE) + ", " + locationJSON.get(LONGITUDE);
+    }
+    return (String) locationValue;
+  }
 
     /**
      * Loads the relief requests from the requests JSON file.
-     *
+     * 
      * @return the list of requests or an empty list if none load
      */
-    public static ArrayList<ReliefRequest> getRequests() {
-        ArrayList<ReliefRequest> requests = new ArrayList<>();
-        HashMap<ReliefRequest, String> duplicateIds = new HashMap<>();
+    public static ReliefRequestCatalog getRequests() {
+        ReliefRequestCatalog requests = ReliefRequestCatalog.getInstance();
 
-        for (JSONObject requestJSON : readArray(REQUEST_FILE)) {
-            try {
-                ReliefRequest request = requestFromJSON(requestJSON);
-                requests.add(request);
-                Object duplicateOf = requestJSON.get("isDuplicateOf");
-                if (duplicateOf != null) {
-                    duplicateIds.put(request, String.valueOf(duplicateOf));
-                }
-            } catch (RuntimeException e) {
-                System.out.println("Skipped a request that could not be read: " + e.getMessage());
-            }
-        }
-
-        // isDuplicateOf holds another request's id, so link them once all are loaded.
-        for (ReliefRequest request : duplicateIds.keySet()) {
-            UUID originalId = toUUID(duplicateIds.get(request), "request");
-            for (ReliefRequest original : requests) {
-                if (original.getRequestId().equals(originalId)) {
-                    request.setIsDuplicateOf(original);
-                }
-            }
-        }
+        // TODO: Read REQUEST_FILE and add each request to the list.
         return requests;
     }
 
     /**
      * Loads the Hurricane Event from the hurricanes JSON file.
-     *
+     * 
      * @return the list of hurricanes or an empty list if none load.
      */
     public static ArrayList<HurricaneEvent> getHurricanes() {
         ArrayList<HurricaneEvent> hurricanes = new ArrayList<>();
 
-        for (JSONObject hurricaneJSON : readArray(HURRICANE_FILE)) {
-            try {
-                hurricanes.add(hurricaneFromJSON(hurricaneJSON));
-            } catch (RuntimeException e) {
-                System.out.println("Skipped a hurricane that could not be read: " + e.getMessage());
-            }
-        }
+        // TODO: Read HURRICANE_FILE and add each hurricane to the list.
         return hurricanes;
     }
-
-        public static void main(String[] args) {
-            getUsers();
-        System.out.println("Users loaded: " + getUsers().getUsers().size());
-        }
 }
