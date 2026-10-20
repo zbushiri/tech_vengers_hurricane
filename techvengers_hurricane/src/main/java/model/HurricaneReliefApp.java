@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import model.ShelterList.Location;
 
 public class HurricaneReliefApp {
     private UserList userList;
@@ -17,6 +18,7 @@ public class HurricaneReliefApp {
 
     private void loadData() {
         DataLoader.getUsers();
+        DataLoader.getShelters();
     }
 
     public boolean login(String username, String password) {
@@ -35,6 +37,10 @@ public class HurricaneReliefApp {
         }
         reliefRequestCatalog.submitRequest(request);
         return true;
+    }
+
+    public ArrayList<Shelter> searchByProximity(Location location, double maxDistance) {
+        return shelterList.searchByProximity(location, maxDistance);
     }
 
     public void logout() {

@@ -6,7 +6,7 @@ import java.util.Random;
 public class ShelterList {
     private static ShelterList instance;
     private ArrayList<Shelter> shelters;
-    private class Location {
+    public class Location {
         double latitude;
         double longitude;
         Random rand = new Random();
