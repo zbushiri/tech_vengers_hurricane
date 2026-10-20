@@ -26,13 +26,13 @@ public class DataWriter extends DataConstants {
         return writeFile(SHELTER_FILE, shelterArray, "shelters");
     }
 
-    /**
-     * Saves all users to users.json.
-     *
-     * @param users the users that will be saved
-     */
-    @SuppressWarnings("unchecked")
-    public static void saveUsers(ArrayList<User> users) {
+    // * Saves every user.
+    public static boolean saveUsers(List<User> users) {
+        if (users == null) {
+            // ! There is no list to save.
+            return false;
+        }
+
         JSONArray userArray = new JSONArray();
 
         for (User user : users) {
@@ -115,7 +115,6 @@ public class DataWriter extends DataConstants {
         json.put(USER_ID, user.getUserId().toString());
         json.put(USER_FIRST_NAME, user.getFirstName());
         json.put(USER_LAST_NAME, user.getLastName());
-        json.put(USER_PHONE, user.getPhoneNumber());
         json.put(USER_EMAIL, user.getEmail());
         json.put(USER_ADDRESS, user.getAddress());
         json.put(USER_USERNAME, user.getUsername());
@@ -135,12 +134,12 @@ public class DataWriter extends DataConstants {
                 people.add(personToJSON(person));
             }
         }
-        json.put(USER_ASSOCIATED_PEOPLE, people);
+        json.put("associatedPeople", people);
 
-        json.put(USER_VERIFICATION, enumText(user.getVerificationStatus()));
-        json.put(USER_LOCATION, user.getLastKnownLocation());
-        json.put(USER_SAFETY, enumText(user.getSafetyStatus()));
-        json.put(USER_SAFETY_UPDATED, String.valueOf(user.getSafetyStatusUpdatedAt()));
+        json.put("verificationStatus", user.getVerificationStatus().toString().toLowerCase());
+        json.put("lastKnownLocation", user.getLastKnownLocation());
+        json.put("safetyStatus", user.getSafetyStatus().toString().toLowerCase());
+        json.put("safetyStatusUpdatedAt", user.getSafetyStatusUpdatedAt().toString());
 
         // * Adds information that only volunteers have.
         if (user instanceof VolunteerProfile) {

@@ -402,13 +402,13 @@ public class HurricaneReliefApp {
 
 public class HurricaneReliefApp {
     private UserList userList;
-   // private ShelterList shelterList;
+    private ShelterList shelterList;
     private ReliefRequestCatalog reliefRequestCatalog;
     private User currentUser;
 
     public HurricaneReliefApp() {
         userList = UserList.getInstance();
-        //shelterList = ShelterList.getInstance();
+        shelterList = ShelterList.getInstance();
         reliefRequestCatalog = ReliefRequestCatalog.getInstance();
         loadData();
     }

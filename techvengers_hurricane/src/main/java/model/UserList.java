@@ -39,7 +39,8 @@ public class UserList {
 =======
     
     public void addUser(User user) {
-        for (User existingUser : users) {
+        for (int i = 0; i < users.size(); i++) {
+            User existingUser = users.get(i);
             if (existingUser.getUsername().equals(user.getUsername())) {
                 throw new IllegalArgumentException("Username already exists");
             }

@@ -6,9 +6,9 @@
         "capacity": 50,
         "occupancy": 30,
         "status": "open",
-        "accommodations": ["food", "water", "medical assistance"],
+        "accommodations": ["wheelchair_accessible", "pet_friendly"],
         "lastUpdated": "2024-06-01T12:00:00Z",
-        "shelterOperators": ["John Doe", "Jane Smith"]
+        "shelterOperators": ["johndoe", "janesmith"]
     },
     {
         "shelterId": 2,
@@ -17,8 +17,8 @@
         "capacity": 100,
         "occupancy": 80,
         "status": "open",
-        "accommodations": ["food", "water", "medical assistance", "pet care"],
+        "accommodations": ["medical_support", "pet_friendly"],
         "lastUpdated": "2024-06-01T12:00:00Z",
-        "shelterOperators": ["Jim Doe", "Macy West"]
+        "shelterOperators": ["jimsmith", "macywest"]
     }
 ]
