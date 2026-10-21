@@ -42,4 +42,10 @@ public abstract class DataConstants {
     protected static final String SHELTER_ACCOMMODATIONS = "accommodations";
     protected static final String SHELTER_LAST_UPDATED = "lastUpdated";
     protected static final String SHELTER_OPERATORS = "shelterOperators";
+
+    protected static final String HURRICANE_NAME = "name";
+    protected static final String HURRICANE_START = "startDate";
+    protected static final String HURRICANE_END = "endDate";
+    protected static final String HURRICANE_STATUS = "status";
+    protected static final String HURRICANE_AREAS = "affectedAreas";
 }
