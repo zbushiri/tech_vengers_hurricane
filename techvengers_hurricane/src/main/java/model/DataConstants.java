@@ -21,7 +21,7 @@ public abstract class DataConstants {
     protected static final String USER_PASSWORD = "passwordHash";
     protected static final String USER_ROLES = "roles";
     protected static final String USER_LAST_KNOWN_LOCATION = "lastKnownLocation";
-    protected static final String ASSOCIATED_PERSONS = "associatedPeople";
+    protected static final String ASSOCIATED_PERSONS = "associatedPersons";
     protected static final String VERIFICATION_STATUS = "verificationStatus";
     protected static final String SAFETY_STATUS = "safetyStatus";
     protected static final String SAFETY_STATUS_UPDATED_AT = "safetyStatusUpdatedAt";

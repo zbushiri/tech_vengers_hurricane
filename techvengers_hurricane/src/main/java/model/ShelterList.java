@@ -24,9 +24,7 @@ public class ShelterList {
         shelters = new ArrayList<>();
         locations = new HashMap<>();
     }
-    private final ArrayList<Shelter> shelters = new ArrayList<>();
-
-    private ShelterList() { }
+    
     public static ShelterList getInstance() {
         if (instance == null) instance = new ShelterList();
         return instance;
