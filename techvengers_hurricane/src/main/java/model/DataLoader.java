@@ -8,6 +8,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.util.Date;
+import java.util.HashMap;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -171,7 +172,11 @@ public class DataLoader extends DataConstants {
      */
     private static UUID readID(Object idValue) {
         if (idValue instanceof String) {
-            return UUID.fromString((String) idValue);
+            try {
+                return UUID.fromString((String) idValue);
+            } catch (IllegalArgumentException e) {
+                // an old id like "1" is not a UUID, so it gets a new one
+            }
         }
         return UUID.randomUUID();
     }
@@ -261,8 +266,79 @@ public class DataLoader extends DataConstants {
     public static ReliefRequestCatalog getRequests() {
         ReliefRequestCatalog requests = ReliefRequestCatalog.getInstance();
 
-        // TODO: Read REQUEST_FILE and add each request to the list.
+        if (!requests.getRequests().isEmpty()) {
+            return requests;
+        }
+
+        // isDuplicateOf is saved as an id, so the links are made after every request is loaded
+        HashMap<ReliefRequest, String> duplicateIds = new HashMap<>();
+        HashMap<String, ReliefRequest> requestsById = new HashMap<>();
+
+        try (FileReader reader = new FileReader(REQUEST_FILE)) {
+            JSONArray requestsJSON = (JSONArray) new JSONParser().parse(reader);
+
+            for (int i = 0; i < requestsJSON.size(); i++) {
+                JSONObject requestJSON = (JSONObject) requestsJSON.get(i);
+
+                String savedId = String.valueOf(requestJSON.get(REQUEST_ID));
+                UUID requestId = readID(requestJSON.get(REQUEST_ID));
+                RequestType type = RequestType.valueOf(((String) requestJSON.get(REQUEST_TYPE)).toUpperCase());
+                String description = (String) requestJSON.get(REQUEST_DESCRIPTION);
+                String location = (String) requestJSON.get(REQUEST_LOCATION);
+                int people = readInt(requestJSON.get(REQUEST_PEOPLE));
+                int animals = readInt(requestJSON.get(REQUEST_ANIMALS));
+                String animalNotes = (String) requestJSON.get(REQUEST_ANIMAL_NOTES);
+                String photoUrl = (String) requestJSON.get(REQUEST_PHOTO_URL);
+                boolean isSuspicious = Boolean.TRUE.equals(requestJSON.get(REQUEST_IS_SUSPICIOUS));
+
+                HurricaneEvent hurricane = null;
+                Object hurricaneValue = requestJSON.get(REQUEST_HURRICANE);
+                if (hurricaneValue instanceof JSONObject) {
+                    hurricane = hurricaneFromJSON((JSONObject) hurricaneValue);
+                }
+
+                ReliefRequest request = new ReliefRequest(requestId, type, description, location, people, 
+                        animals, animalNotes, photoUrl, isSuspicious, null, hurricane);
+
+                // The constructor sets SUBMITTED, today's date and a calculated priority, so put back the saved values 
+                String statusText = (String) requestJSON.get(REQUEST_STATUS);
+                if (statusText != null) {
+                    request.setStatus(RequestStatus.valueOf(statusText.toUpperCase()));
+                }
+                String priorityText = (String) requestJSON.get(REQUEST_PRIORITY);
+                if (priorityText != null) {
+                    request.setPriority(PriorityLevel.valueOf(priorityText.toUpperCase()));
+                }
+                String dateText = (String) requestJSON.get(REQUEST_DATE_SUBMITTED);
+                if (dateText != null) {
+                    request.setDateSubmitted(parseDate(dateText));
+                }
+
+                Object duplicateValue = requestJSON.get(REQUEST_DUPLICATE_OF);
+                if (duplicateValue != null) {
+                    duplicateIds.put(request, String.valueOf(duplicateValue));
+                }
+                requestsById.put(savedId, request);
+                requests.addLoadedRequest(request);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        for (ReliefRequest request : duplicateIds.keySet()) {
+            request.setIsDuplicateOf(requestsById.get(duplicateIds.get(request)));
+        }
         return requests;
+    }
+
+    /**
+     * Reads a whole number. json-simple gives back a Long, and a missing value is 0.
+     */
+    private static int readInt(Object numberValue) {
+        if (numberValue instanceof Long) {
+            return ((Long) numberValue).intValue();
+        }
+        return 0;
     }
 
     /**

@@ -48,4 +48,19 @@ public abstract class DataConstants {
     protected static final String HURRICANE_END = "endDate";
     protected static final String HURRICANE_STATUS = "status";
     protected static final String HURRICANE_AREAS = "affectedAreas";
+
+    protected static final String REQUEST_ID = "requestId";
+    protected static final String REQUEST_TYPE = "type";
+    protected static final String REQUEST_STATUS = "status";
+    protected static final String REQUEST_LOCATION = "location";
+    protected static final String REQUEST_DESCRIPTION = "description";
+    protected static final String REQUEST_PRIORITY = "priority";
+    protected static final String REQUEST_DATE_SUBMITTED = "dateSubmitted";
+    protected static final String REQUEST_PEOPLE = "numberOfPeopleNeeded";
+    protected static final String REQUEST_ANIMALS = "numberOfAnimals";
+    protected static final String REQUEST_ANIMAL_NOTES = "animalNotes";
+    protected static final String REQUEST_PHOTO_URL = "photoUrl";
+    protected static final String REQUEST_IS_SUSPICIOUS = "isSuspicious";
+    protected static final String REQUEST_DUPLICATE_OF = "isDuplicateOf";
+    protected static final String REQUEST_HURRICANE = "forHurricane";
 }
