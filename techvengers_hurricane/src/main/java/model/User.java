@@ -3,6 +3,7 @@ import java.util.UUID;
 import java.util.List;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * User's profile and account information.
@@ -13,41 +14,47 @@ public class User {
     private UUID userId;
     private String firstName;
     private String lastName;
+    private String phoneNumber;
     private String email;
     private String address;
     private String username;
     private String passwordHash;
-    private List <AccountRole> roles;
-    private List <Person> associatedPersons;
+    private ArrayList <AccountRole> roles;
+    private ArrayList <Person> associatedPersons;
     private VerificationStatus verificationStatus;
     private String lastKnownLocation;
     private SafetyStatusType safetyStatus;
     private LocalDateTime safetyStatusUpdatedAt;
 
-    public User(String username, String passwordHash) {
+    public User(String firstName, String lastName, String email, String phoneNumber,
+        String address, String username, String passwordHash, ArrayList<AccountRole> roles,
+        String lastKnownLocation) {
         setUserId(UUID.randomUUID());
-        setFirstName("");
-        setLastName("");
-        setEmail("");
-        setAddress("");
+        setFirstName(firstName);
+        setLastName(lastName);
+        setEmail(email);
+        setPhoneNumber(phoneNumber);
+        setAddress(address);
         setUsername(username);
         setPasswordHash(passwordHash);
-        setRoles(new ArrayList<>());
+        setRoles(roles);
         setAssociatedPersons(new ArrayList<>());
         setVerificationStatus(VerificationStatus.UNVERIFIED);
-        setLastKnownLocation("");
+        setLastKnownLocation(lastKnownLocation);
         setSafetyStatus(SafetyStatusType.UNKNOWN);
         setSafetyStatusUpdatedAt(LocalDateTime.now());
     }
 
-    public User(UUID userId, String firstName, String lastName, String email, 
-        String address, String username, String passwordHash, List<AccountRole> roles, 
-        List<Person> associatedPersons, VerificationStatus verificationStatus, String lastKnownLocation, 
+    public User(UUID userId, String firstName, String lastName, String email, String phoneNumber,
+        String address, String username, String passwordHash, ArrayList<AccountRole> roles, 
+        ArrayList<Person> associatedPersons, VerificationStatus verificationStatus, String lastKnownLocation, 
         SafetyStatusType safetyStatus, LocalDateTime safetyStatusUpdatedAt) {
         setUserId(userId);
         setFirstName(firstName);
         setLastName(lastName);
+        setPhoneNumber(phoneNumber);
         setEmail(email);
+        setPhoneNumber(phoneNumber);
         setAddress(address);
         setUsername(username);
         setPasswordHash(passwordHash);
@@ -60,12 +67,16 @@ public class User {
     }
 
     public boolean login(String username, String passwordHash) {
-        return this.username.equals(username) && this.passwordHash.equals(passwordHash);
+        return this.username != null && this.username.equalsIgnoreCase(username)
+                && Objects.equals(this.passwordHash, passwordHash);
     }
 
+    /**
+     * Ends this user's session. The facade tracks who is logged in, so the
+     * account's username and password must stay as they are.
+     */
     public void logout() {
-        this.username = null;
-        this.passwordHash = null;
+        System.out.println("Logged out: " + this.username);
     }
 
 
@@ -74,9 +85,8 @@ public class User {
         System.out.println("Updating profile for user: " + this.username);
     }
 
-    public static void submitReliefRequest(ReliefRequest request) {
-        // Implementation for submitting a relief request goes here
-        new ReliefRequest(request);
+    public void submitReliefRequest(ReliefRequest request) {
+        ReliefRequestCatalog.getInstance().submitRequest(request);
     }
 
     public boolean verifyIdentity(VerificationMethod verificationMethod) {
@@ -105,9 +115,14 @@ public class User {
    }
 
    public ArrayList<Shelter> findNearestShelters() {
-       // TODO: Implementation for finding nearest shelter goes here
-       return new ArrayList<Shelter>();
-       
+       // A location saved as coordinates has no town to match, so use the address.
+       boolean hasTown = lastKnownLocation != null && lastKnownLocation.matches(".*[A-Za-z].*");
+       String location = hasTown ? lastKnownLocation : address;
+       return ShelterList.getInstance().searchByProximity(location, ShelterList.DEFAULT_RADIUS_MILES);
+   }
+
+   public boolean hasRole(AccountRole role) {
+       return roles != null && roles.contains(role);
    }
 
     public UUID getUserId() {
@@ -120,6 +135,10 @@ public class User {
 
     public String getLastName() {
         return lastName;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
     public String getEmail() {
@@ -174,12 +193,16 @@ public class User {
         this.lastName = lastName;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public void setUsername(String username) {
@@ -190,11 +213,11 @@ public class User {
         this.passwordHash = passwordHash;
     }
 
-    public void setRoles(List<AccountRole> roles) {
+    public void setRoles(ArrayList<AccountRole> roles) {
         this.roles = roles;
     }
 
-    public void setAssociatedPersons(List<Person> associatedPersons) {
+    public void setAssociatedPersons(ArrayList<Person> associatedPersons) {
         this.associatedPersons = associatedPersons;
     }
 
@@ -220,10 +243,11 @@ public class User {
                 "userId=" + userId + "\n" +
                 "firstName='" + firstName + "\n" +
                 "lastName='" + lastName + "\n" +
+                "phoneNumber='" + phoneNumber + "\n" +
                 "email='" + email + "\n" +
+                "phoneNumber='" + phoneNumber + "\n" +
                 "address='" + address + "\n" +
                 "username='" + username + "\n" +
-                "password='" + passwordHash + "\n" +
                 "roles=" + roles + "\n" +
                 "associatedPersons=" + associatedPersons + "\n" +
                 "verificationStatus=" + verificationStatus + "\n" +
