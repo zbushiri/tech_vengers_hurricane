@@ -6,7 +6,8 @@
       "name": "MapUI",
       "request": "launch",
       "mainClass": "techvengers_hurricane/model.MapUI",
-      "projectName": "techvengers_hurricane"
+      "projectName": "techvengers_hurricane",
+      "envFile": "${workspaceFolder}/.env"
     },
     {
       "type": "java",

@@ -3,6 +3,7 @@ package location;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URLEncoder;
@@ -29,6 +30,7 @@ public class MapTools {
     private final String apiKey = System.getenv("HURRICANE_API");
     private final HttpClient httpClient;
     private final ObjectMapper objectMapper;
+    private final HashMap<String, Coordinates> savedCoordinates = new HashMap<>();
 
     private MapTools() {
         httpClient = HttpClient.newBuilder()
@@ -57,8 +59,13 @@ public class MapTools {
 
         checkForApiKey();
 
+        String addressText = address.toString();
+        if (savedCoordinates.containsKey(addressText)) {
+            return savedCoordinates.get(addressText);
+        }
+
         String encodedAddress = URLEncoder.encode(
-                address.toString(),
+                addressText,
                 StandardCharsets.UTF_8
         );
 
@@ -95,11 +102,13 @@ public class MapTools {
 
         JsonNode bestResult = findBestResult(features);
 
-        return readCoordinates(bestResult);
+        Coordinates coordinates = readCoordinates(bestResult);
+        savedCoordinates.put(addressText, coordinates);
+        return coordinates;
     }
 
     /**
-     * Finds the shelter with the shortest driving time.
+     * Finds the shelter closest to the starting address.
      * @param startingAddress The address we are driving from
      * @param shelters The list of shelters we are choosing from
      * @return The address of the closest shelter
@@ -112,18 +121,18 @@ public class MapTools {
         Coordinates startingCoordinates = getCoordinates(startingAddress);
 
         Address closestShelter = null;
-        double shortestTime = Double.MAX_VALUE;
+        double shortestDistance = Double.MAX_VALUE;
 
         for (Address shelter : shelters) {
             Coordinates shelterCoordinates = getCoordinates(shelter);
+            double latitude = startingCoordinates.getLatitude()
+                    - shelterCoordinates.getLatitude();
+            double longitude = startingCoordinates.getLongitude()
+                    - shelterCoordinates.getLongitude();
+            double distance = latitude * latitude + longitude * longitude;
 
-            double drivingTime = getDrivingTime(
-                    startingCoordinates,
-                    shelterCoordinates
-            );
-
-            if (drivingTime < shortestTime) {
-                shortestTime = drivingTime;
+            if (distance < shortestDistance) {
+                shortestDistance = distance;
                 closestShelter = shelter;
             }
         }
@@ -201,22 +210,6 @@ public class MapTools {
         double latitude = coordinates.get(1).asDouble();
 
         return new Coordinates(latitude, longitude);
-    }
-
-    /**
-     * Calculates the driving time in seconds between two coordinates
-     * @param start Starting location
-     * @param end Ending location
-     * @return The number of seconds
-     * @throws IOException
-     * @throws InterruptedException
-     */
-    private double getDrivingTime(Coordinates start, Coordinates end)
-            throws IOException, InterruptedException {
-
-        JsonNode route = getRoute(start, end);
-
-        return route.path("summary").path("duration").asDouble();
     }
 
     /**

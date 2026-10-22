@@ -3,7 +3,6 @@ module techvengers_hurricane {
     requires javafx.fxml;
     requires java.net.http;
     requires com.fasterxml.jackson.databind;
-    requires javafx.web;
     requires json.simple;
     
     opens techvengers_hurricane to javafx.fxml;
