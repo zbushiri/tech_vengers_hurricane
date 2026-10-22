@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 public class Shelter {
     private UUID shelterId;
     private String name;
-    private String address;
+    private location.MapLocation location;
     private int capacity;
     private int occupancy;
     private ShelterStatus status;
@@ -15,11 +15,11 @@ public class Shelter {
     private LocalDateTime lastUpdated;
     private ArrayList<User> shelterOperators;
 
-    public Shelter(UUID shelterID, String name, String address, int capacity,
+    public Shelter(UUID shelterID, String name, location.MapLocation location, int capacity,
         int occupancy, ShelterStatus status, ArrayList<Accommodation> accomodations) {
             setShelterId(shelterID);
             setName(name);
-            setAddress(address);
+            setLocation(location);
             setCapacity(capacity);
             setStatus(status);
             setOccupancy(occupancy);
@@ -113,12 +113,12 @@ public class Shelter {
         this.name = name;
     }
 
-    public String getAddress() {
-        return address;
+    public location.MapLocation getLocation() {
+        return location;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setLocation(location.MapLocation location) {
+        this.location = location;
     }
 
     public int getCapacity() {
@@ -183,7 +183,7 @@ public class Shelter {
         return "Shelter{" + "\n" +
                 "shelterId=" + shelterId + "\n" +
                 "name='" + name + "\n" +
-                "address='" + address + "\n" +
+                "location='" + location + "\n" +
                 "capacity=" + capacity + "\n" +
                 "occupancy=" + occupancy + "\n" +
                 "status=" + status + "\n" +
