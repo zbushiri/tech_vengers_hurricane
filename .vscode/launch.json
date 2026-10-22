@@ -15,6 +15,7 @@
       "name": "Run UI",
       "request": "launch",
       "mainClass": "model.UI",
+      "vmArgs": "--enable-native-access=javafx.graphics",
       "envFile": "${workspaceFolder}/.env"
     }
   ]

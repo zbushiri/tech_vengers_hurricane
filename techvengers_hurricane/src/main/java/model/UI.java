@@ -1,13 +1,15 @@
 package model;
 
-/**
- * Starts the terminal app. The menus live in HurricaneReliefApp, so this
- * only loads the data and runs them.
- */
+/** Starts the terminal app and shelter map. */
 public class UI {
     public static void main(String[] args) {
-        HurricaneReliefApp app = new HurricaneReliefApp();
-        app.initialize();
-        app.run();
+        Thread terminal = new Thread(() -> {
+            HurricaneReliefApp app = new HurricaneReliefApp();
+            app.initialize();
+            app.run();
+        });
+
+        terminal.start();
+        MapUI.main(args);
     }
 }
