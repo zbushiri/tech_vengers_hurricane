@@ -15,6 +15,17 @@ cd techvengers_hurricane
 mvn compile
 ```
 
+### Map API Setup
+
+Each teammate needs a local `.env` file in the main project folder:
+
+```text
+HURRICANE_API=your_api_key
+```
+
+Use `.env.example` as the template. The real `.env` file is ignored by Git.
+Then select `MapUI` in VS Code and press Run.
+
 ## Project Documents
 
 📄 [Requirements Document](docs/requirements-document.pdf)

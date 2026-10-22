@@ -7,18 +7,15 @@
       "request": "launch",
       "mainClass": "techvengers_hurricane/model.MapUI",
       "projectName": "techvengers_hurricane",
-      "env": {
-        "HURRICANE_API": "${env:HURRICANE_API}"
-      }
+      "vmArgs": "--enable-native-access=javafx.graphics",
+      "envFile": "${workspaceFolder}/.env"
     },
     {
       "type": "java",
       "name": "Run UI",
       "request": "launch",
       "mainClass": "model.UI",
-      "env": {
-        "HURRICANE_API": "${env:HURRICANE_API}"
-      }
+      "envFile": "${workspaceFolder}/.env"
     },
     {
       "type": "java",
@@ -26,9 +23,8 @@
       "request": "launch",
       "mainClass": "techvengers_hurricane/model.MapUI",
       "projectName": "techvengers_hurricane",
-      "env": {
-        "HURRICANE_API": "${env:HURRICANE_API}"
-      }
+      "vmArgs": "--enable-native-access=javafx.graphics",
+      "envFile": "${workspaceFolder}/.env"
     }
   ]
 }

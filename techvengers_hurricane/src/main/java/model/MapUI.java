@@ -11,6 +11,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import location.Address;
 import location.Coordinates;
@@ -27,6 +28,7 @@ public class MapUI extends Application {
     public void start(Stage stage) {
         directions.setEditable(false);
         directions.setPrefRowCount(6);
+        drawLoadingScreen();
 
         VBox page = new VBox(10, status, map, directions);
         page.setPadding(new Insets(12));
@@ -60,6 +62,7 @@ public class MapUI extends Application {
         try {
             MapTools tools = MapTools.getInstance();
             Address shelter = tools.findClosestAddress(userAddress, shelters);
+            updateStatus("Loading directions to " + shelter + "...");
             String[] steps = tools.getDrivingDirections(userAddress, shelter);
             DrivingRoute route = tools.getDrivingRoute(userAddress, shelter);
 
@@ -69,8 +72,27 @@ public class MapUI extends Application {
                 drawRoute(route);
             });
         } catch (Exception e) {
-            Platform.runLater(() -> status.setText("Could not load the map: " + e.getMessage()));
+            e.printStackTrace();
+            Platform.runLater(() -> {
+                status.setText("Could not load the map.");
+                directions.setText(e.getMessage());
+            });
         }
+    }
+
+    /** Shows that the map is loading. */
+    private void drawLoadingScreen() {
+        GraphicsContext pen = map.getGraphicsContext2D();
+        pen.setFill(Color.web("#e8f2e8"));
+        pen.fillRect(0, 0, map.getWidth(), map.getHeight());
+        pen.setFill(Color.web("#345c48"));
+        pen.setFont(new Font(20));
+        pen.fillText("Loading shelter map...", 320, 210);
+    }
+
+    /** Changes the message at the top of the window. */
+    private void updateStatus(String message) {
+        Platform.runLater(() -> status.setText(message));
     }
 
     /** Draws the route using the coordinates returned by the map API. */
@@ -98,27 +120,36 @@ public class MapUI extends Application {
         pen.setLineWidth(5);
 
         Coordinates previous = null;
+        double startX = 0;
+        double startY = 0;
+        double endX = 0;
+        double endY = 0;
         for (Coordinates point : route.getRoutePoints()) {
             double x = padding + (point.getLongitude() - minLon) / lonRange
                     * (map.getWidth() - padding * 2);
             double y = map.getHeight() - padding - (point.getLatitude() - minLat) / latRange
                     * (map.getHeight() - padding * 2);
-            if (previous != null) {
+            if (previous == null) {
+                startX = x;
+                startY = y;
+            } else {
                 double oldX = padding + (previous.getLongitude() - minLon) / lonRange
                         * (map.getWidth() - padding * 2);
                 double oldY = map.getHeight() - padding - (previous.getLatitude() - minLat) / latRange
                         * (map.getHeight() - padding * 2);
                 pen.strokeLine(oldX, oldY, x, y);
             }
+            endX = x;
+            endY = y;
             previous = point;
         }
 
         pen.setFill(Color.web("#2e7d32"));
-        pen.fillOval(padding - 7, map.getHeight() - padding - 7, 14, 14);
-        pen.fillText("Start", padding + 10, map.getHeight() - padding + 5);
+        pen.fillOval(startX - 7, startY - 7, 14, 14);
+        pen.fillText("Start", startX + 10, startY + 5);
         pen.setFill(Color.web("#c62828"));
-        pen.fillOval(map.getWidth() - padding - 7, padding - 7, 14, 14);
-        pen.fillText("Shelter", map.getWidth() - padding - 55, padding - 12);
+        pen.fillOval(endX - 7, endY - 7, 14, 14);
+        pen.fillText("Shelter", endX - 55, endY - 12);
     }
 
     public static void main(String[] args) {
