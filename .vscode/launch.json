@@ -16,15 +16,6 @@
       "request": "launch",
       "mainClass": "model.UI",
       "envFile": "${workspaceFolder}/.env"
-    },
-    {
-      "type": "java",
-      "name": "Run Map App",
-      "request": "launch",
-      "mainClass": "techvengers_hurricane/model.MapUI",
-      "projectName": "techvengers_hurricane",
-      "vmArgs": "--enable-native-access=javafx.graphics",
-      "envFile": "${workspaceFolder}/.env"
     }
   ]
 }

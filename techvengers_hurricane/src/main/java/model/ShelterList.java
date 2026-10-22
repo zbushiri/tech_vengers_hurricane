@@ -1,28 +1,15 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Random;
 
 /** Stores and searches shelters. */
 public class ShelterList {
     public static final double DEFAULT_RADIUS_MILES = 25;
     private static ShelterList instance;
     private ArrayList<Shelter> shelters;
-    public class Location {
-        double latitude;
-        double longitude;
-        Random rand = new Random();
-        public Location() {
-            latitude = rand.nextDouble() * 30;
-            longitude = rand.nextDouble() * 60;
-        }
-    }
 
-    private HashMap<String, Location> locations;
     private ShelterList() {
         shelters = new ArrayList<>();
-        locations = new HashMap<>();
     }
     
     public static ShelterList getInstance() {
@@ -34,11 +21,20 @@ public class ShelterList {
         if (shelter != null && !shelters.contains(shelter)) shelters.add(shelter);
     }
 
+    /**
+     * Open shelters with space in the same area as the location. A location can
+     * be a town ("Anytown") or a full address ("123 Main St, Anytown, USA"), in
+     * which case shelters in the same town match. Shelters have no coordinates
+     * yet, so radius is not used.
+     */
     public ArrayList<Shelter> searchByProximity(String location, double radius) {
         ArrayList<Shelter> matches = new ArrayList<>();
         String wanted = location == null ? "" : location.trim().toLowerCase();
+        String[] parts = wanted.split(",");
+        String town = parts.length > 1 ? parts[1].trim() : wanted;
         for (Shelter shelter : shelters) {
-            boolean sameArea = wanted.isEmpty() || shelter.getAddress().toLowerCase().contains(wanted);
+            String address = shelter.getAddress() == null ? "" : shelter.getAddress().toLowerCase();
+            boolean sameArea = wanted.isEmpty() || address.contains(wanted) || address.contains(town);
             if (sameArea && shelter.hasSpace()) matches.add(shelter);
         }
         return matches;
@@ -47,7 +43,9 @@ public class ShelterList {
     public ArrayList<Shelter> filterByAccommodation(Accommodation accommodation) {
         ArrayList<Shelter> matches = new ArrayList<>();
         for (Shelter shelter : shelters) {
-            if (shelter.getAccommodations().contains(accommodation)) matches.add(shelter);
+            if (shelter.getAccommodations() != null && shelter.getAccommodations().contains(accommodation)) {
+                matches.add(shelter);
+            }
         }
         return matches;
     }

@@ -99,10 +99,9 @@ public class DataLoader extends DataConstants {
           return operators;
       }
       for (Object username : (JSONArray) operatorsValue) {
-          for (User user : users.getUsers()) {
-              if (user.getUsername().equals(username)) {
-                  operators.add(user);
-              }
+          User user = users.getUser((String) username);
+          if (user != null) {
+              operators.add(user);
           }
       }
       return operators;
@@ -158,6 +157,9 @@ public class DataLoader extends DataConstants {
                 User user = new User(userId, firstName, lastName, email, phoneNumber, address, 
                         username, password, roles, associatedPersons, verificationStatus,
                         lastKnownLocation, safetyStatus, safetyStatusUpdatedAt);
+                if (user.hasRole(AccountRole.VOLUNTEER)) {
+                    user = readVolunteer(user, userJSON);
+                }
                 users.addUser(user);
             }
         } catch (Exception e) {
@@ -166,6 +168,48 @@ public class DataLoader extends DataConstants {
         return users;
     }
     
+    /**
+     * Builds a VolunteerProfile from a user and the volunteer fields saved with it.
+     */
+    private static VolunteerProfile readVolunteer(User user, JSONObject userJSON) {
+        ArrayList<String> skills = readStrings(userJSON.get(VOLUNTEER_SKILLS));
+        ArrayList<String> equipment = readStrings(userJSON.get(VOLUNTEER_EQUIPMENT));
+
+        BackgroundCheckStatus backgroundCheck = BackgroundCheckStatus.PENDING;
+        String backgroundText = (String) userJSON.get(VOLUNTEER_BACKGROUND_CHECK);
+        if (backgroundText != null) {
+            backgroundCheck = BackgroundCheckStatus.valueOf(backgroundText.toUpperCase());
+        }
+
+        // Saved as a boolean by DataWriter and as "true"/"false" in the sample data
+        Object transportationValue = userJSON.get(VOLUNTEER_TRANSPORTATION);
+        if (transportationValue == null) {
+            transportationValue = userJSON.get(VOLUNTEER_TRANSPORTATION_OLD);
+        }
+        boolean transportation = Boolean.parseBoolean(String.valueOf(transportationValue));
+
+        AvailabilityStatus availability = AvailabilityStatus.AVAILABLE;
+        String availabilityText = (String) userJSON.get(VOLUNTEER_AVAILABILITY);
+        if (availabilityText != null) {
+            availability = AvailabilityStatus.valueOf(availabilityText.toUpperCase());
+        }
+
+        return new VolunteerProfile(user, skills, equipment, backgroundCheck, transportation, availability);
+    }
+
+    /**
+     * Turns a JSON array of text into a list. Anything else is an empty list.
+     */
+    private static ArrayList<String> readStrings(Object value) {
+        ArrayList<String> items = new ArrayList<>();
+        if (value instanceof JSONArray) {
+            for (Object item : (JSONArray) value) {
+                items.add((String) item);
+            }
+        }
+        return items;
+    }
+
     /**
      * Turns a saved id into a UUID.
      * Old data uses numbers for ids, so those get a new UUID.
@@ -362,14 +406,13 @@ public class DataLoader extends DataConstants {
         Date start = parseDate((String) json.get(HURRICANE_START));
         Date end = parseDate((String) json.get(HURRICANE_END));
 
+        EventStatus status = EventStatus.MONITORING;
         String statusText = (String) json.get(HURRICANE_STATUS);
-        EventStatus status = EventStatus.valueOf(statusText.toUpperCase());
-
-        ArrayList <String> areas = new ArrayList<>();
-        JSONArray areasJSON = (JSONArray) json.get(HURRICANE_AREAS);
-        for (int i = 0; i < areasJSON.size(); i++) {
-            areas.add((String) areasJSON.get(i));
+        if (statusText != null) {
+            status = EventStatus.valueOf(statusText.toUpperCase());
         }
+
+        ArrayList<String> areas = readStrings(json.get(HURRICANE_AREAS));
 
         return new HurricaneEvent(name, start, end, areas, status);
     }
@@ -394,11 +437,5 @@ public class DataLoader extends DataConstants {
             }
             return hurricanes;
         }
-    
-    public static void main(String[] args) {
-        for (HurricaneEvent hurricane : getHurricanes()) {
-            System.out.println(hurricane.getName() + " - " + hurricane.getStatus());
-        }
-    }
 }
 
