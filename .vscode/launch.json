@@ -7,7 +7,9 @@
       "request": "launch",
       "mainClass": "techvengers_hurricane/model.MapUI",
       "projectName": "techvengers_hurricane",
-      "envFile": "${workspaceFolder}/.env"
+      "env": {
+        "HURRICANE_API": "${env:HURRICANE_API}"
+      }
     },
     {
       "type": "java",
@@ -22,7 +24,8 @@
       "type": "java",
       "name": "Run Map App",
       "request": "launch",
-      "mainClass": "techvengers_hurricane.App",
+      "mainClass": "techvengers_hurricane/model.MapUI",
+      "projectName": "techvengers_hurricane",
       "env": {
         "HURRICANE_API": "${env:HURRICANE_API}"
       }

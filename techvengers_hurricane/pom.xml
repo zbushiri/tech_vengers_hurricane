@@ -61,7 +61,7 @@
 <configuration>
 <jlinkImageName>hurricanejavafx</jlinkImageName>
 <launcher>launcher</launcher>
-<mainClass>com.techvengershurricane.App</mainClass>
+<mainClass>techvengers_hurricane/model.MapUI</mainClass>
 </configuration>
 </plugin>
 </plugins>
