@@ -35,8 +35,8 @@ public class UserList {
     }
 
     public boolean addUser(String firstName, String lastName, String email, String phoneNumber,
-            String address, String username, String password, ArrayList<AccountRole> roles,
-            String lastKnownLocation) {
+            location.Address address, String username, String password, ArrayList<AccountRole> roles,
+            location.MapLocation lastKnownLocation) {
         return addUser(new User(firstName, lastName, email, phoneNumber, address,
                 username, password, roles, lastKnownLocation));
     }

@@ -4,6 +4,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -98,7 +99,7 @@ public class DataWriter extends DataConstants {
         JSONObject json = new JSONObject();
         json.put(SHELTER_ID, shelter.getShelterId().toString());
         json.put(SHELTER_NAME, shelter.getName());
-        json.put(SHELTER_ADDRESS, shelter.getAddress());
+        json.put(SHELTER_ADDRESS, shelter.getLocation().getAddress());
         json.put(SHELTER_CAPACITY, shelter.getCapacity());
         json.put(SHELTER_OCCUPANCY, shelter.getOccupancy());
         json.put(SHELTER_STATUS, enumText(shelter.getStatus()));

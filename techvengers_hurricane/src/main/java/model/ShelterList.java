@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /** Stores and searches shelters. */
 public class ShelterList {
@@ -27,13 +28,14 @@ public class ShelterList {
      * which case shelters in the same town match. Shelters have no coordinates
      * yet, so radius is not used.
      */
-    public ArrayList<Shelter> searchByProximity(location.MapLocation location, double radius) {
-        ArrayList<Shelter> matches = new ArrayList<>();
+    public Shelter[] searchByProximity(location.MapLocation location, double radius, int maxResults) {
+        Shelter[] matches = new Shelter[maxResults];
         for (Shelter shelter : shelters) {
             if (calculateDistance(shelter.getLocation().getCoordinates(), location.getCoordinates()) <= radius) {
                 if (shelter.getStatus() == ShelterStatus.OPEN && shelter.getOccupancy() < shelter.getCapacity()) {
                     if (shelter.getLocation().getAddress().getCity().equals(location.getAddress().getCity())) {
-                        matches.add(shelter);
+                        matches = Arrays.copyOf(matches, matches.length + 1);
+                        matches[matches.length - 1] = shelter;
                     }
                 }
             }
