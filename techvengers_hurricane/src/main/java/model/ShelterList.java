@@ -27,19 +27,25 @@ public class ShelterList {
      * which case shelters in the same town match. Shelters have no coordinates
      * yet, so radius is not used.
      */
-    public ArrayList<Shelter> searchByProximity(String location, double radius) {
+    public ArrayList<Shelter> searchByProximity(location.MapLocation location, double radius) {
         ArrayList<Shelter> matches = new ArrayList<>();
-        String wanted = location == null ? "" : location.trim().toLowerCase();
-        String[] parts = wanted.split(",");
-        String town = parts.length > 1 ? parts[1].trim() : wanted;
         for (Shelter shelter : shelters) {
-            String address = shelter.getAddress() == null ? "" : shelter.getAddress().toLowerCase();
-            boolean sameArea = wanted.isEmpty() || address.contains(wanted) || address.contains(town);
-            if (sameArea && shelter.hasSpace()) matches.add(shelter);
+            if (calculateDistance(shelter.getLocation().getCoordinates(), location.getCoordinates()) <= radius) {
+                if (shelter.getStatus() == ShelterStatus.OPEN && shelter.getOccupancy() < shelter.getCapacity()) {
+                    if (shelter.getLocation().getAddress().getCity().equals(location.getAddress().getCity())) {
+                        matches.add(shelter);
+                    }
+                }
+            }
         }
         return matches;
     }
 
+    private double calculateDistance(location.Coordinates loc1, location.Coordinates loc2) {
+        if (loc1 == null || loc2 == null) return Double.MAX_VALUE;
+        return Math.sqrt(Math.pow(loc1.getLatitude() - loc2.getLatitude(), 2) + Math.pow(loc1.getLongitude() - loc2.getLongitude(), 2));
+    }
+    
     public ArrayList<Shelter> filterByAccommodation(Accommodation accommodation) {
         ArrayList<Shelter> matches = new ArrayList<>();
         for (Shelter shelter : shelters) {
