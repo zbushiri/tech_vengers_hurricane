@@ -25,6 +25,12 @@ public abstract class DataConstants {
     protected static final String VERIFICATION_STATUS = "verificationStatus";
     protected static final String SAFETY_STATUS = "safetyStatus";
     protected static final String SAFETY_STATUS_UPDATED_AT = "safetyStatusUpdatedAt";
+
+    protected static final String VOLUNTEER_SKILLS = "skills";
+    protected static final String VOLUNTEER_EQUIPMENT = "equipment";
+    protected static final String VOLUNTEER_BACKGROUND_CHECK = "backgroundCheckStatus";
+    protected static final String VOLUNTEER_TRANSPORTATION = "transportationAccess";
+    protected static final String VOLUNTEER_AVAILABILITY = "availabilityStatus";
     
     protected static final String PERSON_FIRST_NAME = "firstName";
     protected static final String PERSON_LAST_NAME = "lastName";

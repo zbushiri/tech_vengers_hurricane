@@ -158,7 +158,12 @@ public class DataLoader extends DataConstants {
                 User user = new User(userId, firstName, lastName, email, phoneNumber, address, 
                         username, password, roles, associatedPersons, verificationStatus,
                         lastKnownLocation, safetyStatus, safetyStatusUpdatedAt);
-                users.addUser(user);
+
+                        // only volunteers have skills, so those become a VolunteerProfile
+                        if (userJSON.containsKey(VOLUNTEER_SKILLS)) {
+                            user = readVolunteer(user, userJSON);
+                        }
+                        users.addUser(user);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -180,6 +185,43 @@ public class DataLoader extends DataConstants {
         }
         return UUID.randomUUID();
     }
+
+    /**
+     * Wraps a loaded user in a VolunteerProfile with the volunteer fields. 
+     */
+    private static VolunteerProfile readVolunteer(User user, JSONObject userJSON) {
+        ArrayList<String> skills = readStrings(userJSON.get(VOLUNTEER_SKILLS));
+        ArrayList<String> equipment = readStrings(userJSON.get(VOLUNTEER_EQUIPMENT));
+
+        BackgroundCheckStatus background = BackgroundCheckStatus.PENDING;
+        String backgroundText = (String) userJSON.get(VOLUNTEER_BACKGROUND_CHECK);
+        if (backgroundText != null) {
+            background = BackgroundCheckStatus.valueOf(backgroundText.toUpperCase());
+        }
+
+        AvailabilityStatus availability = AvailabilityStatus.AVAILABLE;
+        String availabilityText = (String) userJSON.get(VOLUNTEER_AVAILABILITY);
+        if (availabilityText != null) {
+            availability = AvailabilityStatus.valueOf(availabilityText.toUpperCase());  
+        }
+
+        // saved as true / false, but older data has the text "true"
+        boolean transportation = String.valueOf(userJSON.get(VOLUNTEER_TRANSPORTATION)).equals("true");
+
+        return new VolunteerProfile(user, skills, equipment, background, transportation, availability);
+    }
+    /**
+     * Turns a JSON array of text into an ArrayList of Strings.
+     */
+    private static ArrayList<String> readStrings(Object listValue) {
+        ArrayList<String> list = new ArrayList<>();
+        if (listValue instanceof JSONArray) {
+        for (Object item : (JSONArray) listValue) {
+            list.add((String) item);
+        }
+    }
+    return list;
+}
 
     /**
      * Turns a JSON array of role names like "resident" into AccountRoles.
@@ -396,8 +438,9 @@ public class DataLoader extends DataConstants {
         }
     
     public static void main(String[] args) {
-        for (HurricaneEvent hurricane : getHurricanes()) {
-            System.out.println(hurricane.getName() + " - " + hurricane.getStatus());
+        for (User u : getUsers().getUsers()) {
+            System.out.println(u.getUsername() + "volunteer=" +
+            (u instanceof VolunteerProfile));
         }
     }
 }
