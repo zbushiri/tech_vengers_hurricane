@@ -13,23 +13,23 @@ public class User {
     private String lastName;
     private String phoneNumber;
     private String email;
-    private String address;
+    private location.Address address;
     private String username;
     private String passwordHash;
     private ArrayList<AccountRole> roles;
     private ArrayList<Person> associatedPersons;
     private VerificationStatus verificationStatus;
-    private String lastKnownLocation;
+    private location.MapLocation lastKnownLocation;
     private SafetyStatusType safetyStatus;
     private LocalDateTime safetyStatusUpdatedAt;
 
     public User(String username, String passwordHash) {
-        this("", "", "", "", "", username, passwordHash, new ArrayList<>(), "");
+        this("", "", "", "", null, username, passwordHash, new ArrayList<>(), null);
     }
 
     public User(String firstName, String lastName, String email, String phoneNumber,
-            String address, String username, String passwordHash,
-            ArrayList<AccountRole> roles, String lastKnownLocation) {
+            location.Address address, String username, String passwordHash,
+            ArrayList<AccountRole> roles, location.MapLocation lastKnownLocation) {
         this(UUID.randomUUID(), firstName, lastName, email, phoneNumber, address,
                 username, passwordHash, roles, new ArrayList<>(),
                 VerificationStatus.UNVERIFIED, lastKnownLocation,
@@ -37,9 +37,9 @@ public class User {
     }
 
     public User(UUID userId, String firstName, String lastName, String email,
-            String phoneNumber, String address, String username, String passwordHash,
+            String phoneNumber, location.Address address, String username, String passwordHash,
             List<AccountRole> roles, List<Person> associatedPersons,
-            VerificationStatus verificationStatus, String lastKnownLocation,
+            VerificationStatus verificationStatus, location.MapLocation lastKnownLocation,
             SafetyStatusType safetyStatus, LocalDateTime safetyStatusUpdatedAt) {
         this.userId = userId == null ? UUID.randomUUID() : userId;
         this.firstName = firstName;
@@ -77,14 +77,26 @@ public class User {
         safetyStatusUpdatedAt = LocalDateTime.now();
     }
 
-    public void updateLocation(String location) { lastKnownLocation = location; }
+    public void updateLocation(location.MapLocation location) { lastKnownLocation = location; }
     public static void getLatestInfo(HurricaneEvent hurricane) { System.out.println(hurricane); }
     public static void searchGuidanceContent() { System.out.println("Searching guidance content..."); }
 
-    public ArrayList<Shelter> findNearestShelters() {
-        boolean hasTown = lastKnownLocation != null && lastKnownLocation.matches(".*[A-Za-z].*");
-        return ShelterList.getInstance().searchByProximity(hasTown ? lastKnownLocation : address,
-                ShelterList.DEFAULT_RADIUS_MILES);
+    public Shelter[] findNearestShelters(int maxResults) {
+        Shelter[] closestShelters = new Shelter[maxResults];
+        boolean hasTown = lastKnownLocation != null && lastKnownLocation.getCoordinates() != null && lastKnownLocation.getCoordinates().getLatitude() != 0 && lastKnownLocation.getCoordinates().getLongitude() != 0;
+        for (Shelter shelter : ShelterList.getInstance().getShelters()) {
+            if (shelter.getStatus() == ShelterStatus.OPEN && shelter.getOccupancy() < shelter.getCapacity()) {
+                if (hasTown && ShelterList.getInstance().searchByProximity(shelter.getLocation(), ShelterList.DEFAULT_RADIUS_MILES).contains(shelter)) {
+                    for (int i = 0; i < maxResults; i++) {
+                        if (closestShelters[i] == null) {
+                            closestShelters[i] = shelter;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        return closestShelters;
     }
 
     public boolean hasRole(AccountRole role) { return roles.contains(role); }
@@ -93,13 +105,13 @@ public class User {
     public String getLastName() { return lastName; }
     public String getPhoneNumber() { return phoneNumber; }
     public String getEmail() { return email; }
-    public String getAddress() { return address; }
+    public location.Address getAddress() { return address; }
     public String getUsername() { return username; }
     public String getPasswordHash() { return passwordHash; }
     public ArrayList<AccountRole> getRoles() { return roles; }
     public ArrayList<Person> getAssociatedPersons() { return associatedPersons; }
     public VerificationStatus getVerificationStatus() { return verificationStatus; }
-    public String getLastKnownLocation() { return lastKnownLocation; }
+    public location.MapLocation getLastKnownLocation() { return lastKnownLocation; }
     public SafetyStatusType getSafetyStatus() { return safetyStatus; }
     public LocalDateTime getSafetyStatusUpdatedAt() { return safetyStatusUpdatedAt; }
     public void setUserId(UUID value) { userId = value; }
@@ -107,13 +119,13 @@ public class User {
     public void setLastName(String value) { lastName = value; }
     public void setPhoneNumber(String value) { phoneNumber = value; }
     public void setEmail(String value) { email = value; }
-    public void setAddress(String value) { address = value; }
+    public void setAddress(location.Address value) { address = value; }
     public void setUsername(String value) { username = value; }
     public void setPasswordHash(String value) { passwordHash = value; }
     public void setRoles(ArrayList<AccountRole> value) { roles = value; }
     public void setAssociatedPersons(ArrayList<Person> value) { associatedPersons = value; }
     public void setVerificationStatus(VerificationStatus value) { verificationStatus = value; }
-    public void setLastKnownLocation(String value) { lastKnownLocation = value; }
+    public void setLastKnownLocation(location.MapLocation value) { lastKnownLocation = value; }
     public void setSafetyStatus(SafetyStatusType value) { safetyStatus = value; }
     public void setSafetyStatusUpdatedAt(LocalDateTime value) { safetyStatusUpdatedAt = value; }
 
