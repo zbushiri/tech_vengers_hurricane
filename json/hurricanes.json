@@ -19,5 +19,12 @@
         "endDate": "2017-08-25",
         "status": "closed",
         "affectedAreas": ["Texas", "Louisiana"]
+    },
+    {
+        "name": "Hurricane Scarlett",
+        "startDate": "2026-10-21",
+        "endDate": "2026-10-28",
+        "status": "active",
+        "affectedAreas": ["Charleston, SC", "North Charleston, SC", "Mount Pleasant, SC"]  
     }
 ]
