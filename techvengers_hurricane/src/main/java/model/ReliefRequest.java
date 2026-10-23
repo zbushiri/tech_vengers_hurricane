@@ -92,7 +92,7 @@ public class ReliefRequest {
         if (status != RequestStatus.SUBMITTED || volunteer == null || !volunteer.canClaimRequests()) {
             return;
         }
-        setStatus(RequestStatus.IN_PROGRESS);
+        setStatus(RequestStatus.ASSIGNED);
         volunteer.setAvailability(AvailabilityStatus.ON_ASSIGNMENT);
     }
 
@@ -115,7 +115,7 @@ public class ReliefRequest {
         return level;
     }
     public boolean isOpen() {
-        return status == RequestStatus.SUBMITTED || status == RequestStatus.IN_PROGRESS;
+        return status == RequestStatus.SUBMITTED || status == RequestStatus.ASSIGNED || status == RequestStatus.IN_PROGRESS;
     }
     
     public boolean isForVolunteers() {

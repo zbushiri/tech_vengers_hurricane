@@ -130,7 +130,7 @@ public class ReliefRequestCatalog {
             return false;
         }
         request.claimRequest(volunteer);
-        return request.getStatus() == RequestStatus.IN_PROGRESS;
+        return request.getStatus() == RequestStatus.ASSIGNED;
     }
 
     /**

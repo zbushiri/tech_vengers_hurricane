@@ -4,5 +4,7 @@ public enum RequestStatus {
     SUBMITTED,
     IN_PROGRESS,
     FULFILLED,
-    CANCELLED
+    CANCELLED, 
+    ASSIGNED,
+    COMPLETE
 }
