@@ -28,15 +28,15 @@ Then select `MapUI` in VS Code and press Run.
 
 ## Project Documents
 
-📄 [Requirements Document](docs/requirements-document.pdf)
+📄 [Requirements Document](docs/requirements.pdf)
 
 📊 [Requirements Spreadsheet](https://docs.google.com/spreadsheets/d/1-6v7CzIGUt1K67bx0IGyv2CTm_Y1jSjVxjm9yyDrl70/edit?usp=sharing)
 
 📐 [UML Class Diagram](docs/uml-class-diagram.pdf)
 
-🔁 [UML Sequence Diagram 1 – Resident Submits a Relief Request](docs/uml-sequence-diagram1.pdf)
+🔁 [UML Sequence Diagram 1 – Resident Submits a Relief Request](docs/sequence2.pdf)
 
-🔁 [UML Sequence Diagram 2 – Volunteer Claims a Relief Request](docs/uml-sequence-diagram2.pdf)
+🔁 [UML Sequence Diagram 2 – Volunteer Claims a Relief Request](docs/sequence2.pdf)
 
 ## Project Board
 
