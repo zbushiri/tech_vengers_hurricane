@@ -1,1 +1,112 @@
-[{"lastUpdated":"2026-10-22T08:00","address":"2950 Carner Avenue, North Charleston, SC 29405","accommodations":["pet_friendly","wheelchair_accessible"],"occupancy":60,"shelterOperators":[],"name":"Carner Avenue Shelter","shelterId":"00000000-0000-0000-0000-000000000001","capacity":120,"status":"open"},{"lastUpdated":"2026-10-22T08:00","address":"5200 Lackawanna Boulevard, North Charleston, SC 29405","accommodations":["pet_friendly","medical_support","wheelchair_accessible"],"occupancy":90,"shelterOperators":["felixgrant"],"name":"Lackawanna Community Shelter","shelterId":"00000000-0000-0000-0000-000000000002","capacity":150,"status":"open"},{"lastUpdated":"2026-10-22T08:00","address":"3841 Leeds Avenue, North Charleston, SC 29405","accommodations":["pet_friendly","medical_support"],"occupancy":79,"shelterOperators":[],"name":"Leeds Avenue Shelter","shelterId":"00000000-0000-0000-0000-000000000003","capacity":80,"status":"open"},{"lastUpdated":"2026-10-22T08:00","address":"3625 Ashley Phosphate Road, North Charleston, SC 29418","accommodations":["medical_support"],"occupancy":40,"shelterOperators":[],"name":"Ashley Phosphate Shelter","shelterId":"00000000-0000-0000-0000-000000000004","capacity":100,"status":"open"},{"lastUpdated":"2026-10-22T08:00","address":"6401 Dorchester Road, North Charleston, SC 29418","accommodations":["wheelchair_accessible"],"occupancy":30,"shelterOperators":[],"name":"Dorchester Road Shelter","shelterId":"00000000-0000-0000-0000-000000000005","capacity":90,"status":"open"},{"lastUpdated":"2026-10-22T08:00","address":"1624 State Road, Summerville, SC 29483","accommodations":["pet_friendly","medical_support"],"occupancy":50,"shelterOperators":[],"name":"State Road Shelter","shelterId":"00000000-0000-0000-0000-000000000006","capacity":100,"status":"open"},{"lastUpdated":"2026-10-22T08:00","address":"1053 Russellville Road, St. Stephen, SC 29479","accommodations":["pet_friendly","medical_support","wheelchair_accessible"],"occupancy":10,"shelterOperators":[],"name":"Russellville Road Shelter","shelterId":"00000000-0000-0000-0000-000000000007","capacity":60,"status":"open"},{"lastUpdated":"2026-10-22T08:00","address":"200 Macedonia Foxes Circle, St. Stephen, SC 29479","accommodations":["pet_friendly"],"occupancy":20,"shelterOperators":[],"name":"Macedonia Shelter","shelterId":"00000000-0000-0000-0000-000000000008","capacity":70,"status":"open"},{"lastUpdated":"2026-10-22T08:00","address":"101 Westview Boulevard, Goose Creek, SC 29445","accommodations":["pet_friendly","medical_support"],"occupancy":130,"shelterOperators":[],"name":"Goose Creek Shelter","shelterId":"00000000-0000-0000-0000-000000000009","capacity":130,"status":"full"},{"lastUpdated":"2026-10-22T08:00","address":"1101 Boone Hill Road, Summerville, SC 29483","accommodations":["wheelchair_accessible","medical_support"],"occupancy":45,"shelterOperators":[],"name":"Boone Hill Shelter","shelterId":"00000000-0000-0000-0000-000000000010","capacity":100,"status":"open"}]
+[
+    {
+        "shelterId": "00000000-0000-0000-0000-000000000001",
+        "name": "Carner Avenue Shelter",
+        "address": "2950 Carner Avenue, North Charleston, SC 29405",
+        "capacity": 120,
+        "occupancy": 60,
+         "status": "open",
+        "accommodations": ["pet_friendly", "wheelchair_accessible"],
+        "lastUpdated": "2026-10-22T08:00:00",
+        "shelterOperators": []
+    },
+    {
+        "shelterId": "00000000-0000-0000-0000-000000000002",
+        "name": "Lackawanna Community Shelter",
+        "address": "5200 Lackawanna Boulevard, North Charleston, SC 29405",
+        "capacity": 150,
+        "occupancy": 90,
+        "status": "open",
+        "accommodations": ["pet_friendly", "medical_support", "wheelchair_accessible"],
+        "lastUpdated": "2026-10-22T08:00:00",
+        "shelterOperators": ["felixgrant"]
+    },
+    {
+        "shelterId": "00000000-0000-0000-0000-000000000003",
+        "name": "Leeds Avenue Shelter",
+        "address": "3841 Leeds Avenue, North Charleston, SC 29405",
+        "capacity": 80,
+        "occupancy": 79,
+         "status": "open",
+        "accommodations": ["pet_friendly", "medical_support"],
+        "lastUpdated": "2026-10-22T08:00:00",
+        "shelterOperators": []  
+    },
+    {
+        "shelterId": "00000000-0000-0000-0000-000000000004",
+        "name": "Ashley Phosphate Shelter",
+        "address": "3625 Ashley Phosphate Road, North Charleston, SC 29418",
+        "capacity": 100,
+        "occupancy": 40,
+         "status": "open",
+        "accommodations": ["medical_support"],
+        "lastUpdated": "2026-10-22T08:00:00",
+        "shelterOperators": []
+    },
+    {
+        "shelterId": "00000000-0000-0000-0000-000000000005",
+        "name": "Dorchester Road Shelter",
+        "address": "6401 Dorchester Road, North Charleston, SC 29418",
+        "capacity": 90,
+        "occupancy": 30,
+         "status": "open",
+        "accommodations": ["wheelchair_accessible"],
+        "lastUpdated": "2026-10-22T08:00:00",
+        "shelterOperators": []
+    },
+    {
+        "shelterId": "00000000-0000-0000-0000-000000000006",
+        "name": "State Road Shelter",
+        "address": "1624 State Road, Summerville, SC 29483",
+        "capacity": 100,
+        "occupancy": 50,
+         "status": "open",
+        "accommodations": ["pet_friendly","medical_support"],
+        "lastUpdated": "2026-10-22T08:00:00",
+        "shelterOperators": []
+    },
+    {
+        "shelterId": "00000000-0000-0000-0000-000000000007",
+        "name": "Russellville Road Shelter",
+        "address": "1053 Russellville Road, St. Stephen, SC 29479",
+        "capacity": 60,
+        "occupancy": 10,
+         "status": "open",
+        "accommodations": ["pet_friendly","medical_support", "wheelchair_accessible"],
+        "lastUpdated": "2026-10-22T08:00:00",
+        "shelterOperators": []
+    },
+    {
+        "shelterId": "00000000-0000-0000-0000-000000000008",
+        "name": "Macedonia Shelter",
+        "address": "200 Macedonia Foxes Circle, St. Stephen, SC 29479",
+        "capacity": 70,
+        "occupancy": 20,
+         "status": "open",
+        "accommodations": ["pet_friendly"],
+        "lastUpdated": "2026-10-22T08:00:00",
+        "shelterOperators": []
+    },
+    {
+        "shelterId": "00000000-0000-0000-0000-000000000009",
+        "name": "Goose Creek Shelter",
+        "address": "101 Westview Boulevard, Goose Creek, SC 29445",
+        "capacity": 130,
+        "occupancy": 130,
+         "status": "full",
+        "accommodations": ["pet_friendly", "medical_support"],
+        "lastUpdated": "2026-10-22T08:00:00",
+        "shelterOperators": []
+    },
+    {
+        "shelterId": "00000000-0000-0000-0000-000000000010",
+        "name": "Boone Hill Shelter",
+        "address": "1101 Boone Hill Road, Summerville, SC 29483",
+        "capacity": 100,
+        "occupancy": 45,
+         "status": "open",
+        "accommodations": ["wheelchair_accessible", "medical_support"],
+        "lastUpdated": "2026-10-22T08:00:00",
+        "shelterOperators": []
+    }
+]
