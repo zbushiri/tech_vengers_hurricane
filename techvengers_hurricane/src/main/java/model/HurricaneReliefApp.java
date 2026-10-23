@@ -1,7 +1,6 @@
 package model;
 
 import java.util.ArrayList;
-import model.ShelterList.Location;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -218,6 +217,31 @@ public class HurricaneReliefApp {
         return true;
     }
 
+    /**
+     * Marks a volunteer's background check as verified so they can claim
+     * requests. Only a coordinator or shelter operator may do this.
+     *
+     * @return false if the user may not verify or the volunteer was not found
+     */
+    public boolean verifyVolunteer(String username) {
+        if (currentUser == null || !canVerifyVolunteers()) {
+            System.out.println("Only coordinators and shelter operators can verify volunteers.");
+            return false;
+        }
+        User user = userList.getUser(username);
+        if (!(user instanceof VolunteerProfile)) {
+            System.out.println("No volunteer was found with that username.");
+            return false;
+        }
+        ((VolunteerProfile) user).setBackgroundCheckStatus(BackgroundCheckStatus.VERIFIED);
+        System.out.println("Background check verified for " + user.getUsername() + ".");
+        return true;
+    }
+
+    private boolean canVerifyVolunteers() {
+        return currentUser.hasRole(AccountRole.COORDINATOR) || currentUser.hasRole(AccountRole.SHELTER_OPERATOR);
+    }
+
     // ---- Terminal menus ----
 
     /**
@@ -271,6 +295,9 @@ public class HurricaneReliefApp {
         System.out.println("5. View open requests");
         System.out.println("6. Log out");
         System.out.println("7. Exit");
+        if (canVerifyVolunteers()) {
+            System.out.println("8. Verify a volunteer's background check");
+        }
         String choice = prompt("Choose an option: ");
 
         if (choice == null || choice.equals("7")) {
@@ -287,6 +314,8 @@ public class HurricaneReliefApp {
             openRequestsMenu();
         } else if (choice.equals("6")) {
             logout();
+        } else if (choice.equals("8") && canVerifyVolunteers()) {
+            verifyVolunteer(prompt("Volunteer's username: "));
         } else {
             System.out.println("Please choose 1 to 7.");
         }

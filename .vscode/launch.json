@@ -6,25 +6,17 @@
       "name": "MapUI",
       "request": "launch",
       "mainClass": "techvengers_hurricane/model.MapUI",
-      "projectName": "techvengers_hurricane"
+      "projectName": "techvengers_hurricane",
+      "vmArgs": "--enable-native-access=javafx.graphics",
+      "envFile": "${workspaceFolder}/.env"
     },
     {
       "type": "java",
       "name": "Run UI",
       "request": "launch",
       "mainClass": "model.UI",
-      "env": {
-        "HURRICANE_API": "${env:HURRICANE_API}"
-      }
-    },
-    {
-      "type": "java",
-      "name": "Run Map App",
-      "request": "launch",
-      "mainClass": "techvengers_hurricane.App",
-      "env": {
-        "HURRICANE_API": "${env:HURRICANE_API}"
-      }
+      "vmArgs": "--enable-native-access=javafx.graphics",
+      "envFile": "${workspaceFolder}/.env"
     }
   ]
 }

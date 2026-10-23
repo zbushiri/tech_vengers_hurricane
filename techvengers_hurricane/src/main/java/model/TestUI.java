@@ -8,6 +8,11 @@ class TestUI {
     private UserList userListInstance = UserList.getInstance();
     private String createdUserToString;
     private String loginUserToString;
+
+    // Load the saved data first, so saveUsers() doesn't overwrite users.json with only the test user
+    TestUI() {
+        app.initialize();
+    }
 	
 
 

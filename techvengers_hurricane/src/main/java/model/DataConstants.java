@@ -1,15 +1,20 @@
 package model;
 
+import java.io.File;
+
 /**
  * File paths and JSON key names shared by DataLoader and DataWriter.
  * 
  * @author Tavien Smith
  */
 public abstract class DataConstants {
-    protected static final String SHELTER_FILE ="json/shelters.json";
-    protected static final String USER_FILE = "json/users.json";
-    protected static final String REQUEST_FILE = "json/requests.json";
-    protected static final String HURRICANE_FILE = "json/hurricanes.json";
+    // The json folder sits at the repo root, one level above pom.xml, so this
+    // works whether the app is started from the repo root or from techvengers_hurricane/
+    private static final String JSON_FOLDER = new File("json").isDirectory() ? "json/" : "../json/";
+    protected static final String SHELTER_FILE = JSON_FOLDER + "shelters.json";
+    protected static final String USER_FILE = JSON_FOLDER + "users.json";
+    protected static final String REQUEST_FILE = JSON_FOLDER + "requests.json";
+    protected static final String HURRICANE_FILE = JSON_FOLDER + "hurricanes.json";
 
     protected static final String USER_ID = "userId";
     protected static final String USER_FIRST_NAME = "firstName";
@@ -29,7 +34,9 @@ public abstract class DataConstants {
     protected static final String VOLUNTEER_SKILLS = "skills";
     protected static final String VOLUNTEER_EQUIPMENT = "equipment";
     protected static final String VOLUNTEER_BACKGROUND_CHECK = "backgroundCheckStatus";
-    protected static final String VOLUNTEER_TRANSPORTATION = "transportationAccess";
+    protected static final String VOLUNTEER_TRANSPORTATION = "transportationStatus";
+    // Misspelled key used by the sample data in users.json
+    protected static final String VOLUNTEER_TRANSPORTATION_OLD = "transportatioinStatus";
     protected static final String VOLUNTEER_AVAILABILITY = "availabilityStatus";
     
     protected static final String PERSON_FIRST_NAME = "firstName";

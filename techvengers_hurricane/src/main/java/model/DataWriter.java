@@ -2,6 +2,7 @@ package model;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -68,6 +69,15 @@ public class DataWriter extends DataConstants {
         json.put(USER_LAST_KNOWN_LOCATION, user.getLastKnownLocation());
         json.put(SAFETY_STATUS, enumText(user.getSafetyStatus()));
         json.put(SAFETY_STATUS_UPDATED_AT, String.valueOf(user.getSafetyStatusUpdatedAt()));
+
+        if (user instanceof VolunteerProfile) {
+            VolunteerProfile volunteer = (VolunteerProfile) user;
+            json.put(VOLUNTEER_SKILLS, textArray(volunteer.getSkills()));
+            json.put(VOLUNTEER_EQUIPMENT, textArray(volunteer.getEquipment()));
+            json.put(VOLUNTEER_BACKGROUND_CHECK, enumText(volunteer.getBackgroundCheckStatus()));
+            json.put(VOLUNTEER_TRANSPORTATION, volunteer.hasTransportationAccess());
+            json.put(VOLUNTEER_AVAILABILITY, enumText(volunteer.getAvailabilityStatus()));
+        }
         return json;
     }
 
@@ -103,17 +113,51 @@ public class DataWriter extends DataConstants {
     @SuppressWarnings("unchecked")
     private static JSONObject requestToJSON(ReliefRequest request) {
         JSONObject json = new JSONObject();
-        json.put("requestId", request.getRequestId().toString());
-        json.put("type", enumText(request.getType()));
-        json.put("status", enumText(request.getStatus()));
-        json.put("location", request.getLocation());
-        json.put("description", request.getDescription());
-        json.put("priority", enumText(request.getPriority()));
+        json.put(REQUEST_ID, request.getRequestId().toString());
+        json.put(REQUEST_TYPE, enumText(request.getType()));
+        json.put(REQUEST_STATUS, enumText(request.getStatus()));
+        json.put(REQUEST_LOCATION, request.getLocation());
+        json.put(REQUEST_DESCRIPTION, request.getDescription());
+        json.put(REQUEST_PRIORITY, enumText(request.getPriority()));
+        json.put(REQUEST_DATE_SUBMITTED, dateText(request.getDateSubmitted()));
+        json.put(REQUEST_PEOPLE, request.getNumberOfPeopleNeeded());
+        json.put(REQUEST_ANIMALS, request.getNumberOfAnimals());
+        json.put(REQUEST_ANIMAL_NOTES, request.getAnimalNotes());
+        json.put(REQUEST_PHOTO_URL, request.getPhotoUrl());
+        json.put(REQUEST_IS_SUSPICIOUS, request.isSuspicious());
+        ReliefRequest original = request.getIsDuplicateOf();
+        json.put(REQUEST_DUPLICATE_OF, original == null ? null : original.getRequestId().toString());
+        HurricaneEvent hurricane = request.getForHurricane();
+        json.put(REQUEST_HURRICANE, hurricane == null ? null : hurricaneToJSON(hurricane));
         return json;
     }
 
+    @SuppressWarnings("unchecked")
+    private static JSONObject hurricaneToJSON(HurricaneEvent hurricane) {
+        JSONObject json = new JSONObject();
+        json.put(HURRICANE_NAME, hurricane.getName());
+        json.put(HURRICANE_START, dateText(hurricane.getStartDate()));
+        json.put(HURRICANE_END, dateText(hurricane.getEndDate()));
+        json.put(HURRICANE_STATUS, enumText(hurricane.getStatus()));
+        json.put(HURRICANE_AREAS, textArray(hurricane.getAffectedAreas()));
+        return json;
+    }
+
+    /** Writes a date like "2024-06-01T12:00:00Z", which DataLoader can read back. */
+    private static String dateText(Date date) {
+        return date == null ? null : date.toInstant().toString();
+    }
+
+    /** A missing value is saved as null so DataLoader falls back to its default. */
     private static String enumText(Enum<?> value) {
-        return value == null ? "" : value.name().toLowerCase();
+        return value == null ? null : value.name().toLowerCase();
+    }
+
+    @SuppressWarnings("unchecked")
+    private static JSONArray textArray(List<String> values) {
+        JSONArray data = new JSONArray();
+        if (values != null) data.addAll(values);
+        return data;
     }
 
     @SuppressWarnings("unchecked")

@@ -61,7 +61,7 @@
         "skills": ["first aid","logistics", "communication"],
         "equipment": ["first aid kit", "walkie-talkie", "flashlight"],
         "backgroundCheckStatus": "verified",
-        "transportationAccess": "true",
+        "transportationStatus": "true",
         "availabilityStatus": "on_assignment"
     },
     {
@@ -86,7 +86,7 @@
         "skills": ["emergency response", "logistics", "communication"],
         "equipment": ["emergency kit", "walkie-talkie", "flashlight"],
         "backgroundCheckStatus": "pending",
-        "transportationAccess": "true",
+        "transportationStatus": "true",
         "availabilityStatus": "available"
     }
 ]
