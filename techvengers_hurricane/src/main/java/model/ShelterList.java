@@ -2,6 +2,9 @@ package model;
 
 import java.util.ArrayList;
 
+import location.Address;
+import location.MapTools;
+
 /** Stores and searches shelters. */
 public class ShelterList {
     public static final double DEFAULT_RADIUS_MILES = 25;
@@ -19,6 +22,46 @@ public class ShelterList {
     public ArrayList<Shelter> getShelters() { return shelters; }
     public void addShelter(Shelter shelter) {
         if (shelter != null && !shelters.contains(shelter)) shelters.add(shelter);
+    }
+
+    /**
+     * Finds the closest open shelter with room for the group and every accommodation
+     * they need. Falls back to the first match if the map API can't be reached.
+     * 
+     * @param from where the group is starting
+     * @param needs accommodations the shelter must have 
+     * @param people how many people need beds
+     * @return the closest matching shelter, or null if none match
+     */
+    public Shelter findClosestShelter(Address from, ArrayList<Accommodation> needs, int people) {
+        ArrayList<Shelter> candidates = new ArrayList<>();
+        ArrayList<Address> addresses = new ArrayList<>();
+        
+        for (Shelter shelter : shelters) {
+            Address address = Address.fromString(shelter.getAddress());
+            if (shelter.hasSpace() && shelter.getCapacity() - shelter.getOccupancy() >= people
+            && shelter.getAccommodations().containsAll(needs)
+            && address != null) {
+                candidates.add(shelter);
+                addresses.add(address);
+            }
+        }
+
+        if (candidates.isEmpty()) {
+            return null;
+        }
+
+        try {
+            Address closest = MapTools.getInstance().findClosestAddress(from, addresses.toArray(new Address[0]));
+            for (int i = 0; i < addresses.size(); i++) {
+                if (addresses.get(i).toString().equals(closest.toString())) {
+                    return candidates.get(i);
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Map service unavailable, showing the first matching shelter.");
+        }
+        return candidates.get(0);
     }
 
     /**
