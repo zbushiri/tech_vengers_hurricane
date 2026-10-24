@@ -42,4 +42,33 @@ public class Address {
     public String toString() {
         return String.format("%s, %s, %s %s", street, city, state, zip);
     }
+
+    /**
+     * Builds an Address from text like "2950 
+     * Carner Avenue, North Charleston, SC 29405",
+     * the same format toString() prints
+     * 
+     * @param text the stored address 
+     * @return the Address, or null if the
+     * text isn't in "street, city, ST zip" form
+     */
+    public static Address fromString(String text) {
+        if (text == null) {
+            return null;
+        }
+
+        // "2950 Carner Avenue" | "North Charleston" | "SC 29405"
+        String[] parts = text.split(", ");
+        if (parts.length != 3) {
+            return null;
+        }
+
+        // "SC" | "29405"
+        String[] stateZip = parts[2].split(" ");
+        if (stateZip.length != 2) {
+            return null;
+        }
+
+        return new Address(parts[0], parts[1], stateZip[0], stateZip[1]);
+    }
 }
