@@ -99,7 +99,14 @@ public class DataWriter extends DataConstants {
         JSONObject json = new JSONObject();
         json.put(SHELTER_ID, shelter.getShelterId().toString());
         json.put(SHELTER_NAME, shelter.getName());
-        json.put(SHELTER_ADDRESS, shelter.getLocation().getAddress());
+        json.put(SHELTER_STREET, shelter.getLocation().getAddress().getStreet());
+        json.put(SHELTER_CITY, shelter.getLocation().getAddress().getCity());
+        json.put(SHELTER_STATE, shelter.getLocation().getAddress().getState());
+        json.put(SHELTER_ZIP, shelter.getLocation().getAddress().getZip());
+        if (shelter.getLocation().getCoordinates() != null) {
+            json.put(SHELTER_LATITUDE, shelter.getLocation().getCoordinates().getLatitude());
+            json.put(SHELTER_LONGITUDE, shelter.getLocation().getCoordinates().getLongitude());
+        }
         json.put(SHELTER_CAPACITY, shelter.getCapacity());
         json.put(SHELTER_OCCUPANCY, shelter.getOccupancy());
         json.put(SHELTER_STATUS, enumText(shelter.getStatus()));

@@ -14,6 +14,10 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
+import location.Address;
+import location.Coordinates;
+import location.MapLocation;
+
 /**
  * Loads project data from JSON files.
  *
@@ -45,9 +49,9 @@ public class DataLoader extends DataConstants {
                 
                 UUID shelterId = readID(shelterJSON.get(SHELTER_ID));
                 String name = (String) shelterJSON.get(SHELTER_NAME);
-                String address = (String) shelterJSON.get(SHELTER_ADDRESS);
-                int capacity = ((Long) shelterJSON.get(SHELTER_CAPACITY)).intValue();
-                int occupancy = ((Long) shelterJSON.get(SHELTER_OCCUPANCY)).intValue();
+                MapLocation location = readShelterLocation(shelterJSON);
+                int capacity = readInt(shelterJSON.get(SHELTER_CAPACITY));
+                int occupancy = readInt(shelterJSON.get(SHELTER_OCCUPANCY));
 
                 ShelterStatus status = ShelterStatus.OPEN;
                 String statusText = (String) shelterJSON.get(SHELTER_STATUS);
@@ -57,7 +61,7 @@ public class DataLoader extends DataConstants {
 
                 ArrayList<Accommodation> accommodations = readAccommodations (shelterJSON.get(SHELTER_ACCOMMODATIONS));
 
-                Shelter shelter = new Shelter(shelterId, name, address, capacity,
+                Shelter shelter = new Shelter(shelterId, name, location, capacity,
                         occupancy, status, accommodations);
                 shelter.setLastUpdated(readDateTime((String) shelterJSON.get(SHELTER_LAST_UPDATED)));
                 shelter.setShelterOperators(readOperators(shelterJSON.get(SHELTER_OPERATORS), users));
@@ -67,6 +71,61 @@ public class DataLoader extends DataConstants {
             e.printStackTrace();
         }
         return shelters;
+    }
+
+    /**
+     * Builds a MapLocation from the persisted address and coordinates.
+     * Older shelter files stored one comma-separated address string, so that
+     * format is still accepted.
+     */
+    private static MapLocation readShelterLocation(JSONObject shelterJSON) {
+        Address address = readShelterAddress(shelterJSON);
+        double latitude = readDouble(shelterJSON.get(SHELTER_LATITUDE));
+        double longitude = readDouble(shelterJSON.get(SHELTER_LONGITUDE));
+        return new MapLocation(address, new Coordinates(latitude, longitude));
+    }
+
+    private static Address readShelterAddress(JSONObject shelterJSON) {
+        String street = (String) shelterJSON.get(SHELTER_STREET);
+        String city = (String) shelterJSON.get(SHELTER_CITY);
+        String state = (String) shelterJSON.get(SHELTER_STATE);
+        String zip = (String) shelterJSON.get(SHELTER_ZIP);
+
+        if (street != null || city != null || state != null || zip != null) {
+            return new Address(defaultText(street), defaultText(city),
+                    defaultText(state), defaultText(zip));
+        }
+
+        Object legacyAddress = shelterJSON.get("address");
+        if (legacyAddress instanceof String) {
+            return parseLegacyAddress((String) legacyAddress);
+        }
+        return new Address("", "", "", "");
+    }
+
+    private static Address parseLegacyAddress(String text) {
+        String[] parts = text.split("\\s*,\\s*");
+        String street = parts.length > 0 ? parts[0] : "";
+        String city = parts.length > 1 ? parts[1] : "";
+        String state = parts.length > 2 ? parts[2] : "";
+        String zip = parts.length > 3 ? parts[3] : "";
+
+        if (parts.length == 3) {
+            String[] stateAndZip = parts[2].trim().split("\\s+");
+            if (stateAndZip.length > 1) {
+                zip = stateAndZip[stateAndZip.length - 1];
+                state = parts[2].substring(0, parts[2].lastIndexOf(zip)).trim();
+            }
+        }
+        return new Address(street, city, state, zip);
+    }
+
+    private static String defaultText(String value) {
+        return value == null ? "" : value;
+    }
+
+    private static double readDouble(Object numberValue) {
+        return numberValue instanceof Number ? ((Number) numberValue).doubleValue() : 0.0;
     }
 
     /**
@@ -131,7 +190,7 @@ public class DataLoader extends DataConstants {
                 String lastName = (String) userJSON.get(USER_LAST_NAME);
                 String phoneNumber = (String) userJSON.get(USER_PHONE_NUMBER);
                 String email = (String) userJSON.get(USER_EMAIL);
-                String address = (String) userJSON.get(USER_ADDRESS);
+                Address address = readAddressValue(userJSON.get(USER_ADDRESS));
                 String username = (String) userJSON.get(USER_USERNAME);
                 String password = (String) userJSON.get(USER_PASSWORD);
 
@@ -152,7 +211,7 @@ public class DataLoader extends DataConstants {
 
                 LocalDateTime safetyStatusUpdatedAt =
                         readDateTime((String) userJSON.get(SAFETY_STATUS_UPDATED_AT));
-                String lastKnownLocation = readLocation(userJSON.get(USER_LAST_KNOWN_LOCATION));
+                MapLocation lastKnownLocation = readLocation(userJSON.get(USER_LAST_KNOWN_LOCATION));
 
                 User user = new User(userId, firstName, lastName, email, phoneNumber, address, 
                         username, password, roles, associatedPersons, verificationStatus,
@@ -294,12 +353,34 @@ public class DataLoader extends DataConstants {
     * Reads the last known location. Older data stores it as
     * {"latitude": ..., "longitude": ...}, so that becomes "latitude, longitude".
    */
-  private static String readLocation(Object locationValue) {
+  private static MapLocation readLocation(Object locationValue) {
     if (locationValue instanceof JSONObject) {
         JSONObject locationJSON = (JSONObject) locationValue;
-        return locationJSON.get(LATITUDE) + ", " + locationJSON.get(LONGITUDE);
-    }
-    return (String) locationValue;
+      double latitude = readDouble(locationJSON.get(LATITUDE));
+      double longitude = readDouble(locationJSON.get(LONGITUDE));
+      return new MapLocation(new Address("", "", "", ""),
+              new Coordinates(latitude, longitude));
+  }
+  if (locationValue instanceof String) {
+      return new MapLocation(parseLegacyAddress((String) locationValue),
+              new Coordinates(0.0, 0.0));
+  }
+  return null;
+  }
+
+  private static Address readAddressValue(Object addressValue) {
+  if (addressValue instanceof String) {
+      return parseLegacyAddress((String) addressValue);
+  }
+  if (addressValue instanceof JSONObject) {
+      JSONObject addressJSON = (JSONObject) addressValue;
+      return new Address(
+              defaultText((String) addressJSON.get(SHELTER_STREET)),
+              defaultText((String) addressJSON.get(SHELTER_CITY)),
+              defaultText((String) addressJSON.get(SHELTER_STATE)),
+              defaultText((String) addressJSON.get(SHELTER_ZIP)));
+  }
+  return new Address("", "", "", "");
   }
 
     /**
@@ -379,10 +460,7 @@ public class DataLoader extends DataConstants {
      * Reads a whole number. json-simple gives back a Long, and a missing value is 0.
      */
     private static int readInt(Object numberValue) {
-        if (numberValue instanceof Long) {
-            return ((Long) numberValue).intValue();
-        }
-        return 0;
+        return numberValue instanceof Number ? ((Number) numberValue).intValue() : 0;
     }
 
     /**
@@ -438,4 +516,3 @@ public class DataLoader extends DataConstants {
             return hurricanes;
         }
 }
-

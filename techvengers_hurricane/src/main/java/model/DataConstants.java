@@ -48,7 +48,12 @@ public abstract class DataConstants {
     
     protected static final String SHELTER_ID = "shelterId";
     protected static final String SHELTER_NAME = "name";
-    protected static final String SHELTER_ADDRESS = "address";
+    protected static final String SHELTER_STREET = "street";
+    protected static final String SHELTER_CITY = "city";
+    protected static final String SHELTER_STATE = "state";
+    protected static final String SHELTER_ZIP = "zip";
+    protected static final String SHELTER_LATITUDE = "latitude";
+    protected static final String SHELTER_LONGITUDE = "longitude";
     protected static final String SHELTER_CAPACITY = "capacity";
     protected static final String SHELTER_OCCUPANCY = "occupancy";
     protected static final String SHELTER_STATUS = "status";
