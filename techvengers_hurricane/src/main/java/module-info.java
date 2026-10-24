@@ -1,3 +1,5 @@
+
+@SuppressWarnings("module")
 module techvengers_hurricane {
     requires javafx.controls;
     requires javafx.fxml;

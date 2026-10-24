@@ -3,6 +3,8 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * Builds the right kind of account for a role. Volunteers get a
@@ -57,9 +59,11 @@ public class AccountFactory {
 
     private static List<String> list(Object value) {
         List<String> items = new ArrayList<>();
-        if (value instanceof List) {
-            for (Object item : (List<?>) value) {
-                items.add(String.valueOf(item).trim());
+        JsonNode node = new ObjectMapper().valueToTree(value);
+        if (node != null && node.isArray()) {
+            for (JsonNode item : node) {
+                String text = item.asText().trim();
+                if (!text.isEmpty()) items.add(text);
             }
         } else if (value != null) {
             for (String item : String.valueOf(value).split(",")) {

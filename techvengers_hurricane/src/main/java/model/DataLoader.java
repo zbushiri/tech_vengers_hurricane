@@ -1,441 +1,189 @@
 package model;
 
-import java.io.FileReader;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.UUID;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.File;
+import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.UUID;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-
-/**
- * Loads project data from JSON files.
- *
- * @author Tavien Smith
- */
+/** Loads current and legacy JSON using Jackson's typed JSON nodes. */
 public class DataLoader extends DataConstants {
-    private DataLoader() {
+    private static final ObjectMapper JSON = new ObjectMapper();
+
+    private DataLoader() { }
+
+    private static JsonNode readArray(String file) throws IOException {
+        JsonNode data = JSON.readTree(new File(file));
+        if (data == null || !data.isArray()) throw new IOException("Expected a JSON array in " + file);
+        return data;
     }
 
-    /**
-     * Loads the shelters from the shelters JSON file.
-     * 
-     * @return the list of shelters or an empty list if none load
-     */
-    public static ShelterList getShelters() {
-        ShelterList shelters = ShelterList.getInstance();
-
-        if (!shelters.getShelters().isEmpty()) {
-            return shelters;
-        }
-
-        UserList users = getUsers();
-
-        try(FileReader reader = new FileReader(SHELTER_FILE)) {
-            JSONArray sheltersJSON = (JSONArray) new JSONParser().parse(reader);
-
-            for (int i = 0; i < sheltersJSON.size(); i++) {
-                JSONObject shelterJSON = (JSONObject) sheltersJSON.get(i);
-                
-                UUID shelterId = readID(shelterJSON.get(SHELTER_ID));
-                String name = (String) shelterJSON.get(SHELTER_NAME);
-                String address = (String) shelterJSON.get(SHELTER_ADDRESS);
-                int capacity = ((Long) shelterJSON.get(SHELTER_CAPACITY)).intValue();
-                int occupancy = ((Long) shelterJSON.get(SHELTER_OCCUPANCY)).intValue();
-
-                ShelterStatus status = ShelterStatus.OPEN;
-                String statusText = (String) shelterJSON.get(SHELTER_STATUS);
-                if (statusText != null) {
-                    status = ShelterStatus.valueOf(statusText.toUpperCase());
-                }
-
-                ArrayList<Accommodation> accommodations = readAccommodations (shelterJSON.get(SHELTER_ACCOMMODATIONS));
-
-                Shelter shelter = new Shelter(shelterId, name, address, capacity,
-                        occupancy, status, accommodations);
-                shelter.setLastUpdated(readDateTime((String) shelterJSON.get(SHELTER_LAST_UPDATED)));
-                shelter.setShelterOperators(readOperators(shelterJSON.get(SHELTER_OPERATORS), users));
-                shelters.addShelter(shelter);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return shelters;
+    private static String text(JsonNode node, String key) {
+        return node.path(key).asText(null);
     }
 
-    /**
-     * Turns a JSON array of names like"pet_friendly" into Accommodations.
-     * Names that are not an Accommodation are skipped.
-    */
-   private static ArrayList<Accommodation> readAccommodations(Object accommodationsValue) {
-       ArrayList<Accommodation> accommodations = new ArrayList<>();
-       if (!(accommodationsValue instanceof JSONArray)) {
-        return accommodations;
-       }
-
-       for (Object accommodation : (JSONArray) accommodationsValue) {
-           try {
-               accommodations.add(Accommodation.valueOf(((String) accommodation).toUpperCase()));
-           } catch (IllegalArgumentException e) {
-               // not an Accommodation, so skip it
-           }
-       }
-       return accommodations;
-   }
-
-   /**
-    * Turns a JSON array of usernames into the matching Users.
-    * Usernames that match no user are skipped.
-   */
-  private static ArrayList<User> readOperators(Object operatorsValue, UserList users) {
-      ArrayList<User> operators = new ArrayList<>();
-      if (!(operatorsValue instanceof JSONArray)) {
-          return operators;
-      }
-      for (Object username : (JSONArray) operatorsValue) {
-          User user = users.getUser((String) username);
-          if (user != null) {
-              operators.add(user);
-          }
-      }
-      return operators;
-  }
-
-    /**
-     * Loads the users from the users JSON file.
-     * Volunteers are stored in this file too.
-     * 
-     * @return the list of users or an empty list if none load
-     */
     public static UserList getUsers() {
         UserList users = UserList.getInstance();
-
-        if (!users.getUsers().isEmpty()) {
-            return users;
-        }
-        
-        try (FileReader reader= new FileReader(USER_FILE)){
-            JSONArray usersJSON = (JSONArray) new JSONParser().parse(reader);
-
-            for (int i = 0; i < usersJSON.size(); i++) {
-                JSONObject userJSON = (JSONObject) usersJSON.get(i);
-
-                UUID userId = readID(userJSON.get(USER_ID));
-                String firstName = (String) userJSON.get(USER_FIRST_NAME);
-                String lastName = (String) userJSON.get(USER_LAST_NAME);
-                String phoneNumber = (String) userJSON.get(USER_PHONE_NUMBER);
-                String email = (String) userJSON.get(USER_EMAIL);
-                String address = (String) userJSON.get(USER_ADDRESS);
-                String username = (String) userJSON.get(USER_USERNAME);
-                String password = (String) userJSON.get(USER_PASSWORD);
-
-                ArrayList<AccountRole> roles = readRoles(userJSON.get(USER_ROLES));
-                ArrayList<Person> associatedPersons = readPeople(userJSON.get(ASSOCIATED_PERSONS));
-
-                VerificationStatus verificationStatus = VerificationStatus.UNVERIFIED;
-                String verificationText = (String) userJSON.get(VERIFICATION_STATUS);
-                if (verificationText != null) {
-                    verificationStatus = VerificationStatus.valueOf(verificationText.toUpperCase());
+        if (!users.getUsers().isEmpty()) return users;
+        try {
+            for (JsonNode row : readArray(USER_FILE)) {
+                ArrayList<AccountRole> roles = new ArrayList<>();
+                for (String role : strings(row.path(USER_ROLES))) {
+                    try { roles.add(AccountRole.valueOf(role.toUpperCase(Locale.ROOT))); }
+                    catch (IllegalArgumentException e) { /* Ignore obsolete role names. */ }
                 }
-
-                SafetyStatusType safetyStatus = SafetyStatusType.UNKNOWN;
-                String safetyText = (String) userJSON.get(SAFETY_STATUS);
-                if (safetyText != null) {
-                    safetyStatus = SafetyStatusType.valueOf(safetyText.toUpperCase());
+                ArrayList<Person> people = new ArrayList<>();
+                JsonNode peopleJSON = row.path(ASSOCIATED_PERSONS);
+                if (peopleJSON.isArray()) {
+                    for (JsonNode person : peopleJSON) {
+                        ArrayList<String> needs = strings(person.path(PERSON_SPECIAL_NEEDS));
+                        if (person.path(PERSON_SPECIAL_NEEDS).isTextual()
+                                && !"none".equalsIgnoreCase(text(person, PERSON_SPECIAL_NEEDS))) {
+                            needs.add(text(person, PERSON_SPECIAL_NEEDS));
+                        }
+                        people.add(new Person(text(person, PERSON_FIRST_NAME), text(person, PERSON_LAST_NAME),
+                                person.path(PERSON_AGE).asInt(), needs));
+                    }
                 }
-
-                LocalDateTime safetyStatusUpdatedAt =
-                        readDateTime((String) userJSON.get(SAFETY_STATUS_UPDATED_AT));
-                String lastKnownLocation = readLocation(userJSON.get(USER_LAST_KNOWN_LOCATION));
-
-                User user = new User(userId, firstName, lastName, email, phoneNumber, address, 
-                        username, password, roles, associatedPersons, verificationStatus,
-                        lastKnownLocation, safetyStatus, safetyStatusUpdatedAt);
+                JsonNode location = row.path(USER_LAST_KNOWN_LOCATION);
+                String lastLocation = location.isObject()
+                        ? location.path(LATITUDE).asText() + ", " + location.path(LONGITUDE).asText()
+                        : location.asText(null);
+                User user = new User(readID(row.path(USER_ID)), text(row, USER_FIRST_NAME),
+                        text(row, USER_LAST_NAME), text(row, USER_EMAIL), text(row, USER_PHONE_NUMBER),
+                        text(row, USER_ADDRESS), text(row, USER_USERNAME), text(row, USER_PASSWORD),
+                        roles, people, enumValue(VerificationStatus.class, text(row, VERIFICATION_STATUS),
+                                VerificationStatus.UNVERIFIED), lastLocation,
+                        enumValue(SafetyStatusType.class, text(row, SAFETY_STATUS), SafetyStatusType.UNKNOWN),
+                        dateTime(text(row, SAFETY_STATUS_UPDATED_AT)));
                 if (user.hasRole(AccountRole.VOLUNTEER)) {
-                    user = readVolunteer(user, userJSON);
+                    JsonNode transport = row.path(VOLUNTEER_TRANSPORTATION);
+                    if (transport.isMissingNode() || transport.isNull()) transport = row.path(VOLUNTEER_TRANSPORTATION_OLD);
+                    user = new VolunteerProfile(user, strings(row.path(VOLUNTEER_SKILLS)),
+                            strings(row.path(VOLUNTEER_EQUIPMENT)),
+                            enumValue(BackgroundCheckStatus.class, text(row, VOLUNTEER_BACKGROUND_CHECK),
+                                    BackgroundCheckStatus.PENDING),
+                            Boolean.parseBoolean(transport.asText()),
+                            enumValue(AvailabilityStatus.class, text(row, VOLUNTEER_AVAILABILITY),
+                                    AvailabilityStatus.AVAILABLE));
                 }
                 users.addUser(user);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { e.printStackTrace(); }
         return users;
     }
-    
-    /**
-     * Builds a VolunteerProfile from a user and the volunteer fields saved with it.
-     */
-    private static VolunteerProfile readVolunteer(User user, JSONObject userJSON) {
-        ArrayList<String> skills = readStrings(userJSON.get(VOLUNTEER_SKILLS));
-        ArrayList<String> equipment = readStrings(userJSON.get(VOLUNTEER_EQUIPMENT));
 
-        BackgroundCheckStatus backgroundCheck = BackgroundCheckStatus.PENDING;
-        String backgroundText = (String) userJSON.get(VOLUNTEER_BACKGROUND_CHECK);
-        if (backgroundText != null) {
-            backgroundCheck = BackgroundCheckStatus.valueOf(backgroundText.toUpperCase());
-        }
-
-        // Saved as a boolean by DataWriter and as "true"/"false" in the sample data
-        Object transportationValue = userJSON.get(VOLUNTEER_TRANSPORTATION);
-        if (transportationValue == null) {
-            transportationValue = userJSON.get(VOLUNTEER_TRANSPORTATION_OLD);
-        }
-        boolean transportation = Boolean.parseBoolean(String.valueOf(transportationValue));
-
-        AvailabilityStatus availability = AvailabilityStatus.AVAILABLE;
-        String availabilityText = (String) userJSON.get(VOLUNTEER_AVAILABILITY);
-        if (availabilityText != null) {
-            availability = AvailabilityStatus.valueOf(availabilityText.toUpperCase());
-        }
-
-        return new VolunteerProfile(user, skills, equipment, backgroundCheck, transportation, availability);
-    }
-
-    /**
-     * Turns a JSON array of text into a list. Anything else is an empty list.
-     */
-    private static ArrayList<String> readStrings(Object value) {
-        ArrayList<String> items = new ArrayList<>();
-        if (value instanceof JSONArray) {
-            for (Object item : (JSONArray) value) {
-                items.add((String) item);
-            }
-        }
-        return items;
-    }
-
-    /**
-     * Turns a saved id into a UUID.
-     * Old data uses numbers for ids, so those get a new UUID.
-     */
-    private static UUID readID(Object idValue) {
-        if (idValue instanceof String) {
-            try {
-                return UUID.fromString((String) idValue);
-            } catch (IllegalArgumentException e) {
-                // an old id like "1" is not a UUID, so it gets a new one
-            }
-        }
-        return UUID.randomUUID();
-    }
-
-    /**
-     * Turns a JSON array of role names like "resident" into AccountRoles.
-     * Names that are not a role (like "user") are skipped.
-     */
-    private static ArrayList<AccountRole> readRoles(Object rolesValue) {
-        ArrayList<AccountRole> roles = new ArrayList<>();
-        if (!(rolesValue instanceof JSONArray)) {
-            return roles;
-        }
-
-        for (Object role : (JSONArray) rolesValue) {
-            try {
-                roles.add(AccountRole.valueOf(((String) role).toUpperCase()));
-            } catch (IllegalArgumentException e) {
-                // not a role in AccountRole, so skip it
-            }
-        }
-        return roles;
-    }
-
-    /**
-     * Turns a JSON array of people into Person objects.
-     */
-    private static ArrayList<Person> readPeople(Object peopleValue) {
-        ArrayList<Person> people = new ArrayList<>();
-        if (!(peopleValue instanceof JSONArray)) {
-            return people;
-        }
-
-        for (Object item : (JSONArray) peopleValue) {
-            JSONObject personJSON = (JSONObject) item;
-            String firstName = (String) personJSON.get(PERSON_FIRST_NAME);
-            String lastName = (String) personJSON.get(PERSON_LAST_NAME);
-            int age = ((Long) personJSON.get(PERSON_AGE)).intValue();
-
-            // SpecialNeeds is a list in DataWriter's format and a single string in older data
-            ArrayList<String> specialNeeds = new ArrayList<>();
-            Object needsValue = personJSON.get(PERSON_SPECIAL_NEEDS);
-            if (needsValue instanceof JSONArray) {
-                for (Object need : (JSONArray) needsValue) {
-                    specialNeeds.add((String) need);
+    public static ShelterList getShelters() {
+        ShelterList shelters = ShelterList.getInstance();
+        if (!shelters.getShelters().isEmpty()) return shelters;
+        UserList users = getUsers();
+        try {
+            for (JsonNode row : readArray(SHELTER_FILE)) {
+                ArrayList<Accommodation> accommodations = new ArrayList<>();
+                for (String value : strings(row.path(SHELTER_ACCOMMODATIONS))) {
+                    try { accommodations.add(Accommodation.valueOf(value.toUpperCase(Locale.ROOT))); }
+                    catch (IllegalArgumentException e) { /* Ignore unknown accommodations. */ }
                 }
-            } else if (needsValue instanceof String && !needsValue.equals("none")) {
-                specialNeeds.add((String) needsValue);
+                Shelter shelter = new Shelter(readID(row.path(SHELTER_ID)), text(row, SHELTER_NAME),
+                        text(row, SHELTER_ADDRESS), row.path(SHELTER_CAPACITY).asInt(),
+                        row.path(SHELTER_OCCUPANCY).asInt(),
+                        enumValue(ShelterStatus.class, text(row, SHELTER_STATUS), ShelterStatus.OPEN), accommodations);
+                shelter.setLastUpdated(dateTime(text(row, SHELTER_LAST_UPDATED)));
+                ArrayList<User> operators = new ArrayList<>();
+                for (String username : strings(row.path(SHELTER_OPERATORS))) {
+                    User operator = users.getUser(username);
+                    if (operator != null) operators.add(operator);
+                }
+                shelter.setShelterOperators(operators);
+                shelters.addShelter(shelter);
             }
-
-            people.add(new Person(firstName, lastName, age, specialNeeds));
-        }
-        return people;
+        } catch (Exception e) { e.printStackTrace(); }
+        return shelters;
     }
 
-    /**
-     * Reads a date like "2026-10-13T13:58:27" or "2024-06-01T12:00:00Z".
-     * Returns the current time if there is no date.
-    */
-   private static LocalDateTime readDateTime(String text) {
-       if (text == null) {
-           return LocalDateTime.now();
-       }
-       if (text.endsWith("Z")) {
-           text = text.substring(0, text.length() - 1);
-       }
-       return LocalDateTime.parse(text);
-   }
-
-   /**
-    * Reads the last known location. Older data stores it as
-    * {"latitude": ..., "longitude": ...}, so that becomes "latitude, longitude".
-   */
-  private static String readLocation(Object locationValue) {
-    if (locationValue instanceof JSONObject) {
-        JSONObject locationJSON = (JSONObject) locationValue;
-        return locationJSON.get(LATITUDE) + ", " + locationJSON.get(LONGITUDE);
-    }
-    return (String) locationValue;
-  }
-
-    /**
-     * Loads the relief requests from the requests JSON file.
-     * 
-     * @return the list of requests or an empty list if none load
-     */
     public static ReliefRequestCatalog getRequests() {
         ReliefRequestCatalog requests = ReliefRequestCatalog.getInstance();
-
-        if (!requests.getRequests().isEmpty()) {
-            return requests;
-        }
-
-        // isDuplicateOf is saved as an id, so the links are made after every request is loaded
-        HashMap<ReliefRequest, String> duplicateIds = new HashMap<>();
-        HashMap<String, ReliefRequest> requestsById = new HashMap<>();
-
-        try (FileReader reader = new FileReader(REQUEST_FILE)) {
-            JSONArray requestsJSON = (JSONArray) new JSONParser().parse(reader);
-
-            for (int i = 0; i < requestsJSON.size(); i++) {
-                JSONObject requestJSON = (JSONObject) requestsJSON.get(i);
-
-                String savedId = String.valueOf(requestJSON.get(REQUEST_ID));
-                UUID requestId = readID(requestJSON.get(REQUEST_ID));
-                RequestType type = RequestType.valueOf(((String) requestJSON.get(REQUEST_TYPE)).toUpperCase());
-                String description = (String) requestJSON.get(REQUEST_DESCRIPTION);
-                String location = (String) requestJSON.get(REQUEST_LOCATION);
-                int people = readInt(requestJSON.get(REQUEST_PEOPLE));
-                int animals = readInt(requestJSON.get(REQUEST_ANIMALS));
-                String animalNotes = (String) requestJSON.get(REQUEST_ANIMAL_NOTES);
-                String photoUrl = (String) requestJSON.get(REQUEST_PHOTO_URL);
-                boolean isSuspicious = Boolean.TRUE.equals(requestJSON.get(REQUEST_IS_SUSPICIOUS));
-
-                HurricaneEvent hurricane = null;
-                Object hurricaneValue = requestJSON.get(REQUEST_HURRICANE);
-                if (hurricaneValue instanceof JSONObject) {
-                    hurricane = hurricaneFromJSON((JSONObject) hurricaneValue);
-                }
-
-                ReliefRequest request = new ReliefRequest(requestId, type, description, location, people, 
-                        animals, animalNotes, photoUrl, isSuspicious, null, hurricane);
-
-                // The constructor sets SUBMITTED, today's date and a calculated priority, so put back the saved values 
-                String statusText = (String) requestJSON.get(REQUEST_STATUS);
-                if (statusText != null) {
-                    request.setStatus(RequestStatus.valueOf(statusText.toUpperCase()));
-                }
-                String priorityText = (String) requestJSON.get(REQUEST_PRIORITY);
-                if (priorityText != null) {
-                    request.setPriority(PriorityLevel.valueOf(priorityText.toUpperCase()));
-                }
-                String dateText = (String) requestJSON.get(REQUEST_DATE_SUBMITTED);
-                if (dateText != null) {
-                    request.setDateSubmitted(parseDate(dateText));
-                }
-
-                Object duplicateValue = requestJSON.get(REQUEST_DUPLICATE_OF);
-                if (duplicateValue != null) {
-                    duplicateIds.put(request, String.valueOf(duplicateValue));
-                }
-                requestsById.put(savedId, request);
+        if (!requests.getRequests().isEmpty()) return requests;
+        UserList users = getUsers();
+        Map<ReliefRequest, String> duplicateIds = new HashMap<>();
+        Map<String, ReliefRequest> bySavedId = new HashMap<>();
+        try {
+            for (JsonNode row : readArray(REQUEST_FILE)) {
+                JsonNode storm = row.path(REQUEST_HURRICANE);
+                ReliefRequest request = new ReliefRequest(readID(row.path(REQUEST_ID)),
+                        RequestType.valueOf(text(row, REQUEST_TYPE).toUpperCase(Locale.ROOT)),
+                        text(row, REQUEST_DESCRIPTION), text(row, REQUEST_LOCATION),
+                        row.path(REQUEST_PEOPLE).asInt(), row.path(REQUEST_ANIMALS).asInt(),
+                        text(row, REQUEST_ANIMAL_NOTES), text(row, REQUEST_PHOTO_URL),
+                        row.path(REQUEST_IS_SUSPICIOUS).asBoolean(), null,
+                        storm.isObject() ? hurricane(storm) : null);
+                request.setSubmittedBy(users.getUser(text(row, REQUEST_SUBMITTED_BY)));
+                User assigned = users.getUser(text(row, REQUEST_ASSIGNED_VOLUNTEER));
+                if (assigned != null) request.setAssignedVolunteer(assigned.getVolunteerProfile());
+                request.restoreStatus(enumValue(RequestStatus.class, text(row, REQUEST_STATUS), RequestStatus.SUBMITTED));
+                request.setPriority(enumValue(PriorityLevel.class, text(row, REQUEST_PRIORITY), request.calculatePriority()));
+                String submitted = text(row, REQUEST_DATE_SUBMITTED);
+                if (submitted != null) request.setDateSubmitted(parseDate(submitted));
+                String original = text(row, REQUEST_DUPLICATE_OF);
+                if (original != null) duplicateIds.put(request, original);
+                bySavedId.put(row.path(REQUEST_ID).asText(), request);
                 requests.addLoadedRequest(request);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        for (ReliefRequest request : duplicateIds.keySet()) {
-            request.setIsDuplicateOf(requestsById.get(duplicateIds.get(request)));
+        } catch (Exception e) { e.printStackTrace(); }
+        for (Map.Entry<ReliefRequest, String> entry : duplicateIds.entrySet()) {
+            ReliefRequest original = bySavedId.get(entry.getValue());
+            if (original != entry.getKey()) entry.getKey().setIsDuplicateOf(original);
         }
         return requests;
     }
 
-    /**
-     * Reads a whole number. json-simple gives back a Long, and a missing value is 0.
-     */
-    private static int readInt(Object numberValue) {
-        if (numberValue instanceof Long) {
-            return ((Long) numberValue).intValue();
-        }
-        return 0;
+    public static ArrayList<HurricaneEvent> getHurricanes() {
+        ArrayList<HurricaneEvent> storms = new ArrayList<>();
+        try {
+            for (JsonNode row : readArray(HURRICANE_FILE)) storms.add(hurricane(row));
+        } catch (Exception e) { e.printStackTrace(); }
+        return storms;
     }
 
-    /**
-     * Turns a date like "2005-08-23" or "2005-08-24T00:00:00Z" into a Date.
-     */
+    private static HurricaneEvent hurricane(JsonNode row) {
+        return new HurricaneEvent(text(row, HURRICANE_NAME), parseDate(text(row, HURRICANE_START)),
+                parseDate(text(row, HURRICANE_END)), strings(row.path(HURRICANE_AREAS)),
+                enumValue(EventStatus.class, text(row, HURRICANE_STATUS), EventStatus.MONITORING));
+    }
+
+    private static ArrayList<String> strings(JsonNode node) {
+        ArrayList<String> values = new ArrayList<>();
+        if (node.isArray()) for (JsonNode value : node) values.add(value.asText());
+        return values;
+    }
+
+    private static UUID readID(JsonNode value) {
+        try { return UUID.fromString(value.asText()); }
+        catch (IllegalArgumentException e) { return UUID.randomUUID(); }
+    }
+
+    private static <E extends Enum<E>> E enumValue(Class<E> type, String value, E fallback) {
+        return value == null ? fallback : Enum.valueOf(type, value.toUpperCase(Locale.ROOT));
+    }
+
+    private static LocalDateTime dateTime(String text) {
+        if (text == null) return LocalDateTime.now();
+        if (text.endsWith("Z")) text = text.substring(0, text.length() - 1);
+        return LocalDateTime.parse(text);
+    }
+
     private static Date parseDate(String text) {
-        if (text == null) {
-            return null;
-        }
-        if (text.length() == 10) {
-            return Date.from(LocalDate.parse(text).atStartOfDay(ZoneOffset.UTC).toInstant());
-        }
+        if (text == null) return null;
+        if (text.length() == 10) return Date.from(LocalDate.parse(text).atStartOfDay(ZoneOffset.UTC).toInstant());
         return Date.from(Instant.parse(text));
     }
-
-    /**
-     * Turns one hurricane's JSON into a HurricaneEvent.
-     */
-    private static HurricaneEvent hurricaneFromJSON(JSONObject json) {
-        String name = (String) json.get(HURRICANE_NAME);
-        Date start = parseDate((String) json.get(HURRICANE_START));
-        Date end = parseDate((String) json.get(HURRICANE_END));
-
-        EventStatus status = EventStatus.MONITORING;
-        String statusText = (String) json.get(HURRICANE_STATUS);
-        if (statusText != null) {
-            status = EventStatus.valueOf(statusText.toUpperCase());
-        }
-
-        ArrayList<String> areas = readStrings(json.get(HURRICANE_AREAS));
-
-        return new HurricaneEvent(name, start, end, areas, status);
-    }
-
-    /**
-     * Loads the Hurricane Event from the hurricanes JSON file.
-     * 
-     * @return the list of hurricanes or an empty list if none load.
-     */
-    public static ArrayList<HurricaneEvent> getHurricanes() {
-        ArrayList<HurricaneEvent> hurricanes = new ArrayList<>();
-
-        try (FileReader reader = new FileReader(HURRICANE_FILE)) {
-            JSONArray hurricanesJSON = (JSONArray) new JSONParser().parse(reader);
-
-            for (int i = 0; i < hurricanesJSON.size(); i++) {
-                JSONObject hurricaneJSON = (JSONObject) hurricanesJSON.get(i);
-                hurricanes.add(hurricaneFromJSON(hurricaneJSON));
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return hurricanes;
-        }
 }
-

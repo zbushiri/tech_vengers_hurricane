@@ -25,6 +25,7 @@ public class MapUI extends Application {
     private final Canvas map = new Canvas(860, 420);
 
     @Override
+    @SuppressWarnings("exports")
     public void start(Stage stage) {
         directions.setEditable(false);
         directions.setPrefRowCount(6);

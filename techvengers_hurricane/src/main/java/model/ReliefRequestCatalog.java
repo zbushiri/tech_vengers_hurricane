@@ -112,7 +112,8 @@ public class ReliefRequestCatalog {
     public List<ReliefRequest> getOpenRequestsForVolunteers() {
         List<ReliefRequest> result = new ArrayList<>();
         for (ReliefRequest request : getOpenRequestsByUrgency()) {
-            if (request.getStatus() == RequestStatus.SUBMITTED && request.isForVolunteers()) {
+            if (request.getStatus() == RequestStatus.SUBMITTED && request.isForVolunteers()
+                    && !request.hasOpenOriginal()) {
                 result.add(request);
             }
         }
@@ -139,8 +140,8 @@ public class ReliefRequestCatalog {
     public int getAvailableVolunteerCount() {
         int count = 0;
         for (User user : UserList.getInstance().getUsers()) {
-            if (user instanceof VolunteerProfile
-                    && ((VolunteerProfile) user).getAvailabilityStatus() == AvailabilityStatus.AVAILABLE) {
+            VolunteerProfile volunteer = user.getVolunteerProfile();
+            if (volunteer != null && volunteer.canClaimRequests()) {
                 count++;
             }
         }

@@ -10,7 +10,8 @@ import java.io.File;
 public abstract class DataConstants {
     // The json folder sits at the repo root, one level above pom.xml, so this
     // works whether the app is started from the repo root or from techvengers_hurricane/
-    private static final String JSON_FOLDER = new File("json").isDirectory() ? "json/" : "../json/";
+    private static final String JSON_FOLDER = System.getProperty("hurricane.dataDir",
+            new File("json").isDirectory() ? "json" : "../json") + File.separator;
     protected static final String SHELTER_FILE = JSON_FOLDER + "shelters.json";
     protected static final String USER_FILE = JSON_FOLDER + "users.json";
     protected static final String REQUEST_FILE = JSON_FOLDER + "requests.json";
@@ -76,4 +77,6 @@ public abstract class DataConstants {
     protected static final String REQUEST_IS_SUSPICIOUS = "isSuspicious";
     protected static final String REQUEST_DUPLICATE_OF = "isDuplicateOf";
     protected static final String REQUEST_HURRICANE = "forHurricane";
+    protected static final String REQUEST_SUBMITTED_BY = "submittedBy";
+    protected static final String REQUEST_ASSIGNED_VOLUNTEER = "assignedVolunteer";
 }

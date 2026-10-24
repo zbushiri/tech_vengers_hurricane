@@ -70,8 +70,8 @@ public class DataWriter extends DataConstants {
         json.put(SAFETY_STATUS, enumText(user.getSafetyStatus()));
         json.put(SAFETY_STATUS_UPDATED_AT, String.valueOf(user.getSafetyStatusUpdatedAt()));
 
-        if (user instanceof VolunteerProfile) {
-            VolunteerProfile volunteer = (VolunteerProfile) user;
+        VolunteerProfile volunteer = user.getVolunteerProfile();
+        if (volunteer != null) {
             json.put(VOLUNTEER_SKILLS, textArray(volunteer.getSkills()));
             json.put(VOLUNTEER_EQUIPMENT, textArray(volunteer.getEquipment()));
             json.put(VOLUNTEER_BACKGROUND_CHECK, enumText(volunteer.getBackgroundCheckStatus()));
@@ -129,6 +129,10 @@ public class DataWriter extends DataConstants {
         json.put(REQUEST_DUPLICATE_OF, original == null ? null : original.getRequestId().toString());
         HurricaneEvent hurricane = request.getForHurricane();
         json.put(REQUEST_HURRICANE, hurricane == null ? null : hurricaneToJSON(hurricane));
+        VolunteerProfile assignedVolunteer = request.getAssignedVolunteer();
+        json.put(REQUEST_ASSIGNED_VOLUNTEER, assignedVolunteer == null ? null : assignedVolunteer.getUsername());
+        User submitter = request.getSubmittedBy();
+        json.put(REQUEST_SUBMITTED_BY, submitter == null ? null : submitter.getUsername());
         return json;
     }
 

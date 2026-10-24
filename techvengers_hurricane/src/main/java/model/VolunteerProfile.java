@@ -42,6 +42,9 @@ public class VolunteerProfile extends User {
         availabilityStatus = availability;
     }
 
+    @Override
+    public VolunteerProfile getVolunteerProfile() { return this; }
+
     public boolean canClaimRequests() {
         return availabilityStatus == AvailabilityStatus.AVAILABLE
                 && backgroundCheckStatus == BackgroundCheckStatus.VERIFIED;

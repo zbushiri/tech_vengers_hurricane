@@ -64,7 +64,12 @@ public class User {
 
     public void logout() { System.out.println("Logged out: " + username); }
     public void updateProfile() { System.out.println("Updating profile for user: " + username); }
-    public void submitReliefRequest(ReliefRequest request) { ReliefRequestCatalog.getInstance().submitRequest(request); }
+    public void submitReliefRequest(ReliefRequest request) {
+
+        if (request == null) return;
+        request.setSubmittedBy(this);
+        ReliefRequestCatalog.getInstance().submitRequest(request);
+    }
 
     public boolean verifyIdentity(VerificationMethod method) {
         if (method == null) return false;
@@ -86,6 +91,9 @@ public class User {
         return ShelterList.getInstance().searchByProximity(hasTown ? lastKnownLocation : address,
                 ShelterList.DEFAULT_RADIUS_MILES);
     }
+
+    /** Ordinary accounts have no volunteer profile; volunteers override this. */
+    public VolunteerProfile getVolunteerProfile() { return null; }
 
     public boolean hasRole(AccountRole role) { return roles.contains(role); }
     public UUID getUserId() { return userId; }

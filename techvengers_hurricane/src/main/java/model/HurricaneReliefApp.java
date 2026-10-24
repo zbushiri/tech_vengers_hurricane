@@ -1,10 +1,8 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.UUID;
 
 /**
@@ -21,7 +19,6 @@ public class HurricaneReliefApp {
     private ReliefRequestCatalog reliefRequestCatalog;
     private ArrayList<HurricaneEvent> hurricanes;
     private User currentUser;
-    private Scanner scanner;
 
     public HurricaneReliefApp() {
         userList = UserList.getInstance();
@@ -136,11 +133,12 @@ public class HurricaneReliefApp {
             System.out.println("You must be logged in to submit a relief request.");
             return false;
         }
-        if (type == null || location == null || location.trim().isEmpty() || numberOfPeopleNeeded < 1) {
+        if (type == null || description == null || description.trim().isEmpty() || location == null || location.trim().isEmpty() || numberOfPeopleNeeded < 1) {
             System.out.println("A request needs a type, a location and at least one person.");
             return false;
         }
         ReliefRequest request = new ReliefRequest(type, description, location.trim(), numberOfPeopleNeeded);
+        request.setSubmittedBy(currentUser);
         request.setForHurricane(getActiveHurricane());
         currentUser.submitReliefRequest(request);
         System.out.println("Relief request submitted with " + request.getPriority() + " priority.");
@@ -200,11 +198,12 @@ public class HurricaneReliefApp {
      * @return false if the user is not a volunteer or cannot take the request
      */
     public boolean claimRequest(UUID requestId) {
-        if (!(currentUser instanceof VolunteerProfile)) {
+        if (currentUser == null || !(currentUser.getRoles().contains(AccountRole.VOLUNTEER))) {
             System.out.println("Only volunteers can claim requests.");
             return false;
         }
-        VolunteerProfile volunteer = (VolunteerProfile) currentUser;
+        VolunteerProfile volunteer = currentUser.getVolunteerProfile();
+        if (volunteer == null) return false;
         if (!volunteer.canClaimRequests()) {
             System.out.println("You must be available and have a verified background check to claim requests.");
             return false;
@@ -229,209 +228,96 @@ public class HurricaneReliefApp {
             return false;
         }
         User user = userList.getUser(username);
-        if (!(user instanceof VolunteerProfile)) {
+        if (user == null || !(user.getRoles().contains(AccountRole.VOLUNTEER))) {
             System.out.println("No volunteer was found with that username.");
             return false;
         }
-        ((VolunteerProfile) user).setBackgroundCheckStatus(BackgroundCheckStatus.VERIFIED);
+        VolunteerProfile volunteer = user.getVolunteerProfile();
+        if (volunteer == null) return false;
+        volunteer.setBackgroundCheckStatus(BackgroundCheckStatus.VERIFIED);
         System.out.println("Background check verified for " + user.getUsername() + ".");
         return true;
     }
 
-    private boolean canVerifyVolunteers() {
-        return currentUser.hasRole(AccountRole.COORDINATOR) || currentUser.hasRole(AccountRole.SHELTER_OPERATOR);
+    public boolean canVerifyVolunteers() {
+        return currentUser != null && (currentUser.hasRole(AccountRole.COORDINATOR) || currentUser.hasRole(AccountRole.SHELTER_OPERATOR));
     }
 
-    // ---- Terminal menus ----
-
-    /**
-     * Runs the terminal app until the user exits, then saves.
-     */
-    public void run() {
-        scanner = new Scanner(System.in);
-        System.out.println("Welcome to the Gamecock Relief Network");
-
-        boolean running = true;
-        while (running) {
-            running = currentUser == null ? startMenu() : homeMenu();
-        }
-
-        if (currentUser != null) {
-            logout();
-        }
-        saveData();
-        System.out.println("Goodbye!");
-    }
-
-    private boolean startMenu() {
-        System.out.println();
-        System.out.println("1. Log in");
-        System.out.println("2. Create an account");
-        System.out.println("3. Find shelters");
-        System.out.println("4. Exit");
-        String choice = prompt("Choose an option: ");
-
-        if (choice == null || choice.equals("4")) {
+    public boolean completeRequest(UUID requestId) {
+        if (currentUser == null || !(currentUser.getRoles().contains(AccountRole.VOLUNTEER))) {
+            System.out.println("Only volunteers can complete requests.");
             return false;
-        } else if (choice.equals("1")) {
-            login(prompt("Username: "), prompt("Password: "));
-        } else if (choice.equals("2")) {
-            createAccountMenu();
-        } else if (choice.equals("3")) {
-            showShelters(findNearestShelters(prompt("Town or address: "), ShelterList.DEFAULT_RADIUS_MILES));
-        } else {
-            System.out.println("Please choose 1 to 4.");
         }
+        ReliefRequest request = reliefRequestCatalog.getRequest(requestId);
+        if (request == null) {
+            System.out.println("Request not found.");
+            return false;
+        }
+        VolunteerProfile volunteer = currentUser.getVolunteerProfile();
+        if (volunteer == null) return false;
+        if (!request.completeRequest(volunteer)) {
+            System.out.println("You can only complete your own active assignments.");
+            return false;
+        }
+        System.out.println("Request completed. Thank you for your help!");
         return true;
     }
 
-    private boolean homeMenu() {
-        System.out.println();
-        System.out.println("Logged in as " + currentUser.getUsername());
-        System.out.println("1. Submit a relief request");
-        System.out.println("2. Find shelters near me");
-        System.out.println("3. Mark myself safe");
-        System.out.println("4. Hurricane information");
-        System.out.println("5. View open requests");
-        System.out.println("6. Log out");
-        System.out.println("7. Exit");
-        if (canVerifyVolunteers()) {
-            System.out.println("8. Verify a volunteer's background check");
+    public ArrayList<ReliefRequest> getMyAssignments() {
+        ArrayList<ReliefRequest> myAssignments = new ArrayList<>();
+        if (currentUser == null || !(currentUser.getRoles().contains(AccountRole.VOLUNTEER))) {
+            return myAssignments;
         }
-        String choice = prompt("Choose an option: ");
 
-        if (choice == null || choice.equals("7")) {
-            return false;
-        } else if (choice.equals("1")) {
-            submitRequestMenu();
-        } else if (choice.equals("2")) {
-            showShelters(findNearestShelters(null, ShelterList.DEFAULT_RADIUS_MILES));
-        } else if (choice.equals("3")) {
-            markSafe();
-        } else if (choice.equals("4")) {
-            showHurricane();
-        } else if (choice.equals("5")) {
-            openRequestsMenu();
-        } else if (choice.equals("6")) {
-            logout();
-        } else if (choice.equals("8") && canVerifyVolunteers()) {
-            verifyVolunteer(prompt("Volunteer's username: "));
-        } else {
-            System.out.println("Please choose 1 to 7.");
+
+        for (ReliefRequest request : reliefRequestCatalog.getRequests()) {
+              VolunteerProfile volunteer = request.getAssignedVolunteer();
+            if (volunteer != null &&
+                volunteer.getUserId().equals(currentUser.getUserId()) &&
+                (request.getStatus() == RequestStatus.ASSIGNED
+                || request.getStatus() == RequestStatus.IN_PROGRESS)) {
+                myAssignments.add(request);
+            }
         }
+        return myAssignments;
+    }
+    /** Includes request history. Legacy requests without an owner belong to nobody. */
+    public ArrayList<ReliefRequest> getMyRequests() {
+        ArrayList<ReliefRequest> result = new ArrayList<>();
+        if (currentUser == null) return result;
+        for (ReliefRequest request : reliefRequestCatalog.getRequests()) {
+            User owner = request.getSubmittedBy();
+            if (owner != null && owner.getUserId().equals(currentUser.getUserId())) {
+                result.add(request);
+            }
+        }
+        return result;
+    }
+
+    public boolean cancelRequest(UUID requestId) {
+        if (currentUser == null) return false;
+        ReliefRequest request = reliefRequestCatalog.getRequest(requestId);
+        if (request == null || request.getSubmittedBy() == null
+                || !request.getSubmittedBy().getUserId().equals(currentUser.getUserId())
+                || !request.isOpen()) {
+            System.out.println("You can only cancel your own open requests.");
+            return false;
+        }
+        request.cancel();
+        System.out.println("Request cancelled.");
         return true;
     }
 
-    private void createAccountMenu() {
-        Map<String, String> details = new HashMap<>();
-        details.put("username", prompt("Choose a username: "));
-        details.put("password", prompt("Choose a password: "));
-        details.put("firstName", prompt("First name: "));
-        details.put("lastName", prompt("Last name: "));
-        details.put("phoneNumber", prompt("Phone number: "));
-        details.put("email", prompt("Email: "));
-        details.put("address", prompt("Address: "));
-        String roleChoice = prompt("Are you a 1. Resident or 2. Volunteer? ");
-
-        AccountRole role = "2".equals(roleChoice) ? AccountRole.VOLUNTEER : AccountRole.RESIDENT;
-        if (role == AccountRole.VOLUNTEER) {
-            details.put("skills", prompt("Skills (comma separated): "));
-            details.put("equipment", prompt("Equipment (comma separated): "));
-            details.put("transportationAccess", String.valueOf("y".equalsIgnoreCase(prompt("Do you have transportation? (y/n) "))));
+    public boolean startRequest(UUID requestId) {
+        if (currentUser == null) return false;
+        VolunteerProfile volunteer = currentUser.getVolunteerProfile();
+        ReliefRequest request = reliefRequestCatalog.getRequest(requestId);
+        if (volunteer == null || request == null || !request.startRequest(volunteer)) {
+            System.out.println("You can only start your own assigned requests.");
+            return false;
         }
-        if (createAccount(role, details)) {
-            login(details.get("username"), details.get("password"));
-        }
+        System.out.println("Request is now in progress.");
+        return true;
     }
 
-    private void submitRequestMenu() {
-        RequestType[] types = RequestType.values();
-        for (int i = 0; i < types.length; i++) {
-            System.out.println((i + 1) + ". " + types[i]);
-        }
-        int typeChoice = number(prompt("What do you need? "));
-        if (typeChoice < 1 || typeChoice > types.length) {
-            System.out.println("Please choose one of the listed types.");
-            return;
-        }
-        String description = prompt("Describe what you need: ");
-        String location = prompt("Location: ");
-        int people = number(prompt("How many people need help? "));
-        submitReliefRequest(types[typeChoice - 1], description, location, people);
-    }
-
-    private void openRequestsMenu() {
-        boolean isVolunteer = currentUser instanceof VolunteerProfile;
-        List<ReliefRequest> requests = isVolunteer ? getOpenRequestsForVolunteers() : getOpenRequestsByUrgency();
-        if (requests.isEmpty()) {
-            System.out.println("There are no open requests right now.");
-            return;
-        }
-        for (int i = 0; i < requests.size(); i++) {
-            ReliefRequest request = requests.get(i);
-            System.out.println((i + 1) + ". [" + request.getPriority() + "] " + request.getType()
-                    + " at " + request.getLocation() + " for " + request.getNumberOfPeopleNeeded()
-                    + " people (" + request.getStatus() + ")");
-        }
-        if (!isVolunteer) {
-            return;
-        }
-        int choice = number(prompt("Enter a number to claim a request, or press Enter to go back: "));
-        if (choice >= 1 && choice <= requests.size()) {
-            claimRequest(requests.get(choice - 1).getRequestId());
-        }
-    }
-
-    private void showShelters(List<Shelter> shelters) {
-        if (shelters.isEmpty()) {
-            System.out.println("No open shelters were found near that location.");
-            return;
-        }
-        for (Shelter shelter : shelters) {
-            System.out.println(shelter.getName() + " - " + shelter.getAddress() + " ("
-                    + shelter.getStatus() + ", " + shelter.getOccupancy() + "/" + shelter.getCapacity()
-                    + ", " + shelter.getAccommodations() + ")");
-        }
-    }
-
-    private void showHurricane() {
-        HurricaneEvent active = getActiveHurricane();
-        if (active != null) {
-            User.getLatestInfo(active);
-            return;
-        }
-        System.out.println("No active hurricane events at the moment.");
-        for (HurricaneEvent hurricane : hurricanes) {
-            System.out.println(hurricane.getName() + " (" + hurricane.getStatus() + ") "
-                    + hurricane.getAffectedAreas());
-        }
-    }
-
-    /**
-     * Prints a prompt and reads one line.
-     *
-     * @return the trimmed line, or null if there is no more input
-     */
-    private String prompt(String message) {
-        System.out.print(message);
-        if (!scanner.hasNextLine()) {
-            System.out.println();
-            return null;
-        }
-        return scanner.nextLine().trim();
-    }
-
-    private static int number(String text) {
-        try {
-            return text == null ? -1 : Integer.parseInt(text.trim());
-        } catch (NumberFormatException e) {
-            return -1;
-        }
-    }
-
-    public static void main(String[] args) {
-        HurricaneReliefApp app = new HurricaneReliefApp();
-        app.initialize();
-        app.run();
-    }
 }

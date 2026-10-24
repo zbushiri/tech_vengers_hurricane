@@ -6,5 +6,7 @@ public enum RequestStatus {
     FULFILLED,
     CANCELLED, 
     ASSIGNED,
+    /** Legacy saved value; normalized to FULFILLED when loaded. */
+    @Deprecated
     COMPLETE
 }

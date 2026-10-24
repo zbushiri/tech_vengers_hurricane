@@ -37,8 +37,16 @@ public class UserList {
     public boolean addUser(String firstName, String lastName, String email, String phoneNumber,
             String address, String username, String password, ArrayList<AccountRole> roles,
             String lastKnownLocation) {
-        return addUser(new User(firstName, lastName, email, phoneNumber, address,
-                username, password, roles, lastKnownLocation));
+
+        User user = new User(firstName, lastName, email, phoneNumber, address,
+                username, password, roles, lastKnownLocation);
+
+        if(user.hasRole(AccountRole.VOLUNTEER)) {
+            user = new VolunteerProfile(user, new ArrayList<String>(), new ArrayList<String>(),
+                                        BackgroundCheckStatus.PENDING, false,
+                                        AvailabilityStatus.AVAILABLE);
+        }
+        return addUser(user);
     }
 
     public boolean save() { return DataWriter.saveUsers(users); }
