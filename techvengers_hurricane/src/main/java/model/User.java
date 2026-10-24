@@ -83,14 +83,15 @@ public class User {
 
     public Shelter[] findNearestShelters(int maxResults) {
         Shelter[] closestShelters = new Shelter[maxResults];
-        boolean hasTown = lastKnownLocation != null && lastKnownLocation.getCoordinates() != null && lastKnownLocation.getCoordinates().getLatitude() != 0 && lastKnownLocation.getCoordinates().getLongitude() != 0;
         for (Shelter shelter : ShelterList.getInstance().getShelters()) {
             if (shelter.getStatus() == ShelterStatus.OPEN && shelter.getOccupancy() < shelter.getCapacity()) {
-                if (hasTown && ShelterList.getInstance().searchByProximity(shelter.getLocation(), ShelterList.DEFAULT_RADIUS_MILES).contains(shelter)) {
-                    for (int i = 0; i < maxResults; i++) {
-                        if (closestShelters[i] == null) {
-                            closestShelters[i] = shelter;
-                            break;
+                for (Shelter shelters : ShelterList.getInstance().searchByProximity(lastKnownLocation, ShelterList.DEFAULT_RADIUS_MILES, maxResults)) {
+                    if (shelters.equals(shelter)) {
+                        for (int i = 0; i < maxResults; i++) {
+                            if (closestShelters[i] == null) {
+                                closestShelters[i] = shelter;
+                                break;
+                            }
                         }
                     }
                 }
