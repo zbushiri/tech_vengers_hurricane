@@ -18,9 +18,9 @@ class TestUI {
 
 	public void testCreateValidAccount() {
 		app.createAccount("Edward", "Marks", "emarks@gmail.com",
-        "1234567890", "300 Lincoln Street", 
+        "1234567890", new location.Address("300 Lincoln Street", "Columbia", "SC", "29208"),
         "emarks", "emarks127", new ArrayList<AccountRole>() {{add(AccountRole.RESIDENT);}}, 
-        "300 Lincoln Street");
+        new location.MapLocation(new location.Address("300 Lincoln Street", "Columbia", "SC", "29208"), new location.Coordinates(34.0007, -81.0348)));
 		app.login("emarks", "emarks127");
 		User myUser = app.getCurrentUser();
         this.createdUserToString = myUser.toString();

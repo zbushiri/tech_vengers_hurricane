@@ -74,8 +74,8 @@ public class HurricaneReliefApp {
         return true;
     }
 
-    public ArrayList<Shelter> searchByProximity(String location, double maxDistance) {
-        return shelterList.searchByProximity(location, maxDistance);
+    public Shelter[] searchByProximity(location.MapLocation location, double maxDistance) {
+        return shelterList.searchByProximity(location, maxDistance, 10);
     }
 
     public void logout() {
@@ -117,8 +117,8 @@ public class HurricaneReliefApp {
 
     /** Creates an account from the original terminal UI fields. */
     public boolean createAccount(String firstName, String lastName, String email,
-            String phoneNumber, String address, String username, String password,
-            ArrayList<AccountRole> roles, String lastKnownLocation) {
+            String phoneNumber, location.Address address, String username, String password,
+            ArrayList<AccountRole> roles, location.MapLocation lastKnownLocation) {
         return userList.addUser(firstName, lastName, email, phoneNumber, address,
                 username, password, roles, lastKnownLocation);
     }
@@ -154,11 +154,11 @@ public class HurricaneReliefApp {
      * Finds shelters near a location. With no location, the logged in
      * user's own location or address is used.
      */
-    public List<Shelter> findNearestShelters(String location, double radiusMiles) {
-        if ((location == null || location.trim().isEmpty()) && currentUser != null) {
-            return currentUser.findNearestShelters();
+    public Shelter[] findNearestShelters(location.MapLocation location, double radiusMiles, int maxResults) {
+        if ((location == null || location.getAddress() == null) && currentUser != null) {
+            return currentUser.findNearestShelters(maxResults);
         }
-        return shelterList.searchByProximity(location, radiusMiles);
+        return shelterList.searchByProximity(location, radiusMiles, maxResults);
     }
 
     public void markSafe() {
@@ -264,6 +264,7 @@ public class HurricaneReliefApp {
     }
 
     private boolean startMenu() {
+        Scanner scanner = new Scanner(System.in);
         System.out.println();
         System.out.println("1. Log in");
         System.out.println("2. Create an account");
@@ -278,7 +279,9 @@ public class HurricaneReliefApp {
         } else if (choice.equals("2")) {
             createAccountMenu();
         } else if (choice.equals("3")) {
-            showShelters(findNearestShelters(prompt("Town or address: "), ShelterList.DEFAULT_RADIUS_MILES));
+            System.out.println("number of results to display: ");
+            int numberOfResults = scanner.nextInt();
+            showShelters(findNearestShelters(currentUser.getLastKnownLocation(), ShelterList.DEFAULT_RADIUS_MILES, numberOfResults));
         } else {
             System.out.println("Please choose 1 to 4.");
         }
@@ -305,7 +308,9 @@ public class HurricaneReliefApp {
         } else if (choice.equals("1")) {
             submitRequestMenu();
         } else if (choice.equals("2")) {
-            showShelters(findNearestShelters(null, ShelterList.DEFAULT_RADIUS_MILES));
+            System.out.println("number of results to display: ");
+            int numberOfResults = scanner.nextInt();
+            showShelters(findNearestShelters(currentUser.getLastKnownLocation(), ShelterList.DEFAULT_RADIUS_MILES, numberOfResults));
         } else if (choice.equals("3")) {
             markSafe();
         } else if (choice.equals("4")) {
@@ -382,13 +387,13 @@ public class HurricaneReliefApp {
         }
     }
 
-    private void showShelters(List<Shelter> shelters) {
-        if (shelters.isEmpty()) {
+    private void showShelters(Shelter[] shelters) {
+        if (shelters == null || shelters.length == 0) {
             System.out.println("No open shelters were found near that location.");
             return;
         }
         for (Shelter shelter : shelters) {
-            System.out.println(shelter.getName() + " - " + shelter.getAddress() + " ("
+            System.out.println(shelter.getName() + " - " + shelter.getLocation().getAddress() + " ("
                     + shelter.getStatus() + ", " + shelter.getOccupancy() + "/" + shelter.getCapacity()
                     + ", " + shelter.getAccommodations() + ")");
         }
