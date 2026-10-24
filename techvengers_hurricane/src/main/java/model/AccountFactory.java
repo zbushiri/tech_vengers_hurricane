@@ -35,7 +35,8 @@ public class AccountFactory {
         user.setLastName(text(details, "lastName"));
         user.setPhoneNumber(text(details, "phoneNumber"));
         user.setEmail(text(details, "email"));
-        user.setAddress(text(details, "address"));
+        user.setAddress(new location.Address(text(details, "address"),
+                text(details, "city"), text(details, "state"), text(details, "zip")));
         user.getRoles().add(role);
 
         if (role != AccountRole.VOLUNTEER) {
