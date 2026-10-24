@@ -1,6 +1,6 @@
 [
     {
-        "shelterId": "00000000-0000-0000-0000-000000000001",
+        "shelterId": "6a3d4f0e-fe05-431a-b112-10641963cf2f",
         "name": "Carner Avenue Shelter",
         "address": "2950 Carner Avenue, North Charleston, SC 29405",
         "capacity": 120,
@@ -11,7 +11,7 @@
         "shelterOperators": []
     },
     {
-        "shelterId": "00000000-0000-0000-0000-000000000002",
+        "shelterId": "db4dc27e-ae0b-4a82-8c42-d14889754d95",
         "name": "Lackawanna Community Shelter",
         "address": "5200 Lackawanna Boulevard, North Charleston, SC 29405",
         "capacity": 150,
@@ -22,7 +22,7 @@
         "shelterOperators": ["felixgrant"]
     },
     {
-        "shelterId": "00000000-0000-0000-0000-000000000003",
+        "shelterId": "5f71369f-f347-4105-9732-146c23bb308a",
         "name": "Leeds Avenue Shelter",
         "address": "3841 Leeds Avenue, North Charleston, SC 29405",
         "capacity": 80,
@@ -33,7 +33,7 @@
         "shelterOperators": []  
     },
     {
-        "shelterId": "00000000-0000-0000-0000-000000000004",
+        "shelterId": "6181122f-a82f-499d-a54d-4db95e6f843b",
         "name": "Ashley Phosphate Shelter",
         "address": "3625 Ashley Phosphate Road, North Charleston, SC 29418",
         "capacity": 100,
@@ -44,7 +44,7 @@
         "shelterOperators": []
     },
     {
-        "shelterId": "00000000-0000-0000-0000-000000000005",
+        "shelterId": "f37d8069-0e11-401d-8090-53eb288935e0",
         "name": "Dorchester Road Shelter",
         "address": "6401 Dorchester Road, North Charleston, SC 29418",
         "capacity": 90,
@@ -55,7 +55,7 @@
         "shelterOperators": []
     },
     {
-        "shelterId": "00000000-0000-0000-0000-000000000006",
+        "shelterId": "fdf3c610-79f4-4e3d-a0a0-e55cdae529a2",
         "name": "State Road Shelter",
         "address": "1624 State Road, Summerville, SC 29483",
         "capacity": 100,
@@ -66,7 +66,7 @@
         "shelterOperators": []
     },
     {
-        "shelterId": "00000000-0000-0000-0000-000000000007",
+        "shelterId": "fb7e67b8-ffc3-4f36-9be8-acb4655c545e",
         "name": "Russellville Road Shelter",
         "address": "1053 Russellville Road, St. Stephen, SC 29479",
         "capacity": 60,
@@ -77,7 +77,7 @@
         "shelterOperators": []
     },
     {
-        "shelterId": "00000000-0000-0000-0000-000000000008",
+        "shelterId": "b8032afa-0b73-46fe-88fb-8f4448f0b5dd",
         "name": "Macedonia Shelter",
         "address": "200 Macedonia Foxes Circle, St. Stephen, SC 29479",
         "capacity": 70,
@@ -88,7 +88,7 @@
         "shelterOperators": []
     },
     {
-        "shelterId": "00000000-0000-0000-0000-000000000009",
+        "shelterId": "3ac104f5-1228-47ec-b326-30e2df6f294a",
         "name": "Goose Creek Shelter",
         "address": "101 Westview Boulevard, Goose Creek, SC 29445",
         "capacity": 130,
@@ -99,7 +99,7 @@
         "shelterOperators": []
     },
     {
-        "shelterId": "00000000-0000-0000-0000-000000000010",
+        "shelterId": "d80b2e33-c0a4-4257-889e-50e5c8ebea88",
         "name": "Boone Hill Shelter",
         "address": "1101 Boone Hill Road, Summerville, SC 29483",
         "capacity": 100,

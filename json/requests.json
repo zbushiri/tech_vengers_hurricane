@@ -1,6 +1,6 @@
 [
     {
-        "requestId": "10000000-0000-0000-0000-000000000001",
+        "requestId": "dd4aaf3e-ebd0-45c3-832b-74ff5104df78",
         "type": "food",
         "status": "submitted",
         "location": "1850 Sam Rittenberg Boulevard, Charleston, SC 29407",
@@ -22,7 +22,7 @@
         }
     },
     {
-     "requestId": "10000000-0000-0000-0000-000000000002",
+        "requestId": "d4306065-f2de-498f-87a4-337b39a30c4d",
         "type": "supplies",
         "status": "submitted",
         "location": "1400 Ashley River Road, Charleston, SC 29407",
@@ -44,7 +44,7 @@
         }
     },
     {
-        "requestId": "10000000-0000-0000-0000-000000000003",
+        "requestId": "037b401e-a581-40b7-bdb2-c4c05a2a7bff",
         "type": "food",
         "status": "submitted",
         "location": "2100 Mall Drive, North Charleston, SC 29406",
@@ -66,7 +66,7 @@
         }
     },
     {
-        "requestId": "10000000-0000-0000-0000-000000000004",
+        "requestId": "d36077a4-1089-4afc-bde7-b682a91e9466",
         "type": "other",
         "status": "submitted",
         "location": "1020 Folly Road, Charleston, SC 29412",
@@ -88,7 +88,7 @@
         }    
     },
     {
-        "requestId": "10000000-0000-0000-0000-000000000005",
+        "requestId": "b8dcab57-b7e8-41ff-81c4-4465b5153c08",
         "type": "supplies",
         "status": "submitted",
         "location": "455 Coleman Boulevard, Mount Pleasant, SC 29464",
@@ -110,7 +110,7 @@
         }
     },
     {
-    "requestId": "10000000-0000-0000-0000-000000000006",
+        "requestId": "c3f2dc54-b31d-4ccd-8683-c47006689ebb",
         "type": "other",
         "status": "submitted",
         "location": "300 Central Avenue, Summerville, SC 29483",

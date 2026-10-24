@@ -1,11 +1,11 @@
 [
     {
-        "userId": 1,
+        "userId": "40a89768-8c79-4333-8480-16e4ba22a5e0",
         "firstName": "John",
         "lastName": "Doe",
         "phoneNumber": "123-456-7890",
         "email": "john.doe@example.com",
-        "address": "123 Main St, Anytown, USA",
+        "address": "80 Broad Street, Charleston, SC 29401",
         "username": "johndoe",
         "passwordHash": "password123",
         "roles": ["resident", "shelter_operator"],
@@ -20,12 +20,12 @@
         "safetyStatusUpdatedAt": "2024-06-01T12:00:00Z"
     },
     {
-        "userId":2,
+        "userId":"e04f031f-4f65-4049-8de9-b95267f54977",
         "firstName": "Jane",
         "lastName": "Smith",
         "phoneNumber": "987-654-3210",
         "email": "jane.smith@example.com",
-        "address": "456 Oak Ave, Anytown, USA",
+        "address": "66 George Street, Charleston, SC 29424",
         "username": "janesmith",
         "passwordHash": "password456",
         "roles": ["user"],
@@ -40,12 +40,12 @@
         "safetyStatusUpdatedAt": "2024-06-01T12:00:00Z"
     },
     {
-        "userId": 3,
+        "userId": "18904e99-0860-47f9-bccd-509a2291f5fa",
         "firstName": "Jim",
         "lastName": "Smith",
         "phoneNumber": "321-469-8755",
         "email": "jim.smith@example.com",
-        "address": "789 Anywhere Boulevard, Anytown, USA",
+        "address": "171 Ashley Avenue, Charleston, SC 29425",
         "username": "jimsmith",
         "passwordHash": "password789",
         "roles": ["volunteer", "user"],
@@ -65,12 +65,12 @@
         "availabilityStatus": "on_assignment"
     },
     {
-        "userId": 4,
+        "userId": "9256bb9f-5a5c-44bd-bff6-0eaad56f71ba",
         "firstName": "Macy",
         "lastName": "West",
         "phoneNumber": "840-243-0632",
         "email": "macy.west@example.com",
-        "address": "456 Oak Ave, Anytown, USA",
+        "address": "171 Moultrie Street, Charleston, SC 29409",
         "username": "macywest",
         "passwordHash": "password101",
         "roles": ["user", "volunteer"],
@@ -90,7 +90,7 @@
         "availabilityStatus": "available"
     },
     {
-        "userId": "20000000-0000-0000-0000-000000000001" ,
+        "userId": "19318d53-9a5b-449c-b7ad-84ba62dbef8c" ,
         "firstName": "Rosa",
         "lastName": "Delgado",
         "phoneNumber": "843-555-0142",
@@ -111,7 +111,7 @@
         "availabilityStatus": "available"
     },
     {
-        "userId": "20000000-0000-0000-0000-000000000002" ,
+        "userId": "b5dd9f25-3806-41ff-ade3-28b20f22f564" ,
         "firstName": "Felix",
         "lastName": "Grant",
         "phoneNumber": "843-555-0177",
