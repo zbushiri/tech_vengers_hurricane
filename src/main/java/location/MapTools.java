@@ -14,7 +14,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 
 /**
- * MapTools Provides map api tools
+ * Uses the mapping API to geocode addresses and retrieve driving distances, directions and route geometry.
  * @author Team Tech-vengers
  */
 public class MapTools implements RoutingService {
@@ -42,8 +42,8 @@ public class MapTools implements RoutingService {
     }
 
     /**
-     * Returns the instance.
-     * @return the instance
+     * Returns the shared mapping-service client.
+     * @return the shared instance, created on first access
      */
     public static MapTools getInstance() {
         if(mapTools == null){

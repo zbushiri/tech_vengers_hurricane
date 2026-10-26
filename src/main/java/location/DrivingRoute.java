@@ -3,7 +3,7 @@ package location;
 import java.util.ArrayList;
 
 /**
- * driving route in the relief application.
+ * Departure and destination locations with coordinates used to draw a driving route.
  * @author Team Tech-vengers
  */
 public class DrivingRoute {
@@ -13,10 +13,10 @@ public class DrivingRoute {
     private final ArrayList<Coordinates> routePoints;
 
     /**
-     * Creates driving route.
-     * @param startingLocation starting location for this operation
-     * @param endingLocation ending location for this operation
-     * @param routePoints route points for this operation
+     * Creates a drawable route with departure, destination and route coordinates.
+     * @param startingLocation departure address and its coordinates
+     * @param endingLocation destination address and its coordinates
+     * @param routePoints ordered coordinates forming the driving route
      */
     public DrivingRoute(
             MapLocation startingLocation,

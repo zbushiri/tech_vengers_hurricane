@@ -9,12 +9,12 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 /**
- * JavaFX App
+ * Launches the original two-screen JavaFX template application.
  * @author Team Tech-vengers
  */
 public class App extends Application {
     /**
-     * Creates a App instance.
+     * Creates the JavaFX template application.
      */
     public App() { }
 
@@ -22,9 +22,9 @@ public class App extends Application {
     private static Scene scene;
 
     /**
-     * Start.
-     * @param stage stage for this operation
-     * @throws IOException if the operation cannot be completed
+     * Loads the primary FXML screen and displays the template application window.
+     * @param stage JavaFX window to display
+     * @throws IOException if the primary FXML resource cannot be loaded
      */
     @Override
     @SuppressWarnings("exports")
@@ -34,6 +34,11 @@ public class App extends Application {
         stage.show();
     }
 
+    /**
+     * Replaces the current scene contents with another FXML screen.
+     * @param fxml resource name without the .fxml extension
+     * @throws IOException if the requested FXML resource cannot be loaded
+     */
     static void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml));
     }
@@ -44,8 +49,8 @@ public class App extends Application {
     }
 
     /**
-     * Starts this application entry point.
-     * @param args args for this operation
+     * Launches the original JavaFX template application.
+     * @param args command-line arguments; unused by this entry point
      */
     public static void main(String[] args) {
         launch();

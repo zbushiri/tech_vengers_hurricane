@@ -29,7 +29,7 @@ public class User {
     /**
      * A new user account with just a username and password.
      * @param username the username for the new account
-     * @param passwordHash the hashed password for the new account
+     * @param passwordHash password text stored directly; this class does not hash it
      */
     public User(String username, String passwordHash) {
         this("", "", "", "", "", username, passwordHash, new ArrayList<>(), "");
@@ -43,7 +43,7 @@ public class User {
      * @param phoneNumber the user's phone number
      * @param address the user's address
      * @param username the username for the new account
-     * @param passwordHash the hashed password for the new account
+     * @param passwordHash password text stored directly; this class does not hash it
      * @param roles the roles assigned to the user
      * @param lastKnownLocation the user's last known location
      */
@@ -57,7 +57,7 @@ public class User {
     }
 
     /**
-     * Loading user account from persistent storage.
+     * Restores an account from saved profile data.
      * @param userId the unique identifier for the user
      * @param firstName the user's first name
      * @param lastName the user's last name
@@ -65,7 +65,7 @@ public class User {
      * @param phoneNumber the user's phone number
      * @param address the user's address
      * @param username the username for the account
-     * @param passwordHash the hashed password for the account
+     * @param passwordHash stored password text used for direct comparison
      * @param roles the roles assigned to the user
      * @param associatedPersons the persons associated with the user
      * @param verificationStatus the verification status of the user
@@ -95,10 +95,10 @@ public class User {
     }
 
     /**
-     * Logs in the user by verifying the provided username and password hash.
+     * Logs in the user by comparing the provided username and stored password text.
      * 
      * @param username the username to log in with
-     * @param passwordHash the hashed password to verify
+     * @param passwordHash password text to compare directly with the stored value
      * @return true if the login is successful, false otherwise
      */
     public boolean login(String username, String passwordHash) {
@@ -119,7 +119,7 @@ public class User {
     }
 
     /**
-     * Verifies the user's identity using the specified method.
+     * Marks the profile verified when a method is provided; no external verification is performed.
      * 
      * @param method the verification method to use
      * @return true if the verification is successful, false otherwise
@@ -132,7 +132,7 @@ public class User {
 
 
     /**
-     * Mark safe.
+     * Marks this user safe and records the current update time.
      */
     public void markSafe() {
         safetyStatus = SafetyStatusType.SAFE;
@@ -140,21 +140,21 @@ public class User {
     }
 
     /**
-     * Logout.
+     * Prints the logout message; the application facade clears the current session.
      */
     public void logout() { System.out.println("Logged out: " + username); }
     /**
-     * Update location.
-     * @param location location for this operation
+     * Stores the user's latest reported location.
+     * @param location user's latest reported location or address
      */
     public void updateLocation(String location) { lastKnownLocation = location; }
     /**
-     * Returns the latest info.
-     * @param hurricane hurricane for this operation
+     * Prints the supplied hurricane event and its current information.
+     * @param hurricane hurricane event to display
      */
     public static void getLatestInfo(HurricaneEvent hurricane) { System.out.println(hurricane); }
     /**
-     * Search guidance content.
+     * Prints the guidance-search placeholder message; no guidance search is performed.
      */
     public static void searchGuidanceContent() { System.out.println("Searching guidance content..."); }
 
@@ -171,14 +171,14 @@ public class User {
 
     /**
      * Ordinary accounts have no volunteer profile; volunteers override this.
-     * @return the volunteer profile
+     * @return null for an ordinary account; volunteers override this to return their profile
      */
     public VolunteerProfile getVolunteerProfile() { return null; }
 
     /**
-     * Has role.
-     * @param role role for this operation
-     * @return whether has role
+     * Checks whether this account has the specified role.
+     * @param role account role to create or check
+     * @return true if the account's roles contain the requested role
      */
     public boolean hasRole(AccountRole role) { return roles.contains(role); }
     /**
@@ -217,8 +217,8 @@ public class User {
      */
     public String getUsername() { return username; }
     /**
-     * Returns the password hash.
-     * @return the password hash
+     * Returns the stored password value; the legacy field name does not imply that hashing is performed.
+     * @return stored password text used for direct credential comparison
      */
     public String getPasswordHash() { return passwordHash; }
     /**
@@ -227,8 +227,8 @@ public class User {
      */
     public ArrayList<AccountRole> getRoles() { return roles; }
     /**
-     * Returns the associated persons.
-     * @return the associated persons
+     * Returns the household members linked to this account.
+     * @return the account's mutable list of associated people
      */
     public ArrayList<Person> getAssociatedPersons() { return associatedPersons; }
     /**
@@ -253,78 +253,78 @@ public class User {
     public LocalDateTime getSafetyStatusUpdatedAt() { return safetyStatusUpdatedAt; }
     /**
      * Sets the user id.
-     * @param value value for this operation
+     * @param value replacement unique account identifier
      */
     public void setUserId(UUID value) { userId = value; }
     /**
      * Sets the first name.
-     * @param value value for this operation
+     * @param value replacement account holder's first name
      */
     public void setFirstName(String value) { firstName = value; }
     /**
      * Sets the last name.
-     * @param value value for this operation
+     * @param value replacement account holder's last name
      */
     public void setLastName(String value) { lastName = value; }
     /**
      * Sets the phone number.
-     * @param value value for this operation
+     * @param value replacement contact telephone number
      */
     public void setPhoneNumber(String value) { phoneNumber = value; }
     /**
      * Sets the email.
-     * @param value value for this operation
+     * @param value replacement contact email address
      */
     public void setEmail(String value) { email = value; }
     /**
      * Sets the address.
-     * @param value value for this operation
+     * @param value replacement street address
      */
     public void setAddress(String value) { address = value; }
     /**
      * Sets the username.
-     * @param value value for this operation
+     * @param value replacement account username
      */
     public void setUsername(String value) { username = value; }
     /**
-     * Sets the password hash.
-     * @param value value for this operation
+     * Stores the password value without hashing it.
+     * @param value replacement password text stored without hashing
      */
     public void setPasswordHash(String value) { passwordHash = value; }
     /**
      * Sets the roles.
-     * @param value value for this operation
+     * @param value replacement roles assigned to the account
      */
     public void setRoles(ArrayList<AccountRole> value) { roles = value; }
     /**
      * Sets the associated persons.
-     * @param value value for this operation
+     * @param value replacement household members linked to the account
      */
     public void setAssociatedPersons(ArrayList<Person> value) { associatedPersons = value; }
     /**
      * Sets the verification status.
-     * @param value value for this operation
+     * @param value replacement identity-verification status
      */
     public void setVerificationStatus(VerificationStatus value) { verificationStatus = value; }
     /**
      * Sets the last known location.
-     * @param value value for this operation
+     * @param value replacement user's latest reported location
      */
     public void setLastKnownLocation(String value) { lastKnownLocation = value; }
     /**
      * Sets the safety status.
-     * @param value value for this operation
+     * @param value replacement user's reported safety status
      */
     public void setSafetyStatus(SafetyStatusType value) { safetyStatus = value; }
     /**
      * Sets the safety status updated at.
-     * @param value value for this operation
+     * @param value replacement time of the most recent safety-status update
      */
     public void setSafetyStatusUpdatedAt(LocalDateTime value) { safetyStatusUpdatedAt = value; }
 
     /**
      * Formats this object for display.
-     * @return the result of to string
+     * @return user's full name followed by the username
      */
     @Override
     public String toString() { return firstName + " " + lastName + " (" + username + ")"; }

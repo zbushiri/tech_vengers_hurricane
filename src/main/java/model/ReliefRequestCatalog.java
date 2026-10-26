@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * relief request catalog in the relief application.
+ * Shared collection of relief requests, with duplicate detection, priority ordering and assignment lookup.
  * @author Team Tech-vengers
  */
 public class ReliefRequestCatalog {
@@ -15,8 +15,8 @@ public class ReliefRequestCatalog {
     private ReliefRequestCatalog() {}
 
     /**
-     * Returns the instance.
-     * @return the instance
+     * Returns the shared request catalog.
+     * @return the shared instance, created on first access
      */
     public static ReliefRequestCatalog getInstance() {
         if (reliefRequestCatalog == null) {
@@ -35,9 +35,9 @@ public class ReliefRequestCatalog {
     }
 
     /**
-     * Returns the request.
-     * @param requestId request id for this operation
-     * @return the request
+     * Looks up a request by its unique identifier.
+     * @param requestId unique identifier of the relief request
+     * @return matching request, or null when the identifier is not present
      */
     public ReliefRequest getRequest(UUID requestId) {
         for (ReliefRequest request : reliefRequests) {
@@ -52,7 +52,7 @@ public class ReliefRequestCatalog {
      * Adds a request to the catalog. If an open request of the same type
      * already exists at the same location, the new one is marked as its
      * duplicate. The priority is then calculated.
-     * @param request request for this operation
+     * @param request relief request to store or update
      */
     public void submitRequest(ReliefRequest request) {
         if (request == null || getRequest(request.getRequestId()) != null) {
@@ -70,7 +70,7 @@ public class ReliefRequestCatalog {
 
     /**
      * Adds a request read from the JSON file exactly as it was saved.
-     * @param request request for this operation
+     * @param request relief request to store or update
      */
     public void addLoadedRequest(ReliefRequest request) {
         if (request != null && getRequest(request.getRequestId()) == null) {
@@ -98,9 +98,9 @@ public class ReliefRequestCatalog {
     }
 
     /**
-     * Search by type.
-     * @param type type for this operation
-     * @return the result of search by type
+     * Finds all stored requests with the specified assistance type.
+     * @param type kind of relief assistance requested
+     * @return matching requests, including closed requests
      */
     public List<ReliefRequest> searchByType(RequestType type) {
         List<ReliefRequest> result = new ArrayList<>();
@@ -114,8 +114,8 @@ public class ReliefRequestCatalog {
 
     /**
      * Open requests at the same location, ignoring case and extra spaces.
-     * @param location location for this operation
-     * @return the result of find duplicates
+     * @param location full street address where help is needed
+     * @return open requests with the same location text, ignoring case and surrounding whitespace
      */
     public List<ReliefRequest> findDuplicates(String location) {
         List<ReliefRequest> result = new ArrayList<>();
@@ -152,8 +152,8 @@ public class ReliefRequestCatalog {
      * Lets a volunteer claim a request by its id.
      * 
      * @return true if the volunteer now has the request
-     * @param requestId request id for this operation
-     * @param volunteer volunteer for this operation
+     * @param requestId unique identifier of the relief request
+     * @param volunteer volunteer attempting to claim or start the assignment
      */
     public boolean claimRequest(UUID requestId, VolunteerProfile volunteer) {
         ReliefRequest request = getRequest(requestId);
@@ -180,8 +180,8 @@ public class ReliefRequestCatalog {
     }
 
     /**
-     * Save.
-     * @return true when the operation succeeds
+     * Saves the shared request catalog to JSON.
+     * @return true if the requests JSON file was written successfully
      */
     public boolean save() {
         return DataWriter.saveRequests();

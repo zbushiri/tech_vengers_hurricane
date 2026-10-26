@@ -6,15 +6,15 @@ package model;
  */
 public enum EventStatus {
     /**
-     * active.
+     * Hurricane is currently active.
      */
     ACTIVE,
     /**
-     * monitoring.
+     * Hurricane is being monitored.
      */
     MONITORING,
     /**
-     * closed.
+     * Hurricane event is no longer active.
      */
     CLOSED
 }

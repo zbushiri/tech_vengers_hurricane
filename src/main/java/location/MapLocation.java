@@ -5,7 +5,7 @@ package location;
  * into latitude and longitude coordinates.
  */
 /**
- * map location in the relief application.
+ * A street address paired with its geographic coordinates.
  * @author Team Tech-vengers
  */
 public class MapLocation {
@@ -14,9 +14,9 @@ public class MapLocation {
     private final Coordinates coordinates;
 
     /**
-     * Creates map location.
-     * @param address address for this operation
-     * @param coordinates coordinates for this operation
+     * Pairs a street address with the coordinates found for that address.
+     * @param address street address represented by this map location
+     * @param coordinates latitude and longitude associated with the address
      */
     public MapLocation(Address address, Coordinates coordinates) {
         this.address = address;
@@ -41,7 +41,7 @@ public class MapLocation {
 
     /**
      * Formats this object for display.
-     * @return the result of to string
+     * @return formatted street address of this location
      */
     @Override
     public String toString() {

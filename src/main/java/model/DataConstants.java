@@ -15,250 +15,250 @@ public abstract class DataConstants {
     private static final String JSON_FOLDER = System.getProperty("hurricane.dataDir",
             "json") + File.separator;
     /**
-     * shelter file.
+     * Path to the saved shelter JSON file.
      */
     protected static final String SHELTER_FILE = JSON_FOLDER + "shelters.json";
     /**
-     * user file.
+     * Path to the saved user JSON file.
      */
     protected static final String USER_FILE = JSON_FOLDER + "users.json";
     /**
-     * request file.
+     * Path to the saved request JSON file.
      */
     protected static final String REQUEST_FILE = JSON_FOLDER + "requests.json";
     /**
-     * hurricane file.
+     * Path to the saved hurricane JSON file.
      */
     protected static final String HURRICANE_FILE = JSON_FOLDER + "hurricanes.json";
 
     /**
-     * user id.
+     * JSON field name for {@code userId}.
      */
     protected static final String USER_ID = "userId";
     /**
-     * user first name.
+     * JSON field name for {@code firstName}.
      */
     protected static final String USER_FIRST_NAME = "firstName";
     /**
-     * user last name.
+     * JSON field name for {@code lastName}.
      */
     protected static final String USER_LAST_NAME = "lastName";
     /**
-     * user phone number.
+     * JSON field name for {@code phoneNumber}.
      */
     protected static final String USER_PHONE_NUMBER = "phoneNumber";
     /**
-     * user email.
+     * JSON field name for {@code email}.
      */
     protected static final String USER_EMAIL = "email";
     /**
-     * user address.
+     * JSON field name for {@code address}.
      */
     protected static final String USER_ADDRESS = "address";
     /**
-     * user username.
+     * JSON field name for {@code username}.
      */
     protected static final String USER_USERNAME = "username";
     /**
-     * user password.
+     * JSON field name for {@code passwordHash}.
      */
     protected static final String USER_PASSWORD = "passwordHash";
     /**
-     * user roles.
+     * JSON field name for {@code roles}.
      */
     protected static final String USER_ROLES = "roles";
     /**
-     * user last known location.
+     * JSON field name for {@code lastKnownLocation}.
      */
     protected static final String USER_LAST_KNOWN_LOCATION = "lastKnownLocation";
     /**
-     * associated persons.
+     * JSON field name for {@code associatedPersons}.
      */
     protected static final String ASSOCIATED_PERSONS = "associatedPersons";
     /**
-     * verification status.
+     * JSON field name for {@code verificationStatus}.
      */
     protected static final String VERIFICATION_STATUS = "verificationStatus";
     /**
-     * safety status.
+     * JSON field name for {@code safetyStatus}.
      */
     protected static final String SAFETY_STATUS = "safetyStatus";
     /**
-     * safety status updated at.
+     * JSON field name for {@code safetyStatusUpdatedAt}.
      */
     protected static final String SAFETY_STATUS_UPDATED_AT = "safetyStatusUpdatedAt";
 
     /**
-     * volunteer skills.
+     * JSON field name for {@code skills}.
      */
     protected static final String VOLUNTEER_SKILLS = "skills";
     /**
-     * volunteer equipment.
+     * JSON field name for {@code equipment}.
      */
     protected static final String VOLUNTEER_EQUIPMENT = "equipment";
     /**
-     * volunteer background check.
+     * JSON field name for {@code backgroundCheckStatus}.
      */
     protected static final String VOLUNTEER_BACKGROUND_CHECK = "backgroundCheckStatus";
     /**
-     * volunteer transportation.
+     * JSON field name for {@code transportationStatus}.
      */
     protected static final String VOLUNTEER_TRANSPORTATION = "transportationStatus";
     // Misspelled key used by the sample data in users.json
     /**
-     * volunteer transportation old.
+     * JSON field name for {@code transportatioinStatus}.
      */
     protected static final String VOLUNTEER_TRANSPORTATION_OLD = "transportatioinStatus";
     /**
-     * volunteer availability.
+     * JSON field name for {@code availabilityStatus}.
      */
     protected static final String VOLUNTEER_AVAILABILITY = "availabilityStatus";
     
     /**
-     * person first name.
+     * JSON field name for {@code firstName}.
      */
     protected static final String PERSON_FIRST_NAME = "firstName";
     /**
-     * person last name.
+     * JSON field name for {@code lastName}.
      */
     protected static final String PERSON_LAST_NAME = "lastName";
     /**
-     * person age.
+     * JSON field name for {@code age}.
      */
     protected static final String PERSON_AGE = "age";
     /**
-     * person special needs.
+     * JSON field name for {@code specialNeeds}.
      */
     protected static final String PERSON_SPECIAL_NEEDS = "specialNeeds";
     /**
-     * latitude.
+     * JSON field name for {@code latitude}.
      */
     protected static final String LATITUDE = "latitude";
     /**
-     * longitude.
+     * JSON field name for {@code longitude}.
      */
     protected static final String LONGITUDE = "longitude";
     
     /**
-     * shelter id.
+     * JSON field name for {@code shelterId}.
      */
     protected static final String SHELTER_ID = "shelterId";
     /**
-     * shelter name.
+     * JSON field name for {@code name}.
      */
     protected static final String SHELTER_NAME = "name";
     /**
-     * shelter address.
+     * JSON field name for {@code address}.
      */
     protected static final String SHELTER_ADDRESS = "address";
     /**
-     * shelter capacity.
+     * JSON field name for {@code capacity}.
      */
     protected static final String SHELTER_CAPACITY = "capacity";
     /**
-     * shelter occupancy.
+     * JSON field name for {@code occupancy}.
      */
     protected static final String SHELTER_OCCUPANCY = "occupancy";
     /**
-     * shelter status.
+     * JSON field name for {@code status}.
      */
     protected static final String SHELTER_STATUS = "status";
     /**
-     * shelter accommodations.
+     * JSON field name for {@code accommodations}.
      */
     protected static final String SHELTER_ACCOMMODATIONS = "accommodations";
     /**
-     * shelter last updated.
+     * JSON field name for {@code lastUpdated}.
      */
     protected static final String SHELTER_LAST_UPDATED = "lastUpdated";
     /**
-     * shelter operators.
+     * JSON field name for {@code shelterOperators}.
      */
     protected static final String SHELTER_OPERATORS = "shelterOperators";
 
     /**
-     * hurricane name.
+     * JSON field name for {@code name}.
      */
     protected static final String HURRICANE_NAME = "name";
     /**
-     * hurricane start.
+     * JSON field name for {@code startDate}.
      */
     protected static final String HURRICANE_START = "startDate";
     /**
-     * hurricane end.
+     * JSON field name for {@code endDate}.
      */
     protected static final String HURRICANE_END = "endDate";
     /**
-     * hurricane status.
+     * JSON field name for {@code status}.
      */
     protected static final String HURRICANE_STATUS = "status";
     /**
-     * hurricane areas.
+     * JSON field name for {@code affectedAreas}.
      */
     protected static final String HURRICANE_AREAS = "affectedAreas";
 
     /**
-     * request id.
+     * JSON field name for {@code requestId}.
      */
     protected static final String REQUEST_ID = "requestId";
     /**
-     * request type.
+     * JSON field name for {@code type}.
      */
     protected static final String REQUEST_TYPE = "type";
     /**
-     * request status.
+     * JSON field name for {@code status}.
      */
     protected static final String REQUEST_STATUS = "status";
     /**
-     * request location.
+     * JSON field name for {@code location}.
      */
     protected static final String REQUEST_LOCATION = "location";
     /**
-     * request description.
+     * JSON field name for {@code description}.
      */
     protected static final String REQUEST_DESCRIPTION = "description";
     /**
-     * request priority.
+     * JSON field name for {@code priority}.
      */
     protected static final String REQUEST_PRIORITY = "priority";
     /**
-     * request date submitted.
+     * JSON field name for {@code dateSubmitted}.
      */
     protected static final String REQUEST_DATE_SUBMITTED = "dateSubmitted";
     /**
-     * request people.
+     * JSON field name for {@code numberOfPeopleNeeded}.
      */
     protected static final String REQUEST_PEOPLE = "numberOfPeopleNeeded";
     /**
-     * request animals.
+     * JSON field name for {@code numberOfAnimals}.
      */
     protected static final String REQUEST_ANIMALS = "numberOfAnimals";
     /**
-     * request animal notes.
+     * JSON field name for {@code animalNotes}.
      */
     protected static final String REQUEST_ANIMAL_NOTES = "animalNotes";
     /**
-     * request photo url.
+     * JSON field name for {@code photoUrl}.
      */
     protected static final String REQUEST_PHOTO_URL = "photoUrl";
     /**
-     * request is suspicious.
+     * JSON field name for {@code isSuspicious}.
      */
     protected static final String REQUEST_IS_SUSPICIOUS = "isSuspicious";
     /**
-     * request duplicate of.
+     * JSON field name for {@code isDuplicateOf}.
      */
     protected static final String REQUEST_DUPLICATE_OF = "isDuplicateOf";
     /**
-     * request hurricane.
+     * JSON field name for {@code forHurricane}.
      */
     protected static final String REQUEST_HURRICANE = "forHurricane";
     /**
-     * request submitted by.
+     * JSON field name for {@code submittedBy}.
      */
     protected static final String REQUEST_SUBMITTED_BY = "submittedBy";
     /**
-     * request assigned volunteer.
+     * JSON field name for {@code assignedVolunteer}.
      */
     protected static final String REQUEST_ASSIGNED_VOLUNTEER = "assignedVolunteer";
 }

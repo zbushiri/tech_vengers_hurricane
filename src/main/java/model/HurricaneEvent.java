@@ -132,7 +132,7 @@ public class HurricaneEvent {
 
      /**
       * Formats this object for display.
-      * @return the result of to string
+      * @return hurricane details with dates formatted as UTC calendar dates
       */
      @Override
     public String toString() {

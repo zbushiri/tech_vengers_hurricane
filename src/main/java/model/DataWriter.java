@@ -1,6 +1,5 @@
 package model;
 
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
 import java.nio.file.Files;
@@ -18,9 +17,9 @@ public class DataWriter extends DataConstants {
     private DataWriter() { }
 
     /**
-     * Save users.
-     * @param users users for this operation
-     * @return true when the operation succeeds
+     * Serializes the users to JSON and replaces the saved file after writing a temporary copy.
+     * @param users user accounts to serialize to the users JSON file
+     * @return true if the users JSON file was written successfully
      */
     @SuppressWarnings("unchecked")
     public static boolean saveUsers(List<User> users) {
@@ -30,17 +29,17 @@ public class DataWriter extends DataConstants {
     }
 
     /**
-     * Save users.
-     * @return true when the operation succeeds
+     * Serializes the users to JSON and replaces the saved file after writing a temporary copy.
+     * @return true if the users JSON file was written successfully
      */
     public static boolean saveUsers() {
         return saveUsers(UserList.getInstance().getUsers());
     }
 
     /**
-     * Save shelters.
-     * @param shelters shelters for this operation
-     * @return true when the operation succeeds
+     * Serializes the shelters to JSON and replaces the saved file after writing a temporary copy.
+     * @param shelters shelters to serialize to the shelters JSON file
+     * @return true if the shelters JSON file was written successfully
      */
     @SuppressWarnings("unchecked")
     public static boolean saveShelters(List<Shelter> shelters) {
@@ -50,9 +49,9 @@ public class DataWriter extends DataConstants {
     }
 
     /**
-     * Save requests.
-     * @param requests requests for this operation
-     * @return true when the operation succeeds
+     * Serializes the requests to JSON and replaces the saved file after writing a temporary copy.
+     * @param requests relief requests to serialize to the requests JSON file
+     * @return true if the requests JSON file was written successfully
      */
     @SuppressWarnings("unchecked")
     public static boolean saveRequests(List<ReliefRequest> requests) {
@@ -62,8 +61,8 @@ public class DataWriter extends DataConstants {
     }
 
     /**
-     * Save requests.
-     * @return true when the operation succeeds
+     * Serializes the requests to JSON and replaces the saved file after writing a temporary copy.
+     * @return true if the requests JSON file was written successfully
      */
     public static boolean saveRequests() {
         return saveRequests(ReliefRequestCatalog.getInstance().getRequests());

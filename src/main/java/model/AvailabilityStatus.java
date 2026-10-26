@@ -6,15 +6,15 @@ package model;
  */
 public enum AvailabilityStatus {
     /**
-     * available.
+     * Available to claim a new request.
      */
     AVAILABLE,
     /**
-     * unavailable.
+     * Not currently available for assignments.
      */
     UNAVAILABLE,
     /**
-     * on assignment.
+     * Currently handling an assigned request.
      */
     ON_ASSIGNMENT
 }

@@ -1,28 +1,28 @@
 package model;
 
 /**
- * request status in the relief application.
+ * Workflow states for submitted, assigned, active, completed and cancelled relief requests.
  * @author Team Tech-vengers
  */
 public enum RequestStatus {
     /**
-     * submitted.
+     * Submitted and not yet assigned to a volunteer.
      */
     SUBMITTED,
     /**
-     * in progress.
+     * Assigned volunteer has started work.
      */
     IN_PROGRESS,
     /**
-     * fulfilled.
+     * Completed by an authorized manager or coordinator.
      */
     FULFILLED,
     /**
-     * cancelled.
+     * Cancelled and no longer available for assignment.
      */
     CANCELLED, 
     /**
-     * assigned.
+     * Claimed by a volunteer who is responsible for the request.
      */
     ASSIGNED,
     /**

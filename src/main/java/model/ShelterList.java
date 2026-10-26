@@ -22,8 +22,8 @@ public class ShelterList {
     }
     
     /**
-     * Returns the instance.
-     * @return the instance
+     * Returns the shared shelter list.
+     * @return the shared instance, created on first access
      */
     public static ShelterList getInstance() {
         if (instance == null) instance = new ShelterList();
@@ -35,8 +35,8 @@ public class ShelterList {
      */
     public ArrayList<Shelter> getShelters() { return shelters; }
     /**
-     * Add shelter.
-     * @param shelter shelter for this operation
+     * Adds a nonnull shelter unless the same object is already in the list.
+     * @param shelter shelter to add or inspect
      */
     public void addShelter(Shelter shelter) {
         if (shelter != null && !shelters.contains(shelter)) shelters.add(shelter);
@@ -108,9 +108,9 @@ public class ShelterList {
     }
 
     /**
-     * Filter by accommodation.
-     * @param accommodation accommodation for this operation
-     * @return the result of filter by accommodation
+     * Finds shelters offering the requested service, regardless of status or remaining space.
+     * @param accommodation shelter service to require or add
+     * @return shelters that list the requested accommodation
      */
     public ArrayList<Shelter> filterByAccommodation(Accommodation accommodation) {
         ArrayList<Shelter> matches = new ArrayList<>();
@@ -123,18 +123,18 @@ public class ShelterList {
     }
 
     /**
-     * Verify status report.
-     * @param shelter shelter for this operation
-     * @param status status for this operation
-     * @return true when the operation succeeds
+     * Compares a reported operating status with the shelter's current stored status.
+     * @param shelter shelter to add or inspect
+     * @param status shelter operating status to store or compare
+     * @return true if the shelter exists and its stored status equals the reported status
      */
     public boolean verifyStatusReport(Shelter shelter, ShelterStatus status) {
         return shelter != null && shelter.getStatus() == status;
     }
 
     /**
-     * Save.
-     * @return true when the operation succeeds
+     * Saves every shelter in the shared list to JSON.
+     * @return true if the shelters JSON file was written successfully
      */
     public boolean save() { return DataWriter.saveShelters(shelters); }
 }

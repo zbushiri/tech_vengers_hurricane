@@ -17,7 +17,10 @@ final class ScenarioData {
     private static final List<String> JSON_FILES = List.of("users", "shelters", "requests", "hurricanes");
     private final Path directory;
 
-    /** Records the folder used for this demonstration's saved files. */
+    /**
+     * Records the folder used for this demonstration's saved files.
+     * @param directory folder containing the demonstration's JSON files
+     */
     ScenarioData(Path directory) {
         this.directory = directory;
     }
@@ -31,7 +34,12 @@ final class ScenarioData {
                 + " open sample requests.");
     }
 
-    /** Saves the application and copies each JSON file into the named snapshot folder. */
+    /**
+     * Saves the application and copies each JSON file into the named snapshot folder.
+     * @param app application whose current data should be saved
+     * @param phase snapshot label, such as before, assigned or after
+     * @throws IOException if saving or copying a JSON file fails
+     */
     void snapshot(HurricaneReliefApp app, String phase) throws IOException {
         if (!app.saveData()) {
             throw new IOException("Could not save the JSON files.");
@@ -45,7 +53,10 @@ final class ScenarioData {
         }
     }
 
-    /** Returns the folder for this demonstration's printable trip sheets. */
+    /**
+     * Returns the folder for this demonstration's printable trip sheets.
+     * @return trip-sheets folder within the demonstration data directory
+     */
     Path tripSheetDirectory() {
         return directory.resolve("trip-sheets");
     }
@@ -56,7 +67,11 @@ final class ScenarioData {
         System.out.println("JSON snapshots: " + directory.resolve("snapshots"));
     }
 
-    /** Shows the reloaded household and reports whether the scenario results were saved. */
+    /**
+     * Shows the reloaded household and reports whether the scenario results were saved.
+     * @param app application initialized from the saved demonstration files
+     * @return true if completion, assignment, household and shelter admission were restored
+     */
     boolean verifySaved(HurricaneReliefApp app) {
         System.out.println("Carter account reloaded: " + app.login("dcarter", "carter2026"));
         ReliefRequest request = app.getMyRequests().stream()
@@ -90,7 +105,11 @@ final class ScenarioData {
         return saved;
     }
 
-    /** Parses launch options, prepares isolated seed files and selects the demonstration mode. */
+    /**
+     * Parses launch options, prepares isolated seed files and selects the demonstration mode.
+     * @param args optional --verify and --data-dir=folder launch arguments
+     * @throws IOException if seed files, snapshots, trip exports or driving routes are unavailable
+     */
     static void launch(String[] args) throws IOException {
         Path directory = Path.of("demo-data").toAbsolutePath();
         boolean verify = false;

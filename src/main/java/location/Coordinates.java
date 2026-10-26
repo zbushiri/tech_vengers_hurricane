@@ -1,7 +1,7 @@
 package location;
 
 /**
- * coordinates in the relief application.
+ * A geographic location represented by latitude and longitude in decimal degrees.
  * @author Team Tech-vengers
  */
 public class Coordinates {
@@ -9,9 +9,9 @@ public class Coordinates {
     private double longitude;
 
     /**
-     * Creates coordinates.
-     * @param latitude latitude for this operation
-     * @param longitude longitude for this operation
+     * Stores a latitude and longitude pair.
+     * @param latitude latitude in decimal degrees
+     * @param longitude longitude in decimal degrees
      */
     public Coordinates(double latitude, double longitude){
         this.latitude = latitude;
@@ -36,7 +36,7 @@ public class Coordinates {
 
     /**
      * Formats this object for display.
-     * @return the result of to string
+     * @return latitude and longitude separated by a comma
      */
     @Override
     public String toString() {

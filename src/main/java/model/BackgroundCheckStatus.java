@@ -6,15 +6,15 @@ package model;
  */
 public enum BackgroundCheckStatus {
     /**
-     * pending.
+     * Background check has not been verified.
      */
     PENDING,
     /**
-     * verified.
+     * Background check has been approved.
      */
     VERIFIED,
     /**
-     * rejected.
+     * Background check was rejected.
      */
     REJECTED
 }

@@ -21,10 +21,10 @@ public class AccountFactory {
     }
 
     /**
-     * Create account.
+     * Builds a volunteer profile or ordinary account according to the requested role.
      * @return the new account, or null if the role, username or password is missing
-     * @param role role for this operation
-     * @param details details for this operation
+     * @param role account role to create or check
+     * @param details account fields described in {@link AccountFactory}
      */
     public static User createAccount(AccountRole role, Map<String, ?> details) {
         if (role == null || details == null) {

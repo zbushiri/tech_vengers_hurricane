@@ -26,7 +26,7 @@ import location.MapTools;
  */
 public class MapUI extends Application {
     /**
-     * Creates a MapUI instance.
+     * Creates the shelter-map window and its controls.
      */
     public MapUI() { }
 
@@ -35,8 +35,8 @@ public class MapUI extends Application {
     private final Canvas map = new Canvas(860, 420);
 
     /**
-     * Start.
-     * @param stage stage for this operation
+     * Opens the shelter-map window and loads driving directions in a background thread.
+     * @param stage JavaFX window to display
      */
     @Override
     @SuppressWarnings("exports")
@@ -174,14 +174,11 @@ public class MapUI extends Application {
         }
         pen.fillText("Shelter", shelterLabelX, endY - 12);
     }
-<<<<<<< HEAD:src/main/java/model/MapUI.java
 
     /**
-     * Starts this application entry point.
-     * @param args args for this operation
+     * Launches the JavaFX shelter-map application.
+     * @param args JavaFX launch arguments, including optional --from=address
      */
-=======
->>>>>>> fe1f40d029e12c9993fe5ea4e72e2d7dbf3bacac:techvengers_hurricane/src/main/java/model/MapUI.java
     public static void main(String[] args) {
         launch(args);
     }

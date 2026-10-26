@@ -34,11 +34,11 @@ public class ReliefRequest {
     private UUID destinationShelterId;
 
     /**
-     * Creates relief request.
-     * @param type type for this operation
-     * @param description description for this operation
-     * @param location location for this operation
-     * @param numberOfPeopleNeeded number of people needed for this operation
+     * Creates a submitted relief request and calculates its initial priority.
+     * @param type kind of relief assistance requested
+     * @param description description of the household situation and requested help
+     * @param location full street address where help is needed
+     * @param numberOfPeopleNeeded number of people needing assistance
      */
     public ReliefRequest(RequestType type, String description, String location, int numberOfPeopleNeeded) {
         this(UUID.randomUUID(), type, description, location, numberOfPeopleNeeded,
@@ -47,7 +47,7 @@ public class ReliefRequest {
 
     /**
      * Copies another request, including its status, priority and date.
-     * @param request request for this operation
+     * @param request existing request whose fields and workflow state are copied
      */
     public ReliefRequest(ReliefRequest request) {
         this(request.getRequestId(), request.getType(), request.getDescription(), request.getLocation(),
@@ -66,18 +66,18 @@ public class ReliefRequest {
 
 
     /**
-     * Creates relief request.
-     * @param requestId request id for this operation
-     * @param type type for this operation
-     * @param description description for this operation
-     * @param location location for this operation
-     * @param numberOfPeopleNeeded number of people needed for this operation
-     * @param numberOfAnimals number of animals for this operation
-     * @param animalNotes animal notes for this operation
-     * @param photoUrl photo url for this operation
-     * @param isSuspicious is suspicious for this operation
-     * @param isDuplicateOf is duplicate of for this operation
-     * @param forHurricane for hurricane for this operation
+     * Creates a submitted relief request and calculates its initial priority.
+     * @param requestId unique identifier of the relief request
+     * @param type kind of relief assistance requested
+     * @param description description of the household situation and requested help
+     * @param location full street address where help is needed
+     * @param numberOfPeopleNeeded number of people needing assistance
+     * @param numberOfAnimals number of accompanying animals
+     * @param animalNotes description of accompanying animals
+     * @param photoUrl address of an optional supporting photo
+     * @param isSuspicious whether the request has been flagged for review
+     * @param isDuplicateOf original request, or null when no duplicate is known
+     * @param forHurricane associated hurricane event, or null when none is selected
      */
     public ReliefRequest(UUID requestId, RequestType type, String description, String location, int numberOfPeopleNeeded,
         int numberOfAnimals, String animalNotes, String photoUrl, boolean isSuspicious, ReliefRequest isDuplicateOf, HurricaneEvent forHurricane) {
@@ -109,8 +109,8 @@ public class ReliefRequest {
     }
 
     /**
-     * Add detail.
-     * @param detail detail for this operation
+     * Appends a nonblank detail to the description on a new line.
+     * @param detail nonblank text to append to the request description
      */
     public void addDetail(String detail) {
         if (detail == null || detail.trim().isEmpty()) {
@@ -124,7 +124,7 @@ public class ReliefRequest {
     }
 
     /**
-     * Flag as suspicious.
+     * Flags the request for review without changing its workflow status.
      */
     public void flagAsSuspicious() {
         setSuspicious(true);
@@ -134,7 +134,7 @@ public class ReliefRequest {
      * Lets a volunteer take this request. It only works when the request has
      * not been claimed yet and the volunteer is available and verified.
      * The volunteer is then marked as on assignment.
-     * @param volunteer volunteer for this operation
+     * @param volunteer volunteer attempting to claim or start the assignment
      */
     public void claimRequest(VolunteerProfile volunteer) {
         if (status != RequestStatus.SUBMITTED || volunteer == null || !volunteer.canClaimRequests() || !isForVolunteers() || hasOpenOriginal()) {
@@ -146,9 +146,9 @@ public class ReliefRequest {
     }
 
     /**
-     * Medical and hazard requests start at HIGH, shelter and food at MEDIUM,
-     * and everything else at LOW. Large groups move up one level.
-     * @return the result of calculate priority
+     * Medical needs, medical requests and hazards start at HIGH; shelter and food start at MEDIUM.
+     * Other requests start at LOW. Large groups move up one level.
+     * @return calculated urgency, raised for medical needs and groups of at least LARGE_GROUP_SIZE
      */
     public PriorityLevel calculatePriority() {
         PriorityLevel level;
@@ -165,16 +165,16 @@ public class ReliefRequest {
         return level;
     }
     /**
-     * Is open.
-     * @return whether is open
+     * Checks whether the request is submitted, assigned or in progress.
+     * @return true if the request has not been fulfilled or cancelled
      */
     public boolean isOpen() {
         return status == RequestStatus.SUBMITTED || status == RequestStatus.ASSIGNED || status == RequestStatus.IN_PROGRESS;
     }
     
     /**
-     * Is for volunteers.
-     * @return whether is for volunteers
+     * Checks whether this request type is available for volunteer assignments.
+     * @return true for food, transportation, supplies or other assistance
      */
     public boolean isForVolunteers() {
         return type == RequestType.FOOD || type == RequestType.TRANSPORTATION ||
@@ -248,16 +248,16 @@ public class ReliefRequest {
 
     /**
      * A duplicate may enter the queue once its original is no longer open.
-     * @return whether has open original
+     * @return true if this request duplicates an original request that is still open
      */
     public boolean hasOpenOriginal() {
         return isDuplicateOf != null && isDuplicateOf.isOpen();
     }
 
     /**
-     * Start request.
-     * @param volunteer volunteer for this operation
-     * @return true when the operation succeeds
+     * Changes an assigned request to IN_PROGRESS for its assigned volunteer.
+     * @param volunteer volunteer attempting to claim or start the assignment
+     * @return true if the assigned volunteer started the request; false otherwise
      */
     public boolean startRequest(VolunteerProfile volunteer) {
         if (!isAssignedTo(volunteer) || status != RequestStatus.ASSIGNED) return false;
@@ -270,13 +270,17 @@ public class ReliefRequest {
                 && assignedVolunteer.getUserId().equals(volunteer.getUserId());
     }
 
+    /**
+     * Requests a workflow transition using the same rules as normal status changes.
+     * @param status requested workflow state
+     */
     void updateStatus(RequestStatus status) {
         setStatus(status);
     }
 
     /**
-     * Returns the for hurricane.
-     * @return the for hurricane
+     * Returns the hurricane associated with this request.
+     * @return associated hurricane, or null when none is linked
      */
     public HurricaneEvent getForHurricane() {
         return forHurricane;
@@ -371,16 +375,16 @@ public class ReliefRequest {
     }
 
     /**
-     * Is suspicious.
-     * @return whether is suspicious
+     * Checks whether the request has been flagged for review.
+     * @return true if the suspicious flag is set
      */
     public boolean isSuspicious() {
         return isSuspicious;
     }
 
     /**
-     * Returns the is duplicate of.
-     * @return the is duplicate of
+     * Returns the original request when this request is a duplicate.
+     * @return original request, or null when no duplicate is linked
      */
     public ReliefRequest getIsDuplicateOf() {
         return isDuplicateOf;
@@ -388,14 +392,14 @@ public class ReliefRequest {
 
     /**
      * Sets the request id.
-     * @param requestId request id for this operation
+     * @param requestId unique identifier of the relief request
      */
     public void setRequestId(UUID requestId) {
         this.requestId = requestId;
     }
     /**
      * Sets the type.
-     * @param type type for this operation
+     * @param type kind of relief assistance requested
      */
     public void setType(RequestType type) {
         this.type = type;
@@ -403,13 +407,17 @@ public class ReliefRequest {
     }
     /**
      * Sets the description.
-     * @param description description for this operation
+     * @param description description of the household situation and requested help
      */
     public void setDescription(String description) {
         this.description = description;
     }
 
-    /** Enforces transitions during normal use. Loading uses restoreStatus. */
+    /**
+     * Applies a permitted workflow transition and releases the volunteer when work ends.
+     * Loading uses {@link #restoreStatus(RequestStatus)} instead.
+     * @param next requested workflow state; invalid transitions are ignored
+     */
     @SuppressWarnings("deprecation")
     void setStatus(RequestStatus next) {
         if (next == null) return;
@@ -433,7 +441,10 @@ public class ReliefRequest {
         }
     }
 
-    /** Restores persisted state without replaying workflow side effects. */
+    /**
+     * Restores persisted state without replaying workflow side effects.
+     * @param saved stored workflow state; legacy COMPLETE is normalized to FULFILLED
+     */
     @SuppressWarnings("deprecation")
     void restoreStatus(RequestStatus saved) {
         status = saved == RequestStatus.COMPLETE ? RequestStatus.FULFILLED : saved;
@@ -441,7 +452,7 @@ public class ReliefRequest {
 
     /**
      * Sets the priority.
-     * @param priority priority for this operation
+     * @param priority urgency level to store
      */
     public void setPriority(PriorityLevel priority) {
         this.priority = priority;
@@ -449,7 +460,7 @@ public class ReliefRequest {
 
     /**
      * Sets the date submitted.
-     * @param dateSubmitted date submitted for this operation
+     * @param dateSubmitted time when the request was submitted
      */
     public void setDateSubmitted(Date dateSubmitted) {
         this.dateSubmitted = dateSubmitted;
@@ -457,7 +468,7 @@ public class ReliefRequest {
 
     /**
      * Sets the location.
-     * @param location location for this operation
+     * @param location full street address where help is needed
      */
     public void setLocation(String location) {
         this.location = location;
@@ -465,7 +476,7 @@ public class ReliefRequest {
 
     /**
      * Sets the number of people needed.
-     * @param numberOfPeopleNeeded number of people needed for this operation
+     * @param numberOfPeopleNeeded number of people needing assistance
      */
     public void setNumberOfPeopleNeeded(int numberOfPeopleNeeded) {
         this.numberOfPeopleNeeded = numberOfPeopleNeeded;
@@ -474,7 +485,7 @@ public class ReliefRequest {
 
     /**
      * Sets the number of animals.
-     * @param numberOfAnimals number of animals for this operation
+     * @param numberOfAnimals number of accompanying animals
      */
     public void setNumberOfAnimals(int numberOfAnimals) {
         this.numberOfAnimals = numberOfAnimals;
@@ -482,7 +493,7 @@ public class ReliefRequest {
 
     /**
      * Sets the animal notes.
-     * @param animalNotes animal notes for this operation
+     * @param animalNotes description of accompanying animals
      */
     public void setAnimalNotes(String animalNotes) {
         this.animalNotes = animalNotes;
@@ -490,51 +501,51 @@ public class ReliefRequest {
 
     /**
      * Sets the photo url.
-     * @param photoUrl photo url for this operation
+     * @param photoUrl address of an optional supporting photo
      */
     public void setPhotoUrl(String photoUrl) {
         this.photoUrl = photoUrl;
     }
 
     /**
-     * Sets the suspicious.
-     * @param isSuspicious is suspicious for this operation
+     * Updates the request's review flag.
+     * @param isSuspicious whether the request has been flagged for review
      */
     public void setSuspicious(boolean isSuspicious) {
         this.isSuspicious = isSuspicious;
     }
 
     /**
-     * Sets the is duplicate of.
-     * @param isDuplicateOf is duplicate of for this operation
+     * Links this request to its original when a duplicate is identified.
+     * @param isDuplicateOf original request, or null when no duplicate is known
      */
     public void setIsDuplicateOf(ReliefRequest isDuplicateOf) {
         this.isDuplicateOf = isDuplicateOf;
     }
 
     /**
-     * Sets the for hurricane.
-     * @param forHurricane for hurricane for this operation
+     * Links this request to a hurricane event.
+     * @param forHurricane associated hurricane event, or null when none is selected
      */
     public void setForHurricane(HurricaneEvent forHurricane) {
         this.forHurricane = forHurricane;
     }
 
     /**
-     * Returns the submitted by.
-     * @return the submitted by
+     * Returns the account that submitted the request.
+     * @return submitting account, or null for legacy requests without an owner
      */
     public User getSubmittedBy() { return submittedBy; }
 
     /**
-     * Sets the submitted by.
-     * @param user user for this operation
+     * Records which account submitted the request.
+     * @param user account that submitted this request
      */
     public void setSubmittedBy(User user) { submittedBy = user; }
 
     /**
      * Returns the assigned volunteer.
-     * @return the assigned volunteer
+     * @return assigned volunteer profile, or null before assignment
      */
     public VolunteerProfile getAssignedVolunteer() {
         return assignedVolunteer;
@@ -542,7 +553,7 @@ public class ReliefRequest {
 
     /**
      * Sets the assigned volunteer.
-     * @param assignedVolunteer assigned volunteer for this operation
+     * @param assignedVolunteer assigned volunteer profile, or null when unassigned
      */
     public void setAssignedVolunteer(VolunteerProfile assignedVolunteer) {
         this.assignedVolunteer = assignedVolunteer;
@@ -551,7 +562,7 @@ public class ReliefRequest {
 
     /**
      * Formats this object for display.
-     * @return the result of to string
+     * @return request details, workflow status, priority and linked hurricane
      */
     @Override 
     public String toString() {

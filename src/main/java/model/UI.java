@@ -7,7 +7,7 @@ import java.util.Scanner;
 import java.util.ArrayList;
 
 /**
- * Starts the terminal app and shelter map.
+ * Presents interactive terminal menus and delegates user actions to {@link HurricaneReliefApp}.
  * @author Team Tech-vengers
  */
 public class UI {
@@ -313,15 +313,15 @@ public class UI {
     private HurricaneReliefApp app = new HurricaneReliefApp();
 
     /**
-     * Creates ui.
-     * @param app app for this operation
+     * Creates the terminal interface for the supplied application facade.
+     * @param app application facade used by the terminal menus
      */
     public UI(HurricaneReliefApp app) {
         this.app = app;
     }
 
     /**
-     * Run.
+     * Displays terminal menus until the user exits, saving changes after menu actions.
      */
     public void run() {
         scanner = new Scanner(System.in);
@@ -347,8 +347,8 @@ public class UI {
 
 
     /**
-     * Starts this application entry point.
-     * @param args args for this operation
+     * Loads the saved data and starts the interactive terminal menus.
+     * @param args command-line arguments; unused by this entry point
      */
     public static void main(String[] args) {
         HurricaneReliefApp app = new HurricaneReliefApp();

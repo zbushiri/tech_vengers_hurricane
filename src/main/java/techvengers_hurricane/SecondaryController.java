@@ -4,12 +4,12 @@ import java.io.IOException;
 import javafx.fxml.FXML;
 
 /**
- * secondary controller in the relief application.
+ * Handles navigation from the secondary JavaFX template screen to the primary screen.
  * @author Team Tech-vengers
  */
 public class SecondaryController {
     /**
-     * Creates a SecondaryController instance.
+     * Creates the controller for the secondary template screen.
      */
     public SecondaryController() { }
 

@@ -22,14 +22,14 @@ public class Shelter {
     private int petCapacity = 0;
 
     /**
-     * Creates shelter.
-     * @param shelterID shelter id for this operation
-     * @param name name for this operation
-     * @param address address for this operation
-     * @param capacity capacity for this operation
-     * @param occupancy occupancy for this operation
-     * @param status status for this operation
-     * @param accomodations accomodations for this operation
+     * Creates a shelter with its identity, human capacity, operating status and services.
+     * @param shelterID shelter's unique identifier
+     * @param name shelter's display name
+     * @param address shelter's street address
+     * @param capacity maximum number of human occupants
+     * @param occupancy current number of human occupants; pets are counted separately
+     * @param status shelter operating status to store or compare
+     * @param accomodations services available at the shelter
      */
     public Shelter(UUID shelterID, String name, String address, int capacity,
         int occupancy, ShelterStatus status, ArrayList<Accommodation> accomodations) {
@@ -49,8 +49,8 @@ public class Shelter {
      * coordinator may do this.
      * 
      * @return true if the status was changed
-     * @param status status for this operation
-     * @param requestedBy requested by for this operation
+     * @param status shelter operating status to store or compare
+     * @param requestedBy operator or coordinator requesting the change
      */
     public boolean updateStatus(ShelterStatus status, User requestedBy) {
         if (status == null || !canManage(requestedBy)) {
@@ -67,8 +67,8 @@ public class Shelter {
      * may do this.
      * 
      * @return true if the accommodation was added
-     * @param accommodation accommodation for this operation
-     * @param requestedBy requested by for this operation
+     * @param accommodation shelter service to require or add
+     * @param requestedBy operator or coordinator requesting the change
      */
     public boolean addAccommodation(Accommodation accommodation, User requestedBy) {
         if (accommodation == null || !canManage(requestedBy)) {
@@ -87,9 +87,9 @@ public class Shelter {
     }
 
     /**
-     * Report status flag.
-     * @param status status for this operation
-     * @param reportedBy reported by for this operation
+     * Prints a status report and its reporter; reports are not yet persisted.
+     * @param status shelter operating status to store or compare
+     * @param reportedBy user reporting the status, or null for an unknown reporter
      */
     public void reportStatusFlag(ShelterStatus status, User reportedBy) {
         // TODO:Log the status flag report
@@ -101,8 +101,8 @@ public class Shelter {
     /**
      * Operators are matched by username, since the operator list may hold
      * a different User object than the one that is logged in.
-     * @param user user for this operation
-     * @return whether is shelter operator
+     * @param user account to check against the shelter operator list
+     * @return true if the user's username matches a listed operator, ignoring case
      */
     public boolean isShelterOperator(User user) {
         if (shelterOperators == null || user == null || user.getUsername() == null) {
@@ -165,7 +165,10 @@ public class Shelter {
      * @return saved household admissions; legacy aggregate occupancy may have no names
      */
     public List<ShelterAdmission> getAdmissions() { return List.copyOf(admissions); }
-    /** @param saved persisted admissions; occupancy is already saved separately */
+    /**
+     * Restores admissions without increasing the separately persisted occupancy again.
+     * @param saved household admissions read from the shelter JSON file
+     */
     void restoreAdmissions(List<ShelterAdmission> saved) { admissions.clear(); admissions.addAll(saved); }
     /**
      * Returns the occupants.
@@ -202,8 +205,8 @@ public class Shelter {
     }
 
     /**
-     * Has space.
-     * @return whether has space
+     * Checks whether the shelter is open and has at least one unused human bed.
+     * @return true if the status is OPEN and human occupancy is below capacity
      */
     public boolean hasSpace() {
         return status == ShelterStatus.OPEN && occupancy < capacity;
@@ -219,7 +222,7 @@ public class Shelter {
 
     /**
      * Sets the shelter id.
-     * @param shelterId shelter id for this operation
+     * @param shelterId shelter's unique identifier
      */
     public void setShelterId(UUID shelterId) {
         this.shelterId = shelterId;
@@ -235,7 +238,7 @@ public class Shelter {
 
     /**
      * Sets the name.
-     * @param name name for this operation
+     * @param name shelter's display name
      */
     public void setName(String name) {
         this.name = name;
@@ -251,7 +254,7 @@ public class Shelter {
 
     /**
      * Sets the address.
-     * @param address address for this operation
+     * @param address shelter's street address
      */
     public void setAddress(String address) {
         this.address = address;
@@ -267,7 +270,7 @@ public class Shelter {
 
     /**
      * Sets the capacity.
-     * @param capacity capacity for this operation
+     * @param capacity maximum number of human occupants
      */
     public void setCapacity(int capacity) {
         this.capacity = capacity;
@@ -284,7 +287,7 @@ public class Shelter {
     /**
      * Sets how many people are in the shelter. An open shelter that reaches
      * capacity becomes FULL, and a full shelter with space again reopens.
-     * @param occupancy occupancy for this operation
+     * @param occupancy current number of human occupants; pets are counted separately
      */
     public void setOccupancy(int occupancy) {
         this.occupancy = Math.max(0, occupancy);
@@ -305,7 +308,7 @@ public class Shelter {
 
     /**
      * Sets the status.
-     * @param status status for this operation
+     * @param status shelter operating status to store or compare
      */
     public void setStatus(ShelterStatus status) {
         this.status = status;
@@ -321,7 +324,7 @@ public class Shelter {
 
     /**
      * Sets the accommodations.
-     * @param accommodations accommodations for this operation
+     * @param accommodations services available at the shelter
      */
     public void setAccommodations(List<Accommodation> accommodations) {
         this.accommodations = accommodations;
@@ -337,7 +340,7 @@ public class Shelter {
 
     /**
      * Sets the last updated.
-     * @param lastUpdated last updated for this operation
+     * @param lastUpdated time when the shelter's information was last updated
      */
     public void setLastUpdated(LocalDateTime lastUpdated) {
         this.lastUpdated = lastUpdated;
@@ -353,7 +356,7 @@ public class Shelter {
 
     /**
      * Sets the shelter operators.
-     * @param shelterOperators shelter operators for this operation
+     * @param shelterOperators accounts assigned to manage this shelter
      */
     public void setShelterOperators(ArrayList<User> shelterOperators) {
         this.shelterOperators = shelterOperators;
@@ -361,7 +364,7 @@ public class Shelter {
 
     /**
      * Formats this object for display.
-     * @return the result of to string
+     * @return shelter identity, address, capacity, occupancy, services and operators
      */
     @Override 
     public String toString() {

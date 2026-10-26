@@ -6,19 +6,19 @@ package model;
  */
 public enum AccountRole {
     /**
-     * resident.
+     * Resident who can request assistance and report safety information.
      */
     RESIDENT,
     /**
-     * volunteer.
+     * Volunteer who can claim eligible requests and transport households.
      */
     VOLUNTEER,
     /**
-     * shelter operator.
+     * Shelter manager who can check in households and complete eligible requests.
      */
     SHELTER_OPERATOR,
     /**
-     * coordinator.
+     * Coordinator with oversight of volunteer verification and relief operations.
      */
     COORDINATOR
 }

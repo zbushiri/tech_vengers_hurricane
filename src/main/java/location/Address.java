@@ -2,7 +2,7 @@ package location;
 
 
 /**
- * address in the relief application.
+ * A street address that can be parsed, displayed and geocoded.
  * @author Team Tech-vengers
  */
 public class Address {
@@ -12,11 +12,11 @@ public class Address {
     private String zip;
 
     /**
-     * Creates address.
-     * @param street street for this operation
-     * @param city city for this operation
-     * @param state state for this operation
-     * @param zip zip for this operation
+     * Creates a street address from its postal components.
+     * @param street street number and street name
+     * @param city city or town name
+     * @param state state abbreviation
+     * @param zip postal ZIP code
      */
     public Address(String street, String city, String state, String zip){
         this.street = street;
@@ -58,8 +58,8 @@ public class Address {
     }
 
     /**
-     * Returns the coordinates.
-     * @return the coordinates
+     * Geocodes this address, printing any lookup failure.
+     * @return coordinates returned by the mapping service, or null if lookup fails
      */
     public Coordinates getCoordinates() {
         try {
@@ -72,7 +72,7 @@ public class Address {
 
     /**
      * Formats this object for display.
-     * @return the result of to string
+     * @return street address formatted as street, city, state and ZIP
      */
     public String toString() {
         return String.format("%s, %s, %s %s", street, city, state, zip);

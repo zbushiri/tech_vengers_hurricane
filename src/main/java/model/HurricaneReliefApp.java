@@ -23,7 +23,7 @@ public class HurricaneReliefApp {
     private final location.RoutingService routes;
 
     /**
-     * Creates hurricane relief app.
+     * Creates the application facade using the live mapping service.
      */
     public HurricaneReliefApp() { this(location.MapTools.getInstance()); }
 
@@ -65,7 +65,7 @@ public class HurricaneReliefApp {
 
     /**
      * Writes users, shelters and requests back to the JSON files.
-     * @return true when the operation succeeds
+     * @return true only if users, shelters and requests were all saved successfully
      */
     public boolean saveData() {
         boolean usersSaved = userList.save();
@@ -75,10 +75,10 @@ public class HurricaneReliefApp {
     }
 
     /**
-     * Login.
-     * @param username username for this operation
-     * @param password password for this operation
-     * @return true when the operation succeeds
+     * Authenticates an account and makes it the current user.
+     * @param username account username, matched without regard to case
+     * @param password password text compared directly with the stored value; no hashing is performed
+     * @return true if the credentials matched an account; false otherwise
      */
     public boolean login(String username, String password) {
         User user = userList.getUser(username, password);
@@ -92,17 +92,17 @@ public class HurricaneReliefApp {
     }
 
     /**
-     * Search by proximity.
-     * @param location location for this operation
-     * @param maxDistance max distance for this operation
-     * @return the result of search by proximity
+     * Finds open shelters within the specified driving distance.
+     * @param location full street address where help is needed
+     * @param maxDistance maximum driving distance in miles
+     * @return eligible shelters ordered by driving distance
      */
     public ArrayList<Shelter> searchByProximity(String location, double maxDistance) {
         return shelterList.searchByProximity(location, maxDistance);
     }
 
     /**
-     * Logout.
+     * Logs out the current user and clears the active session.
      */
     public void logout() {
         if (currentUser == null) {
@@ -122,8 +122,8 @@ public class HurricaneReliefApp {
     }
 
     /**
-     * Is logged in.
-     * @return whether is logged in
+     * Checks whether an account is currently signed in.
+     * @return true if there is a current user
      */
     public boolean isLoggedIn() {
         return currentUser != null;
@@ -133,9 +133,9 @@ public class HurricaneReliefApp {
      * Creates an account through AccountFactory and adds it to UserList.
      * See AccountFactory for the keys details can hold.
      * 
-     * @return false if details are missing or the username is taken
-     * @param role role for this operation
-     * @param details details for this operation
+     * @return true if the new account was added; false if required fields are missing or the username is taken
+     * @param role account role to create or check
+     * @param details account fields described in {@link AccountFactory}
      */
     public boolean createAccount(AccountRole role, Map<String, ?> details) {
         User user = AccountFactory.createAccount(role, details);
@@ -153,16 +153,16 @@ public class HurricaneReliefApp {
 
     /**
      * Creates an account from the original terminal UI fields.
-     * @param firstName first name for this operation
-     * @param lastName last name for this operation
-     * @param email email for this operation
-     * @param phoneNumber phone number for this operation
-     * @param address address for this operation
-     * @param username username for this operation
-     * @param password password for this operation
-     * @param roles roles for this operation
-     * @param lastKnownLocation last known location for this operation
-     * @return true when the operation succeeds
+     * @param firstName account holder's first name
+     * @param lastName account holder's last name
+     * @param email contact email address
+     * @param phoneNumber contact telephone number
+     * @param address account holder's street address
+     * @param username account username, matched without regard to case
+     * @param password password text compared directly with the stored value; no hashing is performed
+     * @param roles account roles that determine available actions
+     * @param lastKnownLocation most recently reported location or address
+     * @return true if the new account was added; false if required fields are missing or the username is taken
      */
     public boolean createAccount(String firstName, String lastName, String email,
             String phoneNumber, String address, String username, String password,
@@ -177,10 +177,10 @@ public class HurricaneReliefApp {
      * linked to the active hurricane, if there is one.
      * 
      * @return false if nobody is logged in or the details are missing
-     * @param type type for this operation
-     * @param description description for this operation
-     * @param location location for this operation
-     * @param numberOfPeopleNeeded number of people needed for this operation
+     * @param type kind of relief assistance requested
+     * @param description description of the household situation and requested help
+     * @param location full street address where help is needed
+     * @param numberOfPeopleNeeded number of people needing assistance
      */
     public boolean submitReliefRequest(RequestType type, String description, String location,
                                        int numberOfPeopleNeeded) {
@@ -206,9 +206,9 @@ public class HurricaneReliefApp {
     /**
      * Finds shelters near a location. With no location, the logged in
      * user's own location or address is used.
-     * @param location location for this operation
-     * @param radiusMiles radius miles for this operation
-     * @return the result of find nearest shelters
+     * @param location full street address where help is needed
+     * @param radiusMiles maximum driving distance in miles when an explicit address is provided
+     * @return open shelters within the driving radius, ordered by distance; a blank location uses the current user and the default radius
      */
     public List<Shelter> findNearestShelters(String location, double radiusMiles) {
         if ((location == null || location.trim().isEmpty()) && currentUser != null) {
@@ -219,7 +219,7 @@ public class HurricaneReliefApp {
 
     
     /**
-     * Mark safe.
+     * Marks the signed-in user safe and records the update time.
      */
     public void markSafe() {
         if (currentUser == null) {
@@ -271,7 +271,7 @@ public class HurricaneReliefApp {
      * Lets the logged in volunteer claim a request.
      * 
      * @return false if the user is not a volunteer or cannot take the request
-     * @param requestId request id for this operation
+     * @param requestId unique identifier of the relief request
      */
     public boolean claimRequest(UUID requestId) {
         if (currentUser == null || !(currentUser.getRoles().contains(AccountRole.VOLUNTEER))) {
@@ -297,7 +297,7 @@ public class HurricaneReliefApp {
      * requests. Only a coordinator or shelter operator may do this.
      * 
      * @return false if the user may not verify or the volunteer was not found
-     * @param username username for this operation
+     * @param username account username, matched without regard to case
      */
     public boolean verifyVolunteer(String username) {
         if (currentUser == null || !canVerifyVolunteers()) {
@@ -317,17 +317,17 @@ public class HurricaneReliefApp {
     }
 
     /**
-     * Can verify volunteers.
-     * @return whether can verify volunteers
+     * Checks whether the current account may verify volunteer background checks.
+     * @return true if the current user is a coordinator or shelter operator
      */
     public boolean canVerifyVolunteers() {
         return currentUser != null && (currentUser.hasRole(AccountRole.COORDINATOR) || currentUser.hasRole(AccountRole.SHELTER_OPERATOR));
     }
 
     /**
-     * Complete request.
-     * @param requestId request id for this operation
-     * @return true when the operation succeeds
+     * Completes a request only for an authorized destination manager or coordinator after any required shelter check-in.
+     * @param requestId unique identifier of the relief request
+     * @return true if the authorized user completed an active assignment; false if permission or check-in requirements were not met
      */
     public boolean completeRequest(UUID requestId) {
         if (currentUser == null || (!currentUser.hasRole(AccountRole.SHELTER_OPERATOR)
@@ -345,8 +345,8 @@ public class HurricaneReliefApp {
     }
 
     /**
-     * Returns the my assignments.
-     * @return the my assignments
+     * Finds the signed-in volunteer's assigned and in-progress requests.
+     * @return current assignments, or an empty list when the user is not a volunteer
      */
     public ArrayList<ReliefRequest> getMyAssignments() {
         ArrayList<ReliefRequest> myAssignments = new ArrayList<>();
@@ -383,9 +383,9 @@ public class HurricaneReliefApp {
     }
 
     /**
-     * Cancel request.
-     * @param requestId request id for this operation
-     * @return whether cancel request
+     * Cancels an open request owned by the signed-in user.
+     * @param requestId unique identifier of the relief request
+     * @return true if the owner cancelled an open request; false if it was missing, closed or owned by someone else
      */
     public boolean cancelRequest(UUID requestId) {
         if (currentUser == null) return false;
@@ -402,9 +402,9 @@ public class HurricaneReliefApp {
     }
 
     /**
-     * Start request.
-     * @param requestId request id for this operation
-     * @return true when the operation succeeds
+     * Starts work on the signed-in volunteer's assigned request.
+     * @param requestId unique identifier of the relief request
+     * @return true if the assignment changed to IN_PROGRESS; false if it could not be started
      */
     public boolean startRequest(UUID requestId) {
         if (currentUser == null) return false;
@@ -542,7 +542,7 @@ public class HurricaneReliefApp {
     }
 
     /**
-     * Check in.
+     * Checks an assigned household into a shelter managed by the signed-in user.
      * @param requestId household request
      * @param shelter destination shelter
      * @return whether the authorized manager checked the household in

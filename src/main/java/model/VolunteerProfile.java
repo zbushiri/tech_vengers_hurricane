@@ -15,12 +15,12 @@ public class VolunteerProfile extends User {
     private AvailabilityStatus availabilityStatus;
 
     /**
-     * Creates volunteer profile.
-     * @param skills skills for this operation
-     * @param equipment equipment for this operation
-     * @param backgroundCheckStatus background check status for this operation
-     * @param transportationAccess transportation access for this operation
-     * @param availabilityStatus availability status for this operation
+     * Creates a volunteer profile with an initially empty username and password.
+     * @param skills volunteer's specialties, including request-type names used for matching
+     * @param equipment equipment available to the volunteer
+     * @param backgroundCheckStatus volunteer's background-check result
+     * @param transportationAccess whether the volunteer has access to transportation
+     * @param availabilityStatus volunteer's current availability
      */
     public VolunteerProfile(List<String> skills, List<String> equipment,
             BackgroundCheckStatus backgroundCheckStatus, boolean transportationAccess,
@@ -32,13 +32,13 @@ public class VolunteerProfile extends User {
     }
 
     /**
-     * Creates volunteer profile.
-     * @param user user for this operation
-     * @param skills skills for this operation
-     * @param equipment equipment for this operation
-     * @param backgroundCheckStatus background check status for this operation
-     * @param transportationAccess transportation access for this operation
-     * @param availabilityStatus availability status for this operation
+     * Copies the existing account into a volunteer profile with its specialties and availability.
+     * @param user existing account whose identity and profile are copied
+     * @param skills volunteer's specialties, including request-type names used for matching
+     * @param equipment equipment available to the volunteer
+     * @param backgroundCheckStatus volunteer's background-check result
+     * @param transportationAccess whether the volunteer has access to transportation
+     * @param availabilityStatus volunteer's current availability
      */
     public VolunteerProfile(User user, List<String> skills, List<String> equipment,
             BackgroundCheckStatus backgroundCheckStatus, boolean transportationAccess,
@@ -63,15 +63,15 @@ public class VolunteerProfile extends User {
     }
 
     /**
-     * Returns the volunteer profile.
-     * @return the volunteer profile
+     * Returns this account's volunteer profile.
+     * @return this volunteer profile
      */
     @Override
     public VolunteerProfile getVolunteerProfile() { return this; }
 
     /**
-     * Can claim requests.
-     * @return whether can claim requests
+     * Checks the availability and background-check conditions for claiming work.
+     * @return true if the volunteer is AVAILABLE and the background check is VERIFIED
      */
     public boolean canClaimRequests() {
         return availabilityStatus == AvailabilityStatus.AVAILABLE
@@ -79,7 +79,7 @@ public class VolunteerProfile extends User {
     }
     /**
      * Sets the availability.
-     * @param value value for this operation
+     * @param value replacement availability for volunteer assignments
      */
     public void setAvailability(AvailabilityStatus value) { availabilityStatus = value; }
     /**
@@ -98,8 +98,8 @@ public class VolunteerProfile extends User {
      */
     public BackgroundCheckStatus getBackgroundCheckStatus() { return backgroundCheckStatus; }
     /**
-     * Has transportation access.
-     * @return whether has transportation access
+     * Checks whether the volunteer has access to transportation.
+     * @return true if transportation access is recorded
      */
     public boolean hasTransportationAccess() { return transportationAccess; }
     /**
@@ -109,27 +109,27 @@ public class VolunteerProfile extends User {
     public AvailabilityStatus getAvailabilityStatus() { return availabilityStatus; }
     /**
      * Sets the skills.
-     * @param value value for this operation
+     * @param value replacement volunteer's specialties
      */
     public void setSkills(List<String> value) { skills = value; }
     /**
      * Sets the equipment.
-     * @param value value for this operation
+     * @param value replacement equipment available to the volunteer
      */
     public void setEquipment(List<String> value) { equipment = value; }
     /**
      * Sets the background check status.
-     * @param value value for this operation
+     * @param value replacement background-check result
      */
     public void setBackgroundCheckStatus(BackgroundCheckStatus value) { backgroundCheckStatus = value; }
     /**
      * Sets the transportation access.
-     * @param value value for this operation
+     * @param value replacement whether transportation is available to the volunteer
      */
     public void setTransportationAccess(boolean value) { transportationAccess = value; }
     /**
      * Sets the availability status.
-     * @param value value for this operation
+     * @param value replacement availability for volunteer assignments
      */
     public void setAvailabilityStatus(AvailabilityStatus value) { availabilityStatus = value; }
 }
