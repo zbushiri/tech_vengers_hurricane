@@ -3,19 +3,9 @@
   "configurations": [
     {
       "type": "java",
-      "name": "ScenarioUI",
+      "name": "MapUI",
       "request": "launch",
-      "mainClass": "techvengers_hurricane/model.ScenarioUI",
-      "projectName": "hurricanejavafx",
-      "cwd": "${workspaceFolder}",
-      "envFile": "${workspaceFolder}/.env",
-      "args": "--data-dir=demo-data/take-5"
-    },
-    {
-      "type": "java",
-      "name": "UI",
-      "request": "launch",
-      "mainClass": "model.UI",
+      "mainClass": "techvengers_hurricane/model.MapUI",
       "projectName": "hurricanejavafx",
       "cwd": "${workspaceFolder}",
       "envFile": "${workspaceFolder}/.env",
@@ -23,9 +13,19 @@
     },
     {
       "type": "java",
-      "name": "MapUI",
+      "name": "ScenarioUI",
       "request": "launch",
-      "mainClass": "model.MapUI",
+      "mainClass": "techvengers_hurricane/model.ScenarioUI",
+      "projectName": "hurricanejavafx",
+      "cwd": "${workspaceFolder}",
+      "envFile": "${workspaceFolder}/.env",
+      "args": "--data-dir=demo-data/take-6"
+    },
+    {
+      "type": "java",
+      "name": "UI",
+      "request": "launch",
+      "mainClass": "model.UI",
       "projectName": "hurricanejavafx",
       "cwd": "${workspaceFolder}",
       "envFile": "${workspaceFolder}/.env",
@@ -50,7 +50,7 @@
       "cwd": "${workspaceFolder}",
       "envFile": "${workspaceFolder}/.env",
       "vmArgs": "--enable-native-access=javafx.graphics",
-      "args": "--data-dir=demo-data/take-5"
+      "args": "--data-dir=demo-data/take-6"
     },
     {
       "type": "java",
@@ -61,7 +61,7 @@
       "cwd": "${workspaceFolder}",
       "envFile": "${workspaceFolder}/.env",
       "vmArgs": "--enable-native-access=javafx.graphics",
-      "args": "--verify --data-dir=demo-data/take-5"
+      "args": "--verify --data-dir=demo-data/take-6"
     }
   ]
 }
