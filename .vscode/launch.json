@@ -3,6 +3,16 @@
   "configurations": [
     {
       "type": "java",
+      "name": "ScenarioUI",
+      "request": "launch",
+      "mainClass": "techvengers_hurricane/model.ScenarioUI",
+      "projectName": "hurricanejavafx",
+      "cwd": "${workspaceFolder}",
+      "envFile": "${workspaceFolder}/.env",
+      "args": "--data-dir=demo-data/take-3"
+    },
+    {
+      "type": "java",
       "name": "UI",
       "request": "launch",
       "mainClass": "model.UI",
@@ -39,7 +49,8 @@
       "projectName": "hurricanejavafx",
       "cwd": "${workspaceFolder}",
       "envFile": "${workspaceFolder}/.env",
-      "vmArgs": "--enable-native-access=javafx.graphics"
+      "vmArgs": "--enable-native-access=javafx.graphics",
+      "args": "--data-dir=demo-data/take-3"
     },
     {
       "type": "java",
@@ -50,7 +61,7 @@
       "cwd": "${workspaceFolder}",
       "envFile": "${workspaceFolder}/.env",
       "vmArgs": "--enable-native-access=javafx.graphics",
-      "args": "--verify"
+      "args": "--verify --data-dir=demo-data/take-3"
     }
   ]
 }
