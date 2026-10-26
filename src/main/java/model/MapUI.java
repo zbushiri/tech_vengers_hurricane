@@ -1,5 +1,7 @@
 package model;
 
+import java.util.ArrayList; 
+
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -56,25 +58,22 @@ public class MapUI extends Application {
         worker.start();
     }
 
-    /** Gets the shelter information without freezing the window. */
-    private void loadShelter() {
-        Address userAddress = new Address("1 Vendue Range", "Charleston", "SC", "29401");
-        Address[] shelters = {
-                new Address("2950 Carner Avenue", "North Charleston", "SC", "29405"),
-                new Address("5200 Lackawanna Boulevard", "North Charleston", "SC", "29405"),
-                new Address("3841 Leeds Avenue", "North Charleston", "SC", "29405"),
-                new Address("3625 Ashley Phosphate Road", "North Charleston", "SC", "29418"),
-                new Address("6401 Dorchester Road", "North Charleston", "SC", "29418"),
-                new Address("1624 State Road", "Summerville", "SC", "29483"),
-                new Address("1053 Russellville Road", "St. Stephen", "SC", "29479"),
-                new Address("200 Macedonia Foxes Circle", "St. Stephen", "SC", "29479"),
-                new Address("101 Westview Boulevard", "Goose Creek", "SC", "29445"),
-                new Address("1101 Boone Hill Road", "Summerville", "SC", "29483")
-        };
 
+
+    /** Finds the closest real shelter and gets directions to it. */
+    private void loadShelter() {
+        Address userAddress = new Address("80 Broad Street", "Charleston", "SC", "29401");
+        
         try {
+            ShelterList shelterList = DataLoader.getShelters(); 
+            Shelter closest = shelterList.findClosestShelter(userAddress, new ArrayList<>(), 1);
+            if (closest == null) {
+                updateStatus("No open shelters.");
+                return;
+            }
+            Address shelter = Address.fromString(closest.getAddress());
+
             MapTools tools = MapTools.getInstance();
-            Address shelter = tools.findClosestAddress(userAddress, shelters);
             updateStatus("Loading directions to " + shelter + "...");
             String[] steps = tools.getDrivingDirections(userAddress, shelter);
             DrivingRoute route = tools.getDrivingRoute(userAddress, shelter);
@@ -162,16 +161,27 @@ public class MapUI extends Application {
 
         pen.setFill(Color.web("#2e7d32"));
         pen.fillOval(startX - 7, startY - 7, 14, 14);
-        pen.fillText("Start", startX + 10, startY + 5);
+        double startLabelX = startX + 10;
+        if (startX > map.getWidth() / 2) {
+            startLabelX = startX - 60;
+        }
+        pen.fillText("Start", startLabelX, startY + 5);
         pen.setFill(Color.web("#c62828"));
         pen.fillOval(endX - 7, endY - 7, 14, 14);
-        pen.fillText("Shelter", endX - 55, endY - 12);
+        double shelterLabelX = endX - 70;
+        if (endX < map.getWidth() / 2) {
+            shelterLabelX = endX + 10;
+        }
+        pen.fillText("Shelter", shelterLabelX, endY - 12);
     }
+<<<<<<< HEAD:src/main/java/model/MapUI.java
 
     /**
      * Starts this application entry point.
      * @param args args for this operation
      */
+=======
+>>>>>>> fe1f40d029e12c9993fe5ea4e72e2d7dbf3bacac:techvengers_hurricane/src/main/java/model/MapUI.java
     public static void main(String[] args) {
         launch(args);
     }
