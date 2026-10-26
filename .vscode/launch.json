@@ -9,7 +9,7 @@
       "projectName": "hurricanejavafx",
       "cwd": "${workspaceFolder}",
       "envFile": "${workspaceFolder}/.env",
-      "args": "--data-dir=demo-data/take-3"
+      "args": "--data-dir=demo-data/take-4"
     },
     {
       "type": "java",
@@ -50,7 +50,7 @@
       "cwd": "${workspaceFolder}",
       "envFile": "${workspaceFolder}/.env",
       "vmArgs": "--enable-native-access=javafx.graphics",
-      "args": "--data-dir=demo-data/take-3"
+      "args": "--data-dir=demo-data/take-4"
     },
     {
       "type": "java",
@@ -61,7 +61,7 @@
       "cwd": "${workspaceFolder}",
       "envFile": "${workspaceFolder}/.env",
       "vmArgs": "--enable-native-access=javafx.graphics",
-      "args": "--verify --data-dir=demo-data/take-3"
+      "args": "--verify --data-dir=demo-data/take-4"
     }
   ]
 }
