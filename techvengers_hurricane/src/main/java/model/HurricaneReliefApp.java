@@ -159,6 +159,7 @@ public class HurricaneReliefApp {
         return shelterList.searchByProximity(location, radiusMiles);
     }
 
+    
     public void markSafe() {
         if (currentUser == null) {
             System.out.println("No user is currently logged in.");
