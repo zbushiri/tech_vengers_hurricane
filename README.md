@@ -96,7 +96,7 @@ Update the class and sequence diagrams in `docs/` to reflect these additions bef
 
 ## Presentation
 
-🎥 [YouTube Presentation](PASTE_YOUTUBE_LINK_HERE)
+🎥 [YouTube Presentation](https://youtu.be/24qM7z8QZqo)
 
 ## Project Board
 
