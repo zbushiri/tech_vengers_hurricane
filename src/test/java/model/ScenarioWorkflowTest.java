@@ -196,7 +196,11 @@ public class ScenarioWorkflowTest {
         assertTrue(Files.exists(data.resolve("snapshots/assigned/requests.json")));
         assertTrue(Files.exists(data.resolve("snapshots/checked-in/shelters.json")));
         Path output = data.resolve("restart.log");
-        String classpath = System.getProperty("surefire.test.class.path", System.getProperty("java.class.path"));
+        // Maven uses the classpath; VS Code may put the application and its dependencies on the module path.
+        String classpath = String.join(java.io.File.pathSeparator,
+                Path.of(ScenarioUI.class.getProtectionDomain().getCodeSource().getLocation().toURI()).toString(),
+                System.getProperty("surefire.test.class.path", System.getProperty("java.class.path", "")),
+                System.getProperty("jdk.module.path", ""));
         Process process = new ProcessBuilder(Path.of(System.getProperty("java.home"), "bin", "java").toString(),
                 "-cp", classpath, "model.ScenarioUI", "--verify", "--data-dir=" + data)
                 .redirectErrorStream(true).redirectOutput(output.toFile()).start();
