@@ -45,6 +45,10 @@ class TestUI {
         return createdUser.equals(loginUser);
     }
 
+    public void testScenario1() {
+        
+    }
+
     public static void main(String[] args) {
         TestUI testUI = new TestUI();
         testUI.testCreateValidAccount();
