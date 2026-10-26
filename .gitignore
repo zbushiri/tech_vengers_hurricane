@@ -28,3 +28,8 @@ target/
 
 # Private keys
 .env
+
+# Local scenario runs, exports and generated API documentation
+demo-data/
+trip-sheets/
+trip-sheet*.txt

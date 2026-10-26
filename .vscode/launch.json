@@ -3,34 +3,54 @@
   "configurations": [
     {
       "type": "java",
-      "name": "TestUI",
-      "request": "launch",
-      "mainClass": "techvengers_hurricane/model.TestUI",
-      "projectName": "hurricanejavafx"
-    },
-    {
-      "type": "java",
       "name": "UI",
       "request": "launch",
-      "mainClass": "techvengers_hurricane/model.UI",
-      "projectName": "hurricanejavafx"
+      "mainClass": "model.UI",
+      "projectName": "hurricanejavafx",
+      "cwd": "${workspaceFolder}",
+      "envFile": "${workspaceFolder}/.env",
+      "vmArgs": "--enable-native-access=javafx.graphics"
     },
     {
       "type": "java",
       "name": "MapUI",
       "request": "launch",
-      "mainClass": "techvengers_hurricane/model.MapUI",
-      "projectName": "techvengers_hurricane",
-      "vmArgs": "--enable-native-access=javafx.graphics",
-      "envFile": "${workspaceFolder}/.env"
+      "mainClass": "model.MapUI",
+      "projectName": "hurricanejavafx",
+      "cwd": "${workspaceFolder}",
+      "envFile": "${workspaceFolder}/.env",
+      "vmArgs": "--enable-native-access=javafx.graphics"
     },
     {
       "type": "java",
-      "name": "Run UI",
+      "name": "TestUI",
       "request": "launch",
-      "mainClass": "model.UI",
+      "mainClass": "model.TestUI",
+      "projectName": "hurricanejavafx",
+      "cwd": "${workspaceFolder}",
+      "envFile": "${workspaceFolder}/.env",
+      "vmArgs": "--enable-native-access=javafx.graphics"
+    },
+    {
+      "type": "java",
+      "name": "Scenario",
+      "request": "launch",
+      "mainClass": "model.ScenarioUI",
+      "projectName": "hurricanejavafx",
+      "cwd": "${workspaceFolder}",
+      "envFile": "${workspaceFolder}/.env",
+      "vmArgs": "--enable-native-access=javafx.graphics"
+    },
+    {
+      "type": "java",
+      "name": "Verify saved scenario",
+      "request": "launch",
+      "mainClass": "model.ScenarioUI",
+      "projectName": "hurricanejavafx",
+      "cwd": "${workspaceFolder}",
+      "envFile": "${workspaceFolder}/.env",
       "vmArgs": "--enable-native-access=javafx.graphics",
-      "envFile": "${workspaceFolder}/.env"
+      "args": "--verify"
     }
   ]
 }
