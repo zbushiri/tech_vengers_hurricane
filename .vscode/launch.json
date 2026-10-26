@@ -3,6 +3,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "TestUI",
+      "request": "launch",
+      "mainClass": "techvengers_hurricane/model.TestUI",
+      "projectName": "hurricanejavafx"
+    },
+    {
+      "type": "java",
       "name": "UI",
       "request": "launch",
       "mainClass": "techvengers_hurricane/model.UI",
