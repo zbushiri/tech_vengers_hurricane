@@ -24,6 +24,13 @@
       "mainClass": "model.UI",
       "vmArgs": "--enable-native-access=javafx.graphics",
       "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "type": "java",
+      "name": "Scenario",
+      "request": "launch",
+      "mainClass": "model.ScenarioUI",
+      "envFile": "${workspaceFolder}/.env"
     }
   ]
 }

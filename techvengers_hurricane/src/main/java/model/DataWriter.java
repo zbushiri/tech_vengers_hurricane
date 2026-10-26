@@ -40,6 +40,38 @@ public class DataWriter extends DataConstants {
         return saveRequests(ReliefRequestCatalog.getInstance().getRequests());
     }
 
+    /**
+     * Writes a plain text trip sheet a volunteer can print before a pickup.
+     * 
+     * @param request the request the volunteer is driving for
+     * @param shelter the shelter the family is going to 
+     * @param directions driving directions from the pickup to the shelter
+     * @return true if the file was written 
+     */
+    public static boolean saveTripSheet(ReliefRequest request, Shelter shelter, String[] directions) {
+        String fileName = "trip-sheet.txt";
+        User family = request.getSubmittedBy();
+        try (FileWriter file = new FileWriter(fileName)) {
+            file.write("Gamecock Relief Network - Trip Sheet\n\n");
+            file.write("Volunteer: " + request.getAssignedVolunteer().getFirstName() + " "
+                    + request.getAssignedVolunteer().getLastName() + "\n");
+            file.write("Family: " + family.getFirstName() + " " + family.getLastName()
+                    + ", phone " + family.getPhoneNumber() + "\n");
+            file.write("Pickup: " + request.getLocation() + "\n");
+            file.write("People: " + request.getNumberOfPeopleNeeded() + "\n");
+            file.write("Notes: " + request.getDescription() + "\n\n");
+            file.write("Shelter: " + shelter.getName() + ", " + shelter.getAddress() + "\n\n");
+            file.write("Directions:\n");
+            for (String step : directions) {
+                file.write("  " + step + "\n");
+            }
+            return true;
+        } catch (IOException e) {
+            System.out.println("Could not save " + fileName + ".");
+            return false;
+        }
+    }
+
     private static boolean writeFile(String fileName, JSONArray data) {
         try (FileWriter file = new FileWriter(fileName)) {
             file.write(data.toJSONString());
