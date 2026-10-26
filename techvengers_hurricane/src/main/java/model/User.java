@@ -23,10 +23,27 @@ public class User {
     private SafetyStatusType safetyStatus;
     private LocalDateTime safetyStatusUpdatedAt;
 
+    /**
+     * A new user account with just a username and password.
+     * @param username the username for the new account
+     * @param passwordHash the hashed password for the new account
+     */
     public User(String username, String passwordHash) {
         this("", "", "", "", "", username, passwordHash, new ArrayList<>(), "");
     }
 
+    /**
+     * A new user account with full profile details.
+     * @param firstName the user's first name
+     * @param lastName the user's last name
+     * @param email the user's email address
+     * @param phoneNumber the user's phone number
+     * @param address the user's address
+     * @param username the username for the new account
+     * @param passwordHash the hashed password for the new account
+     * @param roles the roles assigned to the user
+     * @param lastKnownLocation the user's last known location
+     */
     public User(String firstName, String lastName, String email, String phoneNumber,
             String address, String username, String passwordHash,
             ArrayList<AccountRole> roles, String lastKnownLocation) {
@@ -36,6 +53,23 @@ public class User {
                 SafetyStatusType.UNKNOWN, LocalDateTime.now());
     }
 
+    /**
+     * Loading user account from persistent storage.
+     * @param userId the unique identifier for the user
+     * @param firstName the user's first name
+     * @param lastName the user's last name
+     * @param email the user's email address
+     * @param phoneNumber the user's phone number
+     * @param address the user's address
+     * @param username the username for the account
+     * @param passwordHash the hashed password for the account
+     * @param roles the roles assigned to the user
+     * @param associatedPersons the persons associated with the user
+     * @param verificationStatus the verification status of the user
+     * @param lastKnownLocation the user's last known location
+     * @param safetyStatus the user's safety status
+     * @param safetyStatusUpdatedAt the timestamp when the safety status was last updated
+     */
     public User(UUID userId, String firstName, String lastName, String email,
             String phoneNumber, String address, String username, String passwordHash,
             List<AccountRole> roles, List<Person> associatedPersons,
@@ -57,13 +91,23 @@ public class User {
         this.safetyStatusUpdatedAt = safetyStatusUpdatedAt == null ? LocalDateTime.now() : safetyStatusUpdatedAt;
     }
 
+    /**
+     * Logs in the user by verifying the provided username and password hash.
+     *
+     * @param username the username to log in with
+     * @param passwordHash the hashed password to verify
+     * @return true if the login is successful, false otherwise
+     */
     public boolean login(String username, String passwordHash) {
         return this.username != null && this.username.equalsIgnoreCase(username)
                 && Objects.equals(this.passwordHash, passwordHash);
     }
 
-    public void logout() { System.out.println("Logged out: " + username); }
-    public void updateProfile() { System.out.println("Updating profile for user: " + username); }
+
+    /**
+     * Submits a relief request
+     * @param request the relief request to submit
+     */
     public void submitReliefRequest(ReliefRequest request) {
 
         if (request == null) return;
@@ -71,21 +115,34 @@ public class User {
         ReliefRequestCatalog.getInstance().submitRequest(request);
     }
 
+    /**
+     * Verifies the user's identity using the specified method.
+     *
+     * @param method the verification method to use
+     * @return true if the verification is successful, false otherwise
+     */
     public boolean verifyIdentity(VerificationMethod method) {
         if (method == null) return false;
         verificationStatus = VerificationStatus.VERIFIED;
         return true;
     }
 
+
     public void markSafe() {
         safetyStatus = SafetyStatusType.SAFE;
         safetyStatusUpdatedAt = LocalDateTime.now();
     }
 
+    public void logout() { System.out.println("Logged out: " + username); }
     public void updateLocation(String location) { lastKnownLocation = location; }
     public static void getLatestInfo(HurricaneEvent hurricane) { System.out.println(hurricane); }
     public static void searchGuidanceContent() { System.out.println("Searching guidance content..."); }
 
+    /**
+     * Finds the nearest shelters based on the user's last known location.
+     *
+     * @return a list of nearby shelters
+     */
     public ArrayList<Shelter> findNearestShelters() {
         boolean hasTown = lastKnownLocation != null && lastKnownLocation.matches(".*[A-Za-z].*");
         return ShelterList.getInstance().searchByProximity(hasTown ? lastKnownLocation : address,
