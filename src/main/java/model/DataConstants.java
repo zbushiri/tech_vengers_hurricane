@@ -11,6 +11,14 @@ public abstract class DataConstants {
     /** Creates a DataConstants instance. */
     protected DataConstants() { }
 
+    /** Checks whether JUnit is running the code. */
+    protected static boolean isJUnitTest() {
+        for (StackTraceElement element : Thread.currentThread().getStackTrace()) {
+            if (element.getClassName().startsWith("org.junit.")) return true;
+        }
+        return false;
+    }
+
     // Launch from the repository root; scenario and tests supply an isolated data directory.
     private static final String JSON_FOLDER = System.getProperty("hurricane.dataDir",
             "json") + File.separator;

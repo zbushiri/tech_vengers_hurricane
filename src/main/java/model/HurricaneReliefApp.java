@@ -453,8 +453,7 @@ public class HurricaneReliefApp {
     public List<RequestRecommendation> getRecommendedRequests() {
         if (currentUser == null || currentUser.getVolunteerProfile() == null) return List.of();
         VolunteerProfile volunteer = currentUser.getVolunteerProfile();
-        String departure = volunteer.getLastKnownLocation();
-        if (departure == null || departure.isBlank()) departure = volunteer.getAddress();
+        String departure = volunteer.getDepartureAddress();
         List<RequestRecommendation> result = new ArrayList<>();
         for (ReliefRequest request : reliefRequestCatalog.getOpenRequestsByUrgency()) {
             boolean specialty = volunteer.getSkills().stream().anyMatch(skill -> skill.equalsIgnoreCase(request.getType().name()));
@@ -524,8 +523,7 @@ public class HurricaneReliefApp {
         }
         Shelter shelter = shelterList.getShelters().stream().filter(s -> s.getShelterId().equals(request.getDestinationShelterId()))
                 .findFirst().orElseThrow(() -> new IllegalStateException("Select a shelter first."));
-        String departure = currentUser.getLastKnownLocation();
-        if (departure == null || departure.isBlank()) departure = currentUser.getAddress();
+        String departure = currentUser.getDepartureAddress();
         location.Address pickup = location.Address.fromString(request.getLocation());
         return DataWriter.saveTripSheet(request, shelter, routes.route(location.Address.fromString(departure), pickup),
                 routes.route(pickup, location.Address.fromString(shelter.getAddress())), directory);

@@ -1,6 +1,7 @@
 package model;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.Date;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -15,6 +16,20 @@ import org.json.simple.JSONObject;
  */
 public class DataWriter extends DataConstants {
     private DataWriter() { }
+
+    private static String getFileWritingPath(String PATH_NAME, String JUNIT_PATH_NAME) {
+        try {
+            if (isJUnitTest()) {
+                URI url = DataWriter.class.getResource(JUNIT_PATH_NAME).toURI();
+                return url.getPath();
+            } else {
+                return PATH_NAME;
+            }
+        } catch (Exception e) {
+            System.out.println("Difficulty getting resource path");
+            return "";
+        }
+    }
 
     /**
      * Serializes the users to JSON and replaces the saved file after writing a temporary copy.
@@ -131,7 +146,7 @@ public class DataWriter extends DataConstants {
         StringBuilder text = new StringBuilder("Gamecock Relief Network - Trip Sheet\n\n");
         User volunteer = request.getAssignedVolunteer(); User contact = request.getSubmittedBy();
         text.append("Request: ").append(request.getRequestId()).append("\nVolunteer: ").append(volunteer.getFirstName()).append(' ').append(volunteer.getLastName());
-        text.append("\nVolunteer departure: ").append(volunteer.getLastKnownLocation() == null || volunteer.getLastKnownLocation().isBlank() ? volunteer.getAddress() : volunteer.getLastKnownLocation());
+        text.append("\nVolunteer departure: ").append(volunteer.getDepartureAddress());
         text.append("\n\nFamily members:\n");
         for (Person person : request.getFamilyMembers()) {
             text.append("  ").append(person.getFirstName()).append(' ').append(person.getLastName()).append(", age ").append(person.getAge()).append("\n");
@@ -271,7 +286,7 @@ public class DataWriter extends DataConstants {
 
     /** A missing value is saved as null so DataLoader falls back to its default. */
     private static String enumText(Enum<?> value) {
-        return value == null ? null : value.name().toLowerCase();
+        return value == null ? null : value.name().toLowerCase(java.util.Locale.ROOT);
     }
 
     @SuppressWarnings("unchecked")

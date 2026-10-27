@@ -1,4 +1,4 @@
-package model;
+package com.model;
 
 import static org.junit.Assert.*;
 import java.io.IOException;
@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 import location.Address;
 import location.RoutePlan;
 import location.RoutingService;
+import model.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -164,6 +165,14 @@ public class ScenarioWorkflowTest {
         assertNull(app.submitHouseholdRequest(RequestType.TRANSPORTATION, "help", "address", List.of(), List.of(), ""));
         assertNotNull(Address.fromString("25 Calhoun Street,Charleston, SC   29401"));
         assertNull(Address.fromString("Charleston"));
+    }
+
+    @Test public void legacyCoordinateLocationFallsBackToStreetAddress() {
+        User jim = UserList.getInstance().getUser("jimsmith");
+        assertNull(Address.fromString(jim.getLastKnownLocation()));
+        assertEquals("171 Ashley Avenue, Charleston, SC 29425", jim.getDepartureAddress());
+        assertEquals(UserList.getInstance().getUser("rosadelgado").getLastKnownLocation(),
+                UserList.getInstance().getUser("rosadelgado").getDepartureAddress());
     }
 
     @Test public void distantSpecialtyMatchIsNotRecommended() {
