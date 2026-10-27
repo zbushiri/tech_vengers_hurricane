@@ -1,4 +1,4 @@
-package model;
+package com.model;
 
 import static org.junit.Assert.*;
 import java.io.IOException;
@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 import location.Address;
 import location.RoutePlan;
 import location.RoutingService;
+import model.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;

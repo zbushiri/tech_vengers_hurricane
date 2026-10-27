@@ -1,11 +1,11 @@
-package test.java.com.model;
+package com.model;
 
 import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 
-public class testTesting {
+public class TestTesting {
     @Test
     public void testTesting() {
-        assertTrue(condition: true);
+        assertTrue(true);
     }
 }
