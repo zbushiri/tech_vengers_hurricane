@@ -54,7 +54,6 @@ public class ReliefRequest {
              request.getNumberOfPeopleNeeded(), request.getNumberOfAnimals(), request.getAnimalNotes(),
              request.getPhotoUrl(), request.isSuspicious(), request.getIsDuplicateOf(), request.getForHurricane());
         restoreStatus(request.getStatus());
-        setPriority(request.getPriority());
         setDateSubmitted(request.getDateSubmitted());
         setAssignedVolunteer(request.getAssignedVolunteer());
         setSubmittedBy(request.getSubmittedBy());
@@ -62,6 +61,8 @@ public class ReliefRequest {
         setPets(request.getPets());
         setMedicalNeeds(request.getMedicalNeeds());
         setDestinationShelterId(request.getDestinationShelterId());
+        // setMedicalNeeds recalculates priority, so the copied priority is restored last.
+        setPriority(request.getPriority());
     }
 
 

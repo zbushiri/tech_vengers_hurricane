@@ -131,7 +131,7 @@ public class DataWriter extends DataConstants {
         StringBuilder text = new StringBuilder("Gamecock Relief Network - Trip Sheet\n\n");
         User volunteer = request.getAssignedVolunteer(); User contact = request.getSubmittedBy();
         text.append("Request: ").append(request.getRequestId()).append("\nVolunteer: ").append(volunteer.getFirstName()).append(' ').append(volunteer.getLastName());
-        text.append("\nVolunteer departure: ").append(volunteer.getLastKnownLocation() == null || volunteer.getLastKnownLocation().isBlank() ? volunteer.getAddress() : volunteer.getLastKnownLocation());
+        text.append("\nVolunteer departure: ").append(volunteer.getDepartureAddress());
         text.append("\n\nFamily members:\n");
         for (Person person : request.getFamilyMembers()) {
             text.append("  ").append(person.getFirstName()).append(' ').append(person.getLastName()).append(", age ").append(person.getAge()).append("\n");
@@ -271,7 +271,7 @@ public class DataWriter extends DataConstants {
 
     /** A missing value is saved as null so DataLoader falls back to its default. */
     private static String enumText(Enum<?> value) {
-        return value == null ? null : value.name().toLowerCase();
+        return value == null ? null : value.name().toLowerCase(java.util.Locale.ROOT);
     }
 
     @SuppressWarnings("unchecked")
