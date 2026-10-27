@@ -164,9 +164,18 @@ public class User {
      * @return a list of nearby shelters
      */
     public ArrayList<Shelter> findNearestShelters() {
-        boolean hasTown = lastKnownLocation != null && lastKnownLocation.matches(".*[A-Za-z].*");
-        return ShelterList.getInstance().searchByProximity(hasTown ? lastKnownLocation : address,
+        return ShelterList.getInstance().searchByProximity(getDepartureAddress(),
                 ShelterList.DEFAULT_RADIUS_MILES);
+    }
+
+    /**
+     * Chooses the address to route from: the last known location when it is a full
+     * street address, otherwise the account address. Legacy latitude/longitude
+     * locations cannot be routed, so they fall back to the account address.
+     * @return full street address text to depart from
+     */
+    public String getDepartureAddress() {
+        return location.Address.fromString(lastKnownLocation) != null ? lastKnownLocation : address;
     }
 
     /**

@@ -167,6 +167,14 @@ public class ScenarioWorkflowTest {
         assertNull(Address.fromString("Charleston"));
     }
 
+    @Test public void legacyCoordinateLocationFallsBackToStreetAddress() {
+        User jim = UserList.getInstance().getUser("jimsmith");
+        assertNull(Address.fromString(jim.getLastKnownLocation()));
+        assertEquals("171 Ashley Avenue, Charleston, SC 29425", jim.getDepartureAddress());
+        assertEquals(UserList.getInstance().getUser("rosadelgado").getLastKnownLocation(),
+                UserList.getInstance().getUser("rosadelgado").getDepartureAddress());
+    }
+
     @Test public void distantSpecialtyMatchIsNotRecommended() {
         createHousehold();
         HurricaneReliefApp far = new HurricaneReliefApp((a,b) -> new RoutePlan(100000, List.of("TEST long route")));
