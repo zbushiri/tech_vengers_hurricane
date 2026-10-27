@@ -2,8 +2,12 @@ package model;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -24,6 +28,22 @@ public class DataLoader extends DataConstants {
     private static final ObjectMapper JSON = new ObjectMapper();
 
     private DataLoader() { }
+
+    private static BufferedReader getReaderFromFile(String fileName, String jsonFileName) {
+        try {
+            if (isJUnitTest()) {
+                InputStream inputStream = DataLoader.class.getResourceAsStream(jsonFileName);
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                return new BufferedReader(inputStreamReader);
+            } else {
+                FileReader reader = new FileReader(fileName);
+                return new BufferedReader(reader);
+            }
+        } catch (Exception e) {
+            System.out.println("Can't load");
+            return null;
+        }
+    }
 
     private static JsonNode readArray(String file) throws IOException {
         JsonNode data = JSON.readTree(new File(file));
