@@ -3,6 +3,20 @@
   "configurations": [
     {
       "type": "java",
+      "name": "TestUI",
+      "request": "launch",
+      "mainClass": "techvengers_hurricane/model.TestUI",
+      "projectName": ""
+    },
+    {
+      "type": "java",
+      "name": "UI",
+      "request": "launch",
+      "mainClass": "techvengers_hurricane/model.UI",
+      "projectName": ""
+    },
+    {
+      "type": "java",
       "name": "MapUI",
       "request": "launch",
       "mainClass": "techvengers_hurricane/model.MapUI",

@@ -1,4 +1,4 @@
-package com.model;
+package model;
 
 import static org.junit.Assert.*;
 import java.io.IOException;
