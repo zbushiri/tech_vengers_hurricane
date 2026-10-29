@@ -1,4 +1,4 @@
-package test.java.com.model;
+package com.model;
 
 import org.junit.Test;
 import static org.junit.Assert.assertTrue;
