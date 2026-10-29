@@ -1,7 +1,6 @@
 package model;
 
 import java.io.IOException;
-import java.net.URI;
 import java.util.Date;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -16,20 +15,6 @@ import org.json.simple.JSONObject;
  */
 public class DataWriter extends DataConstants {
     private DataWriter() { }
-
-    private static String getFileWritingPath(String PATH_NAME, String JUNIT_PATH_NAME) {
-        try {
-            if (isJUnitTest()) {
-                URI url = DataWriter.class.getResource(JUNIT_PATH_NAME).toURI();
-                return url.getPath();
-            } else {
-                return PATH_NAME;
-            }
-        } catch (Exception e) {
-            System.out.println("Difficulty getting resource path");
-            return "";
-        }
-    }
 
     /**
      * Serializes the users to JSON and replaces the saved file after writing a temporary copy.

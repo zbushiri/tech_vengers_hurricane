@@ -310,7 +310,7 @@ public class UI {
     }
 
 
-    private HurricaneReliefApp app = new HurricaneReliefApp();
+    private final HurricaneReliefApp app;
 
     /**
      * Creates the terminal interface for the supplied application facade.

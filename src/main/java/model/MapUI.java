@@ -177,7 +177,7 @@ public class MapUI extends Application {
 
     /**
      * Launches the JavaFX shelter-map application.
-     * @param args JavaFX launch arguments, including optional --from=address
+     * @param args JavaFX launch arguments; the starting address is fixed in this demo
      */
     public static void main(String[] args) {
         launch(args);

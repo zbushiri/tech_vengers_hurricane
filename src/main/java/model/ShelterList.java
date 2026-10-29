@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import location.Address;
 import location.MapTools;
+import location.RoutingService;
 
 /**
  * Stores and searches shelters.
@@ -14,6 +15,10 @@ public class ShelterList {
      * default radius miles.
      */
     public static final double DEFAULT_RADIUS_MILES = 25;
+    /**
+     * Meters in one statute mile, for converting route distances.
+     */
+    public static final double METERS_PER_MILE = 1609.344;
     private static ShelterList instance;
     private ArrayList<Shelter> shelters;
 
@@ -93,13 +98,25 @@ public class ShelterList {
      * @throws IllegalStateException when driving distances are unavailable
      */
     public ArrayList<Shelter> searchByProximity(String location, double radius) {
+        return searchByProximity(location, radius, MapTools.getInstance());
+    }
+
+    /**
+     * Finds open shelters within the supplied driving-distance radius.
+     * @param location full departure address
+     * @param radius maximum driving miles
+     * @param routes driving-route provider
+     * @return shelters ordered by driving distance
+     * @throws IllegalStateException when driving distances are unavailable
+     */
+    public ArrayList<Shelter> searchByProximity(String location, double radius, RoutingService routes) {
         Address from = Address.fromString(location);
         if (from == null || radius < 0) throw new IllegalArgumentException("Enter a full street, city, state and ZIP, and a nonnegative radius.");
         java.util.Map<Shelter, Double> distances = new java.util.HashMap<>();
         try {
             for (Shelter shelter : shelters) {
                 if (shelter.hasSpace()) {
-                    double miles = MapTools.getInstance().route(from, Address.fromString(shelter.getAddress())).distanceMeters() / 1609.344;
+                    double miles = routes.route(from, Address.fromString(shelter.getAddress())).distanceMeters() / METERS_PER_MILE;
                     if (miles <= radius) distances.put(shelter, miles);
                 }
             }

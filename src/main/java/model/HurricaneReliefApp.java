@@ -49,8 +49,8 @@ public class HurricaneReliefApp {
 
     /**
      * Reads users, shelters, requests and hurricanes from the JSON files.
-     * Users load first so shelters can find their operators. Anything that is
-     * already loaded is skipped, so calling this twice is safe.
+     * Users load first so shelters can find their operators. Users, shelters and
+     * requests that are already loaded are kept; hurricanes are always reread.
      */
     public void loadData() {
         userList = DataLoader.getUsers();
@@ -98,7 +98,7 @@ public class HurricaneReliefApp {
      * @return eligible shelters ordered by driving distance
      */
     public ArrayList<Shelter> searchByProximity(String location, double maxDistance) {
-        return shelterList.searchByProximity(location, maxDistance);
+        return shelterList.searchByProximity(location, maxDistance, routes);
     }
 
     /**
@@ -212,9 +212,9 @@ public class HurricaneReliefApp {
      */
     public List<Shelter> findNearestShelters(String location, double radiusMiles) {
         if ((location == null || location.trim().isEmpty()) && currentUser != null) {
-            return currentUser.findNearestShelters();
+            return searchByProximity(currentUser.getDepartureAddress(), ShelterList.DEFAULT_RADIUS_MILES);
         }
-        return shelterList.searchByProximity(location, radiusMiles);
+        return searchByProximity(location, radiusMiles);
     }
 
     
@@ -332,7 +332,7 @@ public class HurricaneReliefApp {
     public boolean completeRequest(UUID requestId) {
         if (currentUser == null || (!currentUser.hasRole(AccountRole.SHELTER_OPERATOR)
                 && !currentUser.hasRole(AccountRole.COORDINATOR))) {
-            System.out.println("Your volunteer role does not have permission to complete relief requests. A shelter manager must complete the request after check-in.");
+            System.out.println("Only a shelter manager or coordinator can complete relief requests, after check-in.");
             return false;
         }
         ReliefRequest request = reliefRequestCatalog.getRequest(requestId);
@@ -455,19 +455,18 @@ public class HurricaneReliefApp {
         VolunteerProfile volunteer = currentUser.getVolunteerProfile();
         String departure = volunteer.getDepartureAddress();
         List<RequestRecommendation> result = new ArrayList<>();
+        double radiusMeters = ShelterList.DEFAULT_RADIUS_MILES * ShelterList.METERS_PER_MILE;
         for (ReliefRequest request : reliefRequestCatalog.getOpenRequestsByUrgency()) {
             boolean specialty = volunteer.getSkills().stream().anyMatch(skill -> skill.equalsIgnoreCase(request.getType().name()));
             double distance = Double.POSITIVE_INFINITY;
             String explanation;
             try {
                 distance = routes.route(location.Address.fromString(departure), location.Address.fromString(request.getLocation())).distanceMeters();
-                boolean nearby = distance <= 25 * 1609.344;
-                explanation = specialty && nearby ? String.format(java.util.Locale.ROOT,
-                        "Matches your %s specialty; nearby at %.1f driving miles.", request.getType().name().toLowerCase(java.util.Locale.ROOT), distance / 1609.344)
+                explanation = specialty && distance <= radiusMeters ? String.format(java.util.Locale.ROOT,
+                        "Matches your %s specialty; nearby at %.1f driving miles.", request.getType().name().toLowerCase(java.util.Locale.ROOT), distance / ShelterList.METERS_PER_MILE)
                         : "No nearby specialty match.";
             } catch (java.io.IOException e) { explanation = "Driving distance unavailable; proximity cannot be verified."; }
-            boolean recommended = specialty && distance <= 25 * 1609.344 && request.getStatus() == RequestStatus.SUBMITTED
-                    && request.isForVolunteers() && !request.hasOpenOriginal();
+            boolean recommended = specialty && distance <= radiusMeters && request.isClaimable();
             result.add(new RequestRecommendation(request, recommended, explanation, distance));
         }
         result.sort(java.util.Comparator.comparing(RequestRecommendation::recommended).reversed()

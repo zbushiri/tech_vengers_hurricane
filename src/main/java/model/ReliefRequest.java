@@ -138,7 +138,7 @@ public class ReliefRequest {
      * @param volunteer volunteer attempting to claim or start the assignment
      */
     public void claimRequest(VolunteerProfile volunteer) {
-        if (status != RequestStatus.SUBMITTED || volunteer == null || !volunteer.canClaimRequests() || !isForVolunteers() || hasOpenOriginal()) {
+        if (!isClaimable() || volunteer == null || !volunteer.canClaimRequests()) {
             return;
         }
         setAssignedVolunteer(volunteer);
@@ -256,6 +256,14 @@ public class ReliefRequest {
     }
 
     /**
+     * Checks whether a volunteer could claim this request right now.
+     * @return true if it is unclaimed, a volunteer request type, and not a duplicate of an open request
+     */
+    public boolean isClaimable() {
+        return status == RequestStatus.SUBMITTED && isForVolunteers() && !hasOpenOriginal();
+    }
+
+    /**
      * Changes an assigned request to IN_PROGRESS for its assigned volunteer.
      * @param volunteer volunteer attempting to claim or start the assignment
      * @return true if the assigned volunteer started the request; false otherwise
@@ -269,14 +277,6 @@ public class ReliefRequest {
     private boolean isAssignedTo(VolunteerProfile volunteer) {
         return volunteer != null && assignedVolunteer != null
                 && assignedVolunteer.getUserId().equals(volunteer.getUserId());
-    }
-
-    /**
-     * Requests a workflow transition using the same rules as normal status changes.
-     * @param status requested workflow state
-     */
-    void updateStatus(RequestStatus status) {
-        setStatus(status);
     }
 
     /**

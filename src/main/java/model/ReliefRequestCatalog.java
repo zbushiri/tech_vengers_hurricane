@@ -140,8 +140,7 @@ public class ReliefRequestCatalog {
     public List<ReliefRequest> getOpenRequestsForVolunteers() {
         List<ReliefRequest> result = new ArrayList<>();
         for (ReliefRequest request : getOpenRequestsByUrgency()) {
-            if (request.getStatus() == RequestStatus.SUBMITTED && request.isForVolunteers()
-                    && !request.hasOpenOriginal()) {
+            if (request.isClaimable()) {
                 result.add(request);
             }
         }

@@ -26,9 +26,9 @@ public class UserList {
     public ArrayList<User> getUsers() { return users; }
 
     /**
-     * Finds an account by username, checking its password when supplied.
+     * Finds an account by username without checking a password.
      * @param username account username, matched without regard to case
-     * @return matching account, or null when the account or supplied credentials do not match
+     * @return matching account, or null when no account has that username
      */
     public User getUser(String username) {
         if (username == null) return null;

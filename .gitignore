@@ -1,7 +1,7 @@
 # Compiled class file
 *.class
 
-#API Key
+# API keys and other private settings (.env, *.env)
 *.env
 
 # Log file
@@ -26,13 +26,10 @@
 hs_err_pid*
 replay_pid*
 
-# Maven build output
+# Maven build output, including generated Javadoc
 target/
 
-# Private keys
-.env
-
-# Local scenario runs, exports and generated API documentation
+# Local scenario runs and trip-sheet exports
 demo-data/
 trip-sheets/
 trip-sheet*.txt
