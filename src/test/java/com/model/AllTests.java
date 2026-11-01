@@ -12,7 +12,8 @@ import org.junit.runners.Suite;
     ReliefRequestTest.class,
     ReliefRequestCatalogTest.class,
     ScenarioWorkflowTest.class,
-    VolunteerProfileTest.class
+    VolunteerProfileTest.class,
+    HurricaneEventTest.class
 })
 public class AllTests {
 }
