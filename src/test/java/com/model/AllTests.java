@@ -3,6 +3,8 @@ package com.model;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
+import model.RequestRecommendation;
+
 /** Runs all of the project's useful test classes together. */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
@@ -11,6 +13,8 @@ import org.junit.runners.Suite;
     UserValidationTest.class,
     ReliefRequestCatalogTest.class,
     ScenarioWorkflowTest.class,
+    HurricaneReliefAppTest.class,
+    RequestRecommendationTest.class,
     VolunteerProfileTest.class
 })
 public class AllTests {
