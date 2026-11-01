@@ -30,6 +30,9 @@ replay_pid*
 # Maven build output, including generated Javadoc
 target/
 
+# Personal test reasoning sheet
+docs/Test-Reasoning.xlsx
+
 # Local scenario runs and trip-sheet exports
 demo-data/
 trip-sheets/
