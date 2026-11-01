@@ -91,8 +91,6 @@ In VS Code, open **Run and Debug** and select:
 
 🔁 [UML Sequence Diagram 2 – Volunteer Claims a Relief Request](https://github.com/zbushiri/tech_vengers_hurricane/blob/main/docs/sequence2.pdf)
 
-🧪 [Test Reasoning Spreadsheet](https://github.com/zbushiri/tech_vengers_hurricane/blob/main/docs/Test-Reasoning.xlsx)
-
 ## Presentation
 
 🎥 [YouTube Presentation](https://youtu.be/24qM7z8QZqo)
