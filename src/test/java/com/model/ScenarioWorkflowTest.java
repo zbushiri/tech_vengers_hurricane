@@ -30,8 +30,12 @@ public class ScenarioWorkflowTest {
     };
 
     @BeforeClass public static void isolateData() throws IOException {
-        data = Files.createTempDirectory("hurricane-workflow-test-");
-        System.setProperty("hurricane.dataDir", data.toString());
+        String folder = System.getProperty("hurricane.dataDir");
+        if (folder == null) {
+            folder = Files.createTempDirectory("hurricane-workflow-test-").toString();
+            System.setProperty("hurricane.dataDir", folder);
+        }
+        data = Path.of(folder);
     }
 
     @Before public void loadFreshSeeds() throws IOException {
