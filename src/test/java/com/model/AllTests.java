@@ -11,7 +11,8 @@ import org.junit.runners.Suite;
     UserValidationTest.class,
     ReliefRequestTest.class,
     ReliefRequestCatalogTest.class,
-    ScenarioWorkflowTest.class
+    ScenarioWorkflowTest.class,
+    VolunteerProfileTest.class
 })
 public class AllTests {
 }
