@@ -7,6 +7,15 @@
 Gamecock Relief Network is a Java disaster-relief application for residents,
 volunteers, shelter operators, and coordinators.
 
+## What It Does
+
+- Creates and saves user accounts
+- Lets residents submit relief requests
+- Lets volunteers find and claim requests
+- Tracks shelters, available space, and household check-ins
+- Finds nearby shelters and displays driving directions
+- Saves application data in JSON files
+
 ## What You Need
 
 - Java 25
@@ -61,29 +70,6 @@ In VS Code, open **Run and Debug** and select:
 - `MapUI` for the shelter map
 - `Scenario` for the sample walkthrough
 - `Verify saved scenario` to reload the walkthrough data
-
-## Run the Tests
-
-Run every useful test class together:
-
-```bash
-mvn -Dtest=AllTests test
-```
-
-You can also open `AllTests.java` in VS Code and select **Run Test**.
-
-The suite runs 73 tests. Four tests are expected to fail because they document
-the open validation bugs in issues #106 through #109.
-
-## Generate the Javadocs
-
-Generate the Javadocs:
-
-```bash
-mvn javadoc:javadoc
-```
-
-The generated files are stored in `target/reports/apidocs/`.
 
 ## Troubleshooting
 
