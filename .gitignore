@@ -3,6 +3,7 @@
 
 # API keys and other private settings (.env, *.env)
 *.env
+!.env.example
 
 # Log file
 *.log
