@@ -18,14 +18,21 @@ volunteers, shelter operators, and coordinators.
 
 1. Create an account at [OpenRouteService](https://openrouteservice.org/dev/#/signup).
 2. Open the **Tokens** page and create a free token.
-3. Clone this repository and open its main folder in VS Code.
-4. Create your environment file:
+3. Clone this repository:
+
+```bash
+git clone https://github.com/zbushiri/tech_vengers_hurricane.git
+cd tech_vengers_hurricane
+```
+
+4. Open the project folder in VS Code.
+5. Create your environment file:
 
 ```bash
 cp .env.example .env
 ```
 
-5. Open `.env` and replace `your_api_key` with your token:
+6. Open `.env` and replace `your_api_key` with your token:
 
 ```text
 HURRICANE_API=your_api_key
@@ -63,8 +70,12 @@ Run every useful test class together:
 mvn -Dtest=AllTests test
 ```
 
-You can also open `AllTests.java` in VS Code and select **Run Test**. Four tests
-currently document the open validation bugs in issues #106 through #109.
+You can also open `AllTests.java` in VS Code and select **Run Test**.
+
+The suite runs 73 tests. Four tests are expected to fail because they document
+the open validation bugs in issues #106 through #109.
+
+## Generate the Javadocs
 
 Generate the Javadocs:
 
@@ -73,6 +84,14 @@ mvn javadoc:javadoc
 ```
 
 The generated files are stored in `target/reports/apidocs/`.
+
+## Troubleshooting
+
+- If the map says the API key is missing, make sure the file is named `.env`
+  and contains `HURRICANE_API=your_api_key` with your real key.
+- Run the map with the **MapUI** option in VS Code so the `.env` file is loaded.
+- If Maven cannot find a dependency, run `mvn compile` while connected to the
+  internet.
 
 ## Project Documents
 
