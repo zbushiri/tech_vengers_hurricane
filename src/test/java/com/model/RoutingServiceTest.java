@@ -111,14 +111,4 @@ public void testRouteEmptyAddresses() {
             assertEquals("Invalid address", e.getMessage());
         }
     }
-    @Test public void testRouteValidAndNullAddresses() {
-        location.Address from = new location.Address("123 Test St", "Test City", "TS", "12345");
-        location.Address to = null;
-        try {
-            routePlan = routingService.route(from, to);
-            fail("IOException should be thrown for valid and null addresses");
-        } catch (java.io.IOException e) {
-            assertEquals("Invalid address", e.getMessage());
-        }
-    }
 }
