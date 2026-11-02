@@ -18,7 +18,8 @@ import org.junit.runners.Suite;
     RequestRecommendationTest.class,
     VolunteerProfileTest.class,
     SupplyItemTest.class,
-    ShelterTest.class
+    ShelterTest.class,
+    ShelterAdmissionTest.class
 })
 public class AllTests {
 }
