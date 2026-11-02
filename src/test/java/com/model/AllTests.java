@@ -17,7 +17,8 @@ import org.junit.runners.Suite;
     HurricaneReliefAppTest.class,
     RequestRecommendationTest.class,
     VolunteerProfileTest.class,
-    SupplyItemTest.class
+    SupplyItemTest.class,
+    ShelterTest.class
 })
 public class AllTests {
 }
