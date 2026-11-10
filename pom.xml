@@ -67,7 +67,7 @@
 <configuration>
 <jlinkImageName>hurricanejavafx</jlinkImageName>
 <launcher>launcher</launcher>
-<mainClass>techvengers_hurricane/model.MapUI</mainClass>
+<mainClass>techvengers_hurricane/techvengers_hurricane.App</mainClass>
 <options>
 <option>--enable-native-access=javafx.graphics</option>
 </options>
