@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import model.HurricaneReliefApp;
 
 import java.io.IOException;
 
@@ -20,6 +21,19 @@ public class App extends Application {
 
 
     private static Scene scene;
+    private static HurricaneReliefApp reliefApp;
+
+    /**
+     * Returns the shared application facade, loading the JSON data the first time it is needed.
+     * @return the facade used by every screen
+     */
+    static HurricaneReliefApp getReliefApp() {
+        if (reliefApp == null) {
+            reliefApp = new HurricaneReliefApp();
+            reliefApp.initialize();
+        }
+        return reliefApp;
+    }
 
     /**
      * Loads the login FXML screen and displays the template application window.

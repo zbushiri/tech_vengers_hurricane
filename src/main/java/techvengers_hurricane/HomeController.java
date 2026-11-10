@@ -14,8 +14,12 @@ public class HomeController {
     public HomeController() { }
 
 
+    /**
+     * Returns to the login screen.
+     * @throws IOException if the login FXML resource cannot be loaded
+     */
     @FXML
-    private void switchToLogin() throws IOException {
+    private void goToLogin() throws IOException {
         App.setRoot("login");
     }
 }

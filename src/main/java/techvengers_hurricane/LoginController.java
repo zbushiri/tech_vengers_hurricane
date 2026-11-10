@@ -2,9 +2,12 @@ package techvengers_hurricane;
 
 import java.io.IOException;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 
 /**
- * Handles navigation from the login screen to the home screen.
+ * Handles the login form and sends the user to the home screen after a successful login.
  * @author Team Tech-vengers
  */
 public class LoginController {
@@ -13,9 +16,34 @@ public class LoginController {
      */
     public LoginController() { }
 
+    @FXML
+    private TextField usernameField;
 
     @FXML
-    private void switchToHome() throws IOException {
-        App.setRoot("home");
+    private PasswordField passwordField;
+
+    @FXML
+    private Label errorLabel;
+
+    /**
+     * Checks the entered credentials and opens the home screen when they match an account.
+     * @throws IOException if the home FXML resource cannot be loaded
+     */
+    @FXML
+    private void login() throws IOException {
+        String username = usernameField.getText().trim();
+        String password = passwordField.getText();
+
+        if (username.isEmpty() || password.isEmpty()) {
+            errorLabel.setText("Please enter your username and password.");
+            return;
+        }
+
+        if (App.getReliefApp().login(username, password)) {
+            App.setRoot("home");
+        } else {
+            errorLabel.setText("Incorrect username or password. Please try again.");
+            passwordField.clear();
+        }
     }
 }
