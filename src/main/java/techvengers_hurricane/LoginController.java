@@ -4,18 +4,18 @@ import java.io.IOException;
 import javafx.fxml.FXML;
 
 /**
- * Handles navigation from the secondary JavaFX template screen to the primary screen.
+ * Handles navigation from the login screen to the home screen.
  * @author Team Tech-vengers
  */
 public class LoginController {
     /**
-     * Creates the controller for the secondary template screen.
+     * Creates the controller for the login screen.
      */
     public LoginController() { }
 
 
     @FXML
-    private void switchToPrimary() throws IOException {
-        App.setRoot("primary");
+    private void switchToHome() throws IOException {
+        App.setRoot("home");
     }
 }
