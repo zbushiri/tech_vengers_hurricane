@@ -7,6 +7,11 @@
 Gamecock Relief Network is a Java disaster-relief application for residents,
 volunteers, shelter operators, and coordinators.
 
+## App Preview
+
+View the planned login, resident dashboard, relief request, and request form
+screens in the [Gamecock Relief Network App Preview](docs/app-preview.pdf).
+
 ## What It Does
 
 - Creates and saves user accounts
