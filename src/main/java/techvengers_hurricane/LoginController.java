@@ -7,11 +7,11 @@ import javafx.fxml.FXML;
  * Handles navigation from the secondary JavaFX template screen to the primary screen.
  * @author Team Tech-vengers
  */
-public class SecondaryController {
+public class LoginController {
     /**
      * Creates the controller for the secondary template screen.
      */
-    public SecondaryController() { }
+    public LoginController() { }
 
 
     @FXML
