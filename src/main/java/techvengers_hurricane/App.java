@@ -27,7 +27,7 @@ public class App extends Application {
      * Returns the shared application facade, loading the JSON data the first time it is needed.
      * @return the facade used by every screen
      */
-    static HurricaneReliefApp getReliefApp() {
+    public static HurricaneReliefApp getReliefApp() {
         if (reliefApp == null) {
             reliefApp = new HurricaneReliefApp();
             reliefApp.initialize();
@@ -53,7 +53,7 @@ public class App extends Application {
      * @param fxml resource name without the .fxml extension
      * @throws IOException if the requested FXML resource cannot be loaded
      */
-    static void setRoot(String fxml) throws IOException {
+    public static void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml));
     }
 

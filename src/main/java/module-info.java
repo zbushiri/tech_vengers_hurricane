@@ -11,6 +11,9 @@ module techvengers_hurricane {
     opens techvengers_hurricane to javafx.fxml;
     exports techvengers_hurricane;
 
+    opens controllers to javafx.fxml;
+    exports controllers;
+
     opens model to javafx.fxml;
     exports model;
     exports location;

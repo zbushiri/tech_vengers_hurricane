@@ -1,7 +1,8 @@
-package techvengers_hurricane;
+package controllers;
 
 import java.io.IOException;
 import javafx.fxml.FXML;
+import techvengers_hurricane.App;
 
 /**
  * Handles navigation from the home screen to the login screen.

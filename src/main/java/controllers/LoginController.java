@@ -1,10 +1,11 @@
-package techvengers_hurricane;
+package controllers;
 
 import java.io.IOException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import techvengers_hurricane.App;
 
 /**
  * Handles the login form and sends the user to the home screen after a successful login.
