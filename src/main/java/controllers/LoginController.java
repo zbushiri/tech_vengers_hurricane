@@ -34,17 +34,11 @@ public class LoginController {
     private void login() throws IOException {
         String username = usernameField.getText().trim();
         String password = passwordField.getText();
+        System.out.println("Your name is " + username + " pass " + password);
 
         if (username.isEmpty() || password.isEmpty()) {
             errorLabel.setText("Please enter your username and password.");
             return;
-        }
-
-        if (App.getReliefApp().login(username, password)) {
-            App.setRoot("home");
-        } else {
-            errorLabel.setText("Incorrect username or password. Please try again.");
-            passwordField.clear();
         }
     }
 }
