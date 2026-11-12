@@ -8,7 +8,7 @@ import javafx.scene.control.TextField;
 import techvengers_hurricane.App;
 
 /**
- * Handles the login form and sends the user to the home screen after a successful login.
+ * Handles the login form and sends the user to their account screen.
  * @author Team Tech-vengers
  */
 public class LoginController {
@@ -27,18 +27,24 @@ public class LoginController {
     private Label errorLabel;
 
     /**
-     * Checks the entered credentials and opens the home screen when they match an account.
-     * @throws IOException if the home FXML resource cannot be loaded
+     * Checks the entered credentials and opens the user home screen when they match an account.
+     * @throws IOException if the user home FXML resource cannot be loaded
      */
     @FXML
     private void login() throws IOException {
         String username = usernameField.getText().trim();
         String password = passwordField.getText();
-        System.out.println("Your name is " + username + " pass " + password);
 
         if (username.isEmpty() || password.isEmpty()) {
             errorLabel.setText("Please enter your username and password.");
             return;
+        }
+
+        if (App.getReliefApp().login(username, password)) {
+            App.setRoot("userhome");
+        } else {
+            errorLabel.setText("Incorrect username or password.");
+            passwordField.clear();
         }
     }
 }

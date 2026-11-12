@@ -12,6 +12,24 @@
     -fx-border-radius: 12px;
 }
 
+.user-card {
+    -fx-background-color: white;
+    -fx-background-radius: 12px;
+    -fx-border-color: #dddddd;
+    -fx-border-radius: 12px;
+}
+
+.user-info {
+    -fx-padding: 18px;
+    -fx-background-color: #f7f7f7;
+    -fx-background-radius: 8px;
+}
+
+.info-name {
+    -fx-font-weight: bold;
+    -fx-text-fill: #73000a;
+}
+
 /* Text */
 .app-name {
     -fx-text-fill: #73000a;
