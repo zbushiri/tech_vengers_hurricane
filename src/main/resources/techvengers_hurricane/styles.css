@@ -29,6 +29,18 @@
     -fx-text-fill: #666666;
 }
 
+.welcome-title {
+    -fx-text-fill: #222222;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+.welcome-text {
+    -fx-text-fill: #555555;
+    -fx-font-size: 14px;
+    -fx-line-spacing: 3px;
+}
+
 .field-label {
     -fx-max-width: 280px;
     -fx-alignment: center-left;

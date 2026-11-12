@@ -1,16 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Button?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.HomeController">
-   <children>
-      <Label text="Home" />
-      <Button fx:id="loginButton" text="Go to Login" onAction="#goToLogin"/>
-   </children>
-   <padding>
-      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-   </padding>
-</VBox>
+<StackPane prefHeight="480.0" prefWidth="640.0" stylesheets="@styles.css"
+           xmlns="http://javafx.com/javafx/21"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="controllers.HomeController"
+           styleClass="login-screen">
+    <children>
+        <VBox alignment="CENTER" maxHeight="320.0" maxWidth="420.0"
+              spacing="18.0" styleClass="login-card">
+            <children>
+                <Label text="Gamecock Relief" styleClass="app-name" />
+                <Label text="Help When It Matters Most" styleClass="welcome-title" />
+                <Label text="Find shelters, request assistance, and connect with volunteers during an emergency."
+                       maxWidth="330.0" textAlignment="CENTER" wrapText="true"
+                       styleClass="welcome-text" />
+                <Button fx:id="loginButton" text="Continue to Login"
+                        onAction="#goToLogin" prefWidth="280.0"
+                        styleClass="login-button" />
+            </children>
+            <padding>
+                <Insets bottom="35.0" left="35.0" right="35.0" top="35.0" />
+            </padding>
+        </VBox>
+    </children>
+    <padding>
+        <Insets bottom="35.0" left="35.0" right="35.0" top="35.0" />
+    </padding>
+</StackPane>

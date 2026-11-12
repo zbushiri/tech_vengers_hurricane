@@ -36,14 +36,14 @@ public class App extends Application {
     }
 
     /**
-     * Loads the login FXML screen and displays the template application window.
+     * Loads the welcome screen and displays the application window.
      * @param stage JavaFX window to display
-     * @throws IOException if the login FXML resource cannot be loaded
+     * @throws IOException if the home FXML resource cannot be loaded
      */
     @Override
     @SuppressWarnings("exports")
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("login"), 640, 480);
+        scene = new Scene(loadFXML("home"), 640, 480);
         stage.setScene(scene);
         stage.show();
     }
