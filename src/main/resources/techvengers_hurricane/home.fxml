@@ -10,7 +10,7 @@
            xmlns="http://javafx.com/javafx/21"
            xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="controllers.HomeController"
-           styleClass="login-screen">
+           styleClass="home-screen">
     <children>
         <VBox alignment="CENTER" maxHeight="320.0" maxWidth="420.0"
               spacing="18.0" styleClass="login-card">
