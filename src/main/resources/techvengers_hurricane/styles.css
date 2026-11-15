@@ -187,3 +187,61 @@
     -fx-border-color: #007acc;
     -fx-border-width: 2px;
 }
+/* Signup screen */
+.signup-screen {
+    -fx-background-color: #f2f3f5;
+    -fx-font-family: "Arial";
+}
+/*login card */
+.signup-screen .login-card {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.18), 16, 0.2, 0, 4);
+}
+/* Signup screen labels and fields */
+.signup-screen Label {
+    -fx-text-fill: #333333;
+    -fx-font-weight: bold;
+}
+/* Signup screen text fields, password fields, and combo boxes */
+.signup-screen TextField,
+.signup-screen PasswordField,
+.signup-screen ComboBox {
+    -fx-pref-height: 36px;
+    -fx-background-radius: 6px;
+    -fx-border-color: #cccccc;
+    -fx-border-radius: 6px;
+    -fx-padding: 7px;
+}
+/* Focused state for text fields, password fields, and combo boxes */
+.signup-screen TextField:focused,
+.signup-screen PasswordField:focused,
+.signup-screen ComboBox:focused {
+    -fx-border-color: #73000a;
+    -fx-border-width: 2px;
+}
+/* Signup screen buttons */
+.signup-screen .login-button {
+    -fx-pref-height: 38px;
+    -fx-background-radius: 7px;
+}
+/* Hover and pressed states for buttons */
+.signup-screen .login-button:hover {
+    -fx-background-color: #92000d;
+}
+/* Pressed state for buttons */
+.signup-screen .login-button:pressed {
+    -fx-background-color: #570008;
+}
+/* Signup screen hyperlinks */
+.signup-screen Hyperlink {
+    -fx-text-fill: #73000a;
+    -fx-border-color: transparent;
+}
+/* Hover state for hyperlinks */
+.signup-screen Hyperlink:hover {
+    -fx-underline: true;
+}
+/* Error label styling for signup screen */
+.signup-screen .error-label {
+    -fx-text-fill: #b00020;
+    -fx-font-weight: normal;
+}

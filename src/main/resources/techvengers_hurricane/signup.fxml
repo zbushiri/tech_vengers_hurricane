@@ -9,7 +9,7 @@
             fx:controller="controllers.SignupController"
             stylesheets="@styles.css"
             fitToWidth="true">
-    <StackPane styleClass="login-screen">
+    <StackPane styleClass="signup-screen">
         <padding>
             <Insets top="24" right="24" bottom="24" left="24"/>
         </padding>
