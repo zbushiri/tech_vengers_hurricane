@@ -47,4 +47,10 @@ public class LoginController {
             passwordField.clear();
         }
     }
+
+@FXML
+private void openSignUp() throws IOException {
+    App.setRoot("signup");
+}
+
 }

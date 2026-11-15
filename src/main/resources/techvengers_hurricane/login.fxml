@@ -31,6 +31,7 @@
                 <Label fx:id="errorLabel" wrapText="true" styleClass="error-label" />
                 <Button fx:id="loginButton" text="Log In" defaultButton="true"
                         onAction="#login" prefWidth="280.0" styleClass="login-button" />
+                <Button text="Create an account" onAction="#openSignUp"/>
             </children>
             <padding>
                 <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />

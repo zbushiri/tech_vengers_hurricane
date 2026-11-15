@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<ScrollPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controllers.SignupController"
+            stylesheets="@styles.css"
+            fitToWidth="true">
+    <StackPane styleClass="login-screen">
+        <padding>
+            <Insets top="24" right="24" bottom="24" left="24"/>
+        </padding>
+        <VBox maxWidth="340" spacing="8" styleClass="login-card">
+            <padding>
+                <Insets top="24" right="24" bottom="24" left="24"/>
+            </padding>
+
+            <Label text="Gamecock Relief" styleClass="app-name"/>
+            <Label text="Create an account" styleClass="login-title"/>
+
+            <Label text="First name"/>
+            <TextField fx:id="firstNameField"/>
+
+            <Label text="Last name"/>
+            <TextField fx:id="lastNameField"/>
+
+            <Label text="Username"/>
+            <TextField fx:id="usernameField"/>
+
+            <Label text="Account type"/>
+            <ComboBox fx:id="roleBox" promptText="Choose Resident or Volunteer"
+                      maxWidth="Infinity"/>
+
+            <Label text="Password"/>
+            <PasswordField fx:id="passwordField"/>
+
+            <Label text="Confirm password"/>
+            <PasswordField fx:id="confirmPasswordField"/>
+
+            <Label fx:id="errorLabel" wrapText="true" styleClass="error-label"/>
+            <Button text="Create account" onAction="#createAccount"
+                    defaultButton="true" maxWidth="Infinity" styleClass="login-button"/>
+            <Hyperlink text="Back to sign in" onAction="#backToLogin"/>
+        </VBox>
+    </StackPane>
+</ScrollPane>
