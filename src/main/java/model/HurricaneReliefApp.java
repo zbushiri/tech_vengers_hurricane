@@ -83,11 +83,9 @@ public class HurricaneReliefApp {
     public boolean login(String username, String password) {
         User user = userList.getUser(username, password);
         if (user == null) {
-            System.out.println("Incorrect username or password. Please try again.");
             return false;
         }
         currentUser = user;
-        System.out.println("Login successful for user: " + user.getUsername());
         return true;
     }
 

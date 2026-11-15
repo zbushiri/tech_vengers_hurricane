@@ -81,6 +81,17 @@
     -fx-background-color: #570008;
 }
 
+/*Sign up*/
+.signup-link {
+    -fx-text-fill: #73000a;
+    -fx-border-color: transparent;
+    -fx-underline: false;
+}
+
+.signup-link:hover {
+    -fx-underline: true;
+}
+
 /* home screen */
 .home-screen {
     -fx-background-color: #f2f3f5;

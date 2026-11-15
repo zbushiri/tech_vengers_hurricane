@@ -46,7 +46,23 @@ public class UserList {
      */
     public User getUser(String username, String password) {
         User user = getUser(username);
-        return user != null && user.login(username, password) ? user : null;
+        if (user == null) {
+            user = getUserByEmail(username);
+        }
+        return user != null && user.login(user.getUsername(), password) ? user : null;
+    }
+
+    /**
+     * Finds an account by email address without checking a password.
+     * @param email account email, matched without regard to case 
+     * @return matching account, or null when no account has that email
+     */
+    public User getUserByEmail(String email) {
+        if (email == null) return null;
+        for (User user : users) {
+            if (email.equalsIgnoreCase(user.getEmail())) return user;
+        }
+        return null;
     }
 
     /**

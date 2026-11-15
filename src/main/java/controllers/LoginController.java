@@ -35,22 +35,33 @@ public class LoginController {
         String username = usernameField.getText().trim();
         String password = passwordField.getText();
 
-        if (username.isEmpty() || password.isEmpty()) {
-            errorLabel.setText("Please enter your username and password.");
+        if (username.isEmpty()) {
+            errorLabel.setText("Please enter your username or email.");
+            usernameField.requestFocus();
+            return;
+        }
+
+        if (password.isEmpty()) {
+            errorLabel.setText("Please enter your password.");
+            passwordField.requestFocus();
             return;
         }
 
         if (App.getReliefApp().login(username, password)) {
             App.setRoot("userhome");
         } else {
-            errorLabel.setText("Incorrect username or password.");
+            errorLabel.setText("Incorrect username, email, or password.");
             passwordField.clear();
         }
     }
 
-@FXML
-private void openSignUp() throws IOException {
-    App.setRoot("signup");
-}
+    /**
+     * Opens the sign up screen so a new user can create an account.
+     * @throws IOException if the signup FXML resource cannot be loaded
+     */
+    @FXML
+    private void openSignUp() throws IOException {
+        App.setRoot("signup");
+    }
 
 }
