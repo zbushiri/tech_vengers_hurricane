@@ -7,10 +7,23 @@
 Gamecock Relief Network is a Java disaster-relief application for residents,
 volunteers, shelter operators, and coordinators.
 
-## App Preview
+## Prototype
 
-View the planned login, resident dashboard, relief request, and request form
-screens in the [Gamecock Relief Network App Preview](docs/app-preview.pdf).
+🖥️ [Working Prototype – Version 2 (PDF)](https://github.com/zbushiri/tech_vengers_hurricane/blob/main/docs/prototype-v2.pdf)
+
+🎨 [Figma Make Prototype](https://www.figma.com/make/oama0u3B6kHsmRqiUJsDN9/TechVengers)
+
+🗂️ [Version 1 App Preview (PDF)](https://github.com/zbushiri/tech_vengers_hurricane/blob/main/docs/app-preview.pdf)
+
+**Demo accounts** (from `json/users.json`):
+
+| Role | Username | Email | Password |
+|------|----------|-------|----------|
+| Volunteer | rosadelgado | rosa.delgado@example.com | rosa2026 |
+| Resident | johndoe | john.doe@example.com | password123 |
+| Shelter Operator | felixgrant | felix.grant@example.com | felix2026 |
+
+> Prototype screens were built with help from AI tools (Figma Make) and reviewed and edited by the team.
 
 ## What It Does
 
