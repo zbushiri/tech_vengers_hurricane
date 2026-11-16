@@ -146,7 +146,7 @@ public class Shelter {
      * @return whether the open shelter can take the whole household
      */
     public boolean canAccommodate(ReliefRequest request) {
-        return hasSpace() && capacity - occupancy >= request.getNumberOfPeopleNeeded()
+        return request != null && hasSpace() && capacity - occupancy >= request.getNumberOfPeopleNeeded()
                 && (request.getMedicalNeeds().isBlank() || accommodations.contains(Accommodation.MEDICAL_SUPPORT))
                 && (request.getNumberOfAnimals() == 0 || accommodations.contains(Accommodation.PET_FRIENDLY))
                 && petCapacity - getPetOccupancy() >= request.getNumberOfAnimals();
@@ -189,7 +189,10 @@ public class Shelter {
      * Returns the available spaces.
      * @return available human beds
      */
-    public int getAvailableSpaces() { return Math.max(0, capacity - occupancy); }
+    public int getAvailableSpaces() {
+        return status == ShelterStatus.OPEN ? Math.max(0, capacity - occupancy) : 0;
+    }
+
     /**
      * Returns the pet capacity.
      * @return maximum accompanying pets
@@ -273,7 +276,8 @@ public class Shelter {
      * @param capacity maximum number of human occupants
      */
     public void setCapacity(int capacity) {
-        this.capacity = capacity;
+        this.capacity = Math.max(occupancy, capacity);
+        setOccupancy(occupancy);
     }
 
     /**
@@ -290,7 +294,7 @@ public class Shelter {
      * @param occupancy current number of human occupants; pets are counted separately
      */
     public void setOccupancy(int occupancy) {
-        this.occupancy = Math.max(0, occupancy);
+        this.occupancy = Math.clamp(occupancy, 0, capacity);
         if (status == ShelterStatus.OPEN && this.occupancy >= capacity) {
             status = ShelterStatus.FULL;
         } else if (status == ShelterStatus.FULL && this.occupancy < capacity) {
