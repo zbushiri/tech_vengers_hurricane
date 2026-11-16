@@ -150,7 +150,7 @@ public class HurricaneReliefApp {
     }
 
     public enum RegistrationResult {
-        CREATED, INVALID_DETAILS, USERNAME_TAKEN, SAVE_FAILED
+        CREATED, INVALID_DETAILS, INVALID_EMAIL, USERNAME_TAKEN, EMAIL_TAKEN, SAVE_FAILED
     }
 
     /**
@@ -159,7 +159,14 @@ public class HurricaneReliefApp {
     public RegistrationResult registerAccount(AccountRole role, Map<String, ?> details) {
         User user = AccountFactory.createAccount(role, details);
         if (user == null) return RegistrationResult.INVALID_DETAILS;
-        if (userList.getUser(user.getUsername()) != null) return RegistrationResult.USERNAME_TAKEN;
+        String email = user.getEmail();
+        if (!UserList.isValidEmail(email)) return RegistrationResult.INVALID_EMAIL;
+        if (userList.getUser(user.getUsername()) != null || userList.getUserByEmail(user.getUsername()) != null) {
+            return RegistrationResult.USERNAME_TAKEN;
+        }
+        if (userList.getUserByEmail(email) != null || userList.getUser(email) != null) {
+            return RegistrationResult.EMAIL_TAKEN;
+        }
         if (!userList.addUser(user)) return RegistrationResult.INVALID_DETAILS;
         if (userList.save()) return RegistrationResult.CREATED;
 

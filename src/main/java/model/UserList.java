@@ -83,10 +83,14 @@ public class UserList {
             return false;
         }
         String email = user.getEmail();
-        if (email != null && !email.isBlank() && !email.matches("[^@\\s]+@[^@\\s]+\\.[^@\\s]+")) {
+        if (email != null && !email.isBlank() && !isValidEmail(email)) {
             return false;
         }
         return restoreUser(user);
+    }
+
+    static boolean isValidEmail(String email) {
+        return email != null && email.matches("[^@\\s]+@[^@\\s]+\\.[^@\\s]+");
     }
 
     // Stored accounts may predate the current registration rules.
