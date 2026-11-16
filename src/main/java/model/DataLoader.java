@@ -85,7 +85,7 @@ public class DataLoader extends DataConstants {
                             enumValue(AvailabilityStatus.class, text(row, VOLUNTEER_AVAILABILITY),
                                     AvailabilityStatus.AVAILABLE));
                 }
-                users.addUser(user);
+                users.restoreUser(user);
             }
         } catch (Exception e) { throw new IllegalStateException("Could not load saved application data.", e); }
         return users;

@@ -9,6 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import model.AccountRole;
+import model.HurricaneReliefApp.RegistrationResult;
 import techvengers_hurricane.App;
 
 public class SignupController {
@@ -52,19 +53,19 @@ public class SignupController {
         AccountRole role = "Volunteer".equals(selectedRole)
                 ? AccountRole.VOLUNTEER : AccountRole.RESIDENT;
 
-        boolean created = App.getReliefApp().createAccount(role, Map.of(
+        RegistrationResult result = App.getReliefApp().registerAccount(role, Map.of(
                 "firstName", firstName,
                 "lastName", lastName,
                 "username", username,
                 "password", password
         ));
 
-        if (!created) {
-            errorLabel.setText("That username is taken. Choose a different one.");
-            return;
+        switch (result) {
+            case CREATED -> backToLogin();
+            case USERNAME_TAKEN -> errorLabel.setText("That username is taken. Choose a different one.");
+            case INVALID_DETAILS -> errorLabel.setText("Choose a username with at least six characters.");
+            case SAVE_FAILED -> errorLabel.setText("Could not save your account. Please try again.");
         }
-
-        backToLogin();
     }
 
     @FXML

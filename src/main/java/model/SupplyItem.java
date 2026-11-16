@@ -32,7 +32,7 @@ public class SupplyItem {
      * @param name what the supply is
      */
     public void setName(String name) {
-        this.name = name;
+        this.name = name == null ? "" : name;
     }
 
     /**
@@ -48,6 +48,6 @@ public class SupplyItem {
      * @param quantity how many there are
      */
     public void setQuantity(int quantity) {
-        this.quantity = quantity;
+        this.quantity = Math.max(0, quantity);
     }
 }

@@ -142,11 +142,29 @@ public class HurricaneReliefApp {
             return false;
         }
         if (!userList.addUser(user)) {
-            System.out.println("Username already exists. Please choose a different username.");
+            System.out.println("Account details are invalid or the username is already taken.");
             return false;
         }
         System.out.println("Account created successfully for user: " + user.getUsername());
         return true;
+    }
+
+    public enum RegistrationResult {
+        CREATED, INVALID_DETAILS, USERNAME_TAKEN, SAVE_FAILED
+    }
+
+    /**
+     * Registers an account and saves the user list before reporting success.
+     */
+    public RegistrationResult registerAccount(AccountRole role, Map<String, ?> details) {
+        User user = AccountFactory.createAccount(role, details);
+        if (user == null) return RegistrationResult.INVALID_DETAILS;
+        if (userList.getUser(user.getUsername()) != null) return RegistrationResult.USERNAME_TAKEN;
+        if (!userList.addUser(user)) return RegistrationResult.INVALID_DETAILS;
+        if (userList.save()) return RegistrationResult.CREATED;
+
+        userList.getUsers().remove(user);
+        return RegistrationResult.SAVE_FAILED;
     }
 
     /**

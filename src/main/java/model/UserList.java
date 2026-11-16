@@ -79,6 +79,18 @@ public class UserList {
      * @return true if the account was added; false if it is invalid or its username is taken
      */
     public boolean addUser(User user) {
+        if (user == null || user.getUsername() == null || user.getUsername().strip().length() < 6) {
+            return false;
+        }
+        String email = user.getEmail();
+        if (email != null && !email.isBlank() && !email.matches("[^@\\s]+@[^@\\s]+\\.[^@\\s]+")) {
+            return false;
+        }
+        return restoreUser(user);
+    }
+
+    // Stored accounts may predate the current registration rules.
+    boolean restoreUser(User user) {
         if (user == null || user.getUsername() == null || getUser(user.getUsername()) != null) return false;
         return users.add(user);
     }

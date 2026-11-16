@@ -63,7 +63,8 @@ public class HurricaneReliefAppTest {
         users.addUser(volunteer("tnguyen", "nguyen2026", BackgroundCheckStatus.VERIFIED));
         users.addUser(pendingVolunteer);
         users.addUser(operator);
-        users.addUser(user("jkim", "kim2026", AccountRole.COORDINATOR));
+        // Seed a legacy account with its original short username.
+        users.getUsers().add(user("jkim", "kim2026", AccountRole.COORDINATOR));
 
         lackawanna = new Shelter(UUID.randomUUID(), "Lackawanna Community Shelter",
                 "5200 Lackawanna Boulevard, North Charleston, SC 29405", 150, 90, ShelterStatus.OPEN,
