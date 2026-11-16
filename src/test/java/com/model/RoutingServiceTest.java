@@ -15,7 +15,7 @@ public class RoutingServiceTest {
             @Override
             public location.RoutePlan route(location.Address from, location.Address to) throws java.io.IOException {
                 if (from == null || to == null) {
-                    throw new java.io.IOException("Invalid address");
+                    throw new java.io.IOException("A valid street, city, state and ZIP are required.");
                 }
                 return new location.RoutePlan(10.0, Arrays.asList("Turn left", "Turn right"));
             }
@@ -39,10 +39,10 @@ public class RoutingServiceTest {
         location.Address from = new location.Address("123 Test St", "Test City", "TS", "12345");
         location.Address to = null;
         try {
-            routePlan = routingService.route(from, to);
+            routePlan = location.MapTools.getInstance().route(from, to);
             fail("IOException should be thrown for invalid addresses");
         } catch (java.io.IOException e) {
-            assertEquals("Invalid address", e.getMessage());
+            assertEquals("A valid street, city, state and ZIP are required.", e.getMessage());
         }
     }
     @Test
@@ -50,10 +50,10 @@ public class RoutingServiceTest {
         location.Address from = null;
         location.Address to = null;
         try {
-            routePlan = routingService.route(from, to);
+            routePlan = location.MapTools.getInstance().route(from, to);
             fail("IOException should be thrown for null addresses");
         } catch (java.io.IOException e) {
-            assertEquals("Invalid address", e.getMessage());
+            assertEquals("A valid street, city, state and ZIP are required.", e.getMessage());
         }
     }
     @Test 
@@ -61,10 +61,10 @@ public void testRouteEmptyAddresses() {
         location.Address from = new location.Address("", "", "", "");
         location.Address to = new location.Address("", "", "", "");
         try {
-            routePlan = routingService.route(from, to);
+            routePlan = location.MapTools.getInstance().route(from, to);
             fail("IOException should be thrown for empty addresses");
         } catch (java.io.IOException e) {
-            assertEquals("Invalid address", e.getMessage());
+            assertEquals("A valid street, city, state and ZIP are required.", e.getMessage());
         }
     }
     @Test
@@ -72,10 +72,10 @@ public void testRouteEmptyAddresses() {
         location.Address from = new location.Address("   ", "   ", "   ", "   ");
         location.Address to = new location.Address("   ", "   ", "   ", "   ");
         try {
-            routePlan = routingService.route(from, to);
+            routePlan = location.MapTools.getInstance().route(from, to);
             fail("IOException should be thrown for whitespace addresses");
         } catch (java.io.IOException e) {
-            assertEquals("Invalid address", e.getMessage());
+            assertEquals("A valid street, city, state and ZIP are required.", e.getMessage());
         }
     }
     @Test
@@ -83,10 +83,10 @@ public void testRouteEmptyAddresses() {
         location.Address from = new location.Address("!@#$%^&*()", "!@#$%^&*()", "!@#$%^&*()", "!@#$%^&*()");
         location.Address to = new location.Address("!@#$%^&*()", "!@#$%^&*()", "!@#$%^&*()", "!@#$%^&*()");
         try {
-            routePlan = routingService.route(from, to);
+            routePlan = location.MapTools.getInstance().route(from, to);
             fail("IOException should be thrown for special character addresses");
         } catch (java.io.IOException e) {
-            assertEquals("Invalid address", e.getMessage());
+            assertEquals("A valid street, city, state and ZIP are required.", e.getMessage());
         }
     }
     @Test
@@ -95,20 +95,20 @@ public void testRouteEmptyAddresses() {
         location.Address from = new location.Address(longString, longString, longString, longString);
         location.Address to = new location.Address(longString, longString, longString, longString);
         try {
-            routePlan = routingService.route(from, to);
+            routePlan = location.MapTools.getInstance().route(from, to);
             fail("IOException should be thrown for long addresses");
         } catch (java.io.IOException e) {
-            assertEquals("Invalid address", e.getMessage());
+            assertEquals("A valid street, city, state and ZIP are required.", e.getMessage());
         }
     }
     @Test public void testRouteMixedValidAndInvalidAddresses() {
         location.Address from = new location.Address("123 Test St", "Test City", "TS", "12345");
         location.Address to = new location.Address("", "", "", "");
         try {
-            routePlan = routingService.route(from, to);
+            routePlan = location.MapTools.getInstance().route(from, to);
             fail("IOException should be thrown for mixed valid and invalid addresses");
         } catch (java.io.IOException e) {
-            assertEquals("Invalid address", e.getMessage());
+            assertEquals("A valid street, city, state and ZIP are required.", e.getMessage());
         }
     }
 }
