@@ -81,7 +81,7 @@ public class ShelterList {
         double shortest = Double.POSITIVE_INFINITY;
         for (Shelter shelter : shelters) {
             if (!shelter.hasSpace() || shelter.getAvailableSpaces() < people
-                    || !shelter.getAccommodations().containsAll(needs)
+                    || (needs != null && !shelter.getAccommodations().containsAll(needs))
                     || (pets > 0 && !shelter.getAccommodations().contains(Accommodation.PET_FRIENDLY))
                     || shelter.getPetCapacity() - shelter.getPetOccupancy() < pets) continue;
             double distance = routes.route(from, Address.fromString(shelter.getAddress())).distanceMeters();

@@ -314,13 +314,11 @@ public class ShelterTest {
     }
 
     @Test
-    public void testCheckIn_DifferentDestinationShelter_ShouldReturnTrue() {
+    public void testCheckIn_DifferentDestinationShelter_ShouldReturnFalse() {
         ReliefRequest request = familyRequest(3, true, "");
         request.setDestinationShelterId(UUID.randomUUID());
         assignVolunteer(request);
-        boolean expected = true;
-        boolean actual = shelter.checkIn(request, operator);
-        assertEquals(expected, actual);
+        assertFalse(shelter.checkIn(request, operator));
     }
 
     @Test

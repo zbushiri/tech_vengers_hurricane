@@ -45,6 +45,7 @@ public class MapLocation {
      */
     @Override
     public String toString() {
-        return address.toString();
+        if (address != null) return address.toString();
+        return coordinates == null ? "Unknown Location" : coordinates.toString();
     }
 }

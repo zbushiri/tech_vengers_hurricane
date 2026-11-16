@@ -61,10 +61,10 @@ public class ShelterAdmissionTest {
     }
 
     @Test
-    public void testCreate_OriginalListChangedAfter_ShouldShowThreePeople() {
+    public void testCreate_OriginalListChangedAfter_ShouldKeepTwoPeople() {
         ShelterAdmission admission = new ShelterAdmission(requestId, people, pets);
         people.add(new Person("Sophie", "Carter", 9, new ArrayList<>()));
-        int expected = 3;
+        int expected = 2;
         int actual = admission.people().size();
         assertEquals(expected, actual);
     }

@@ -62,6 +62,7 @@ public class MapTools implements RoutingService {
     public Coordinates getCoordinates(Address address)
             throws IOException, InterruptedException {
 
+        requirePostalAddress(address);
         checkForApiKey();
 
         String addressText = address.toString();
@@ -161,7 +162,8 @@ public class MapTools implements RoutingService {
      */
     @Override
     public synchronized RoutePlan route(Address from, Address to) throws IOException {
-        if (from == null || to == null) throw new IOException("A valid street, city, state and ZIP are required.");
+        requirePostalAddress(from);
+        requirePostalAddress(to);
         String key = from + " -> " + to;
         if (savedRoutes.containsKey(key)) return savedRoutes.get(key);
         try {
@@ -184,6 +186,18 @@ public class MapTools implements RoutingService {
         } catch (IllegalStateException e) {
             throw new IOException(e.getMessage(), e);
         }
+    }
+
+    private static void requirePostalAddress(Address address) throws IOException {
+        if (address == null || !isAddressText(address.getStreet()) || !isAddressText(address.getCity())
+                || address.getState() == null || !address.getState().strip().matches("[A-Za-z]{2}")
+                || address.getZip() == null || !address.getZip().strip().matches("[0-9]{5}(-[0-9]{4})?")) {
+            throw new IOException("A valid street, city, state and ZIP are required.");
+        }
+    }
+
+    private static boolean isAddressText(String text) {
+        return text != null && text.length() <= 255 && text.codePoints().anyMatch(Character::isLetterOrDigit);
     }
 
     /**
