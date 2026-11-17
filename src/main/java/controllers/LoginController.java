@@ -48,7 +48,7 @@ public class LoginController {
         }
 
         if (App.getReliefApp().login(username, password)) {
-            App.setRoot("userhome");
+            App.setRoot("rolehome");
         } else {
             errorLabel.setText("Incorrect username, email, or password.");
             passwordField.clear();

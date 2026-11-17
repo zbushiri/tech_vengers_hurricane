@@ -1,0 +1,38 @@
+/* Role-based home screen styles, red look from the Figma. @author nate sheffield */
+.rh-root { -fx-background-color: #f6f6f6; -fx-font-family: "Arial"; -fx-font-size: 13px; }
+.rh-sidebar { -fx-background-color: #171717; -fx-padding: 20 14 20 14; }
+.rh-mark { -fx-min-width: 38; -fx-min-height: 38; -fx-border-color: #5b5b5b; -fx-border-radius: 8; }
+.rh-mark-text { -fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold; }
+.rh-brand { -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold; }
+.rh-brand-sub { -fx-text-fill: #ffb1b7; -fx-font-size: 11px; }
+.rh-nav-label { -fx-text-fill: #9a9a9a; -fx-font-size: 10px; -fx-padding: 0 8 6 8; }
+.rh-nav { -fx-background-color: transparent; -fx-text-fill: #d7d7d7; -fx-alignment: center-left; -fx-padding: 10 12 10 12; -fx-background-radius: 8; -fx-cursor: hand; }
+.rh-nav:hover { -fx-background-color: #292929; }
+.rh-nav-active, .rh-nav-active:hover { -fx-background-color: #73000a; -fx-text-fill: white; -fx-font-weight: bold; }
+.rh-help { -fx-background-color: #34070b; -fx-border-color: #a62a34; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 10 12 10 12; }
+.rh-help-small { -fx-text-fill: #ffb1b7; -fx-font-size: 11px; }
+.rh-help-big { -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; }
+.rh-profile { -fx-border-color: #353535 transparent transparent transparent; -fx-padding: 14 0 0 0; }
+.rh-avatar { -fx-background-color: #73000a; -fx-background-radius: 17; -fx-min-width: 34; -fx-min-height: 34; -fx-max-width: 34; -fx-max-height: 34; }
+.rh-avatar-text { -fx-text-fill: white; -fx-font-weight: bold; }
+.rh-side-name { -fx-text-fill: white; -fx-font-weight: bold; }
+.rh-side-email { -fx-text-fill: #bdbdbd; -fx-font-size: 10.5px; }
+.rh-header { -fx-background-color: white; -fx-border-color: transparent transparent #dedede transparent; -fx-padding: 14 26 14 26; }
+.rh-eyebrow { -fx-text-fill: #666666; -fx-font-size: 11px; }
+.rh-title { -fx-text-fill: #202124; -fx-font-size: 20px; -fx-font-weight: bold; }
+.rh-content { -fx-padding: 22 26 22 26; }
+.rh-card { -fx-background-color: white; -fx-border-color: #dedede; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 18 20 18 20; }
+.rh-kicker { -fx-text-fill: #666666; -fx-font-size: 10.5px; -fx-font-weight: bold; }
+.rh-card-title { -fx-text-fill: #202124; -fx-font-size: 17px; -fx-font-weight: bold; -fx-padding: 2 0 8 0; }
+.rh-muted { -fx-text-fill: #666666; }
+.rh-value { -fx-text-fill: #202124; -fx-font-weight: bold; }
+.rh-note { -fx-background-color: #f6f6f6; -fx-border-color: transparent transparent transparent #73000a; -fx-border-width: 0 0 0 3; -fx-padding: 10 12 10 12; -fx-text-fill: #202124; }
+.rh-pill { -fx-background-radius: 999; -fx-padding: 3 10 3 10; -fx-font-size: 11px; -fx-font-weight: bold; }
+.rh-pill-red { -fx-background-color: #f4e6e8; -fx-text-fill: #73000a; }
+.rh-pill-gold { -fx-background-color: #fff4d7; -fx-text-fill: #ad7715; }
+.rh-pill-green { -fx-background-color: #e6f4ed; -fx-text-fill: #2f7b5b; }
+.rh-pill-alert { -fx-background-color: #fae9e9; -fx-text-fill: #b83d42; }
+.rh-btn-primary { -fx-background-color: #73000a; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 9 16 9 16; -fx-cursor: hand; }
+.rh-btn-primary:hover { -fx-background-color: #5b0008; }
+.rh-btn-secondary { -fx-background-color: white; -fx-text-fill: #202124; -fx-font-weight: bold; -fx-border-color: #3f3f3f; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 8 16 8 16; -fx-cursor: hand; }
+.rh-btn-secondary:hover { -fx-background-color: #f0f0f0; }
