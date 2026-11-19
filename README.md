@@ -62,7 +62,7 @@ cp .env.example .env
 6. Open `.env` and replace `your_api_key` with your token:
 
 ```text
-HURRICANE_API=your_api_key
+MAP_API_KEY=your_api_key
 ```
 
 The `.env` file is ignored by Git. Each user should use their own free key, as
@@ -92,7 +92,7 @@ In VS Code, open **Run and Debug** and select:
 ## Troubleshooting
 
 - If the map says the API key is missing, make sure the file is named `.env`
-  and contains `HURRICANE_API=your_api_key` with your real key.
+  and contains `MAP_API_KEY=your_api_key` with your real key.
 - Run the map with the **MapUI** option in VS Code so the `.env` file is loaded.
 - If Maven cannot find a dependency, run `mvn compile` while connected to the
   internet.
