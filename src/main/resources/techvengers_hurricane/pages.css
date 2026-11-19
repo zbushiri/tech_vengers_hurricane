@@ -1,0 +1,54 @@
+/* Extra styles for the pages after login, red look from the Figma. @author nate sheffield */
+.pg-scroll, .pg-scroll > .viewport { -fx-background-color: #f6f6f6; -fx-background: #f6f6f6; }
+.pg-body { -fx-padding: 22 26 22 26; }
+.pg-name { -fx-text-fill: #202124; -fx-font-weight: bold; }
+.pg-pill-red { -fx-background-color: #f4e6e8; -fx-text-fill: #73000a; }
+.pg-pill-gold { -fx-background-color: #fff0c2; -fx-text-fill: #704f00; }
+.pg-pill-green { -fx-background-color: #e1f3e8; -fx-text-fill: #17613a; }
+.pg-pill-alert { -fx-background-color: #fae9e9; -fx-text-fill: #b83d42; }
+.pg-pill-blue { -fx-background-color: #e5f1fc; -fx-text-fill: #244b73; }
+.pg-pill-grey { -fx-background-color: #eeeeee; -fx-text-fill: #474747; }
+.pg-h2 { -fx-text-fill: #202124; -fx-font-size: 20px; -fx-font-weight: bold; }
+.pg-h3 { -fx-text-fill: #202124; -fx-font-size: 15px; -fx-font-weight: bold; }
+.pg-small { -fx-text-fill: #686868; -fx-font-size: 11px; }
+.pg-field-label { -fx-text-fill: #202124; -fx-font-weight: bold; }
+.pg-input { -fx-background-color: white; -fx-border-color: #bcbcbc; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 8 10 8 10; }
+.pg-input:focused { -fx-border-color: #73000a; }
+.pg-input-error { -fx-border-color: #b3261e; }
+.pg-error-text { -fx-text-fill: #b3261e; -fx-font-size: 12px; }
+.pg-error-banner { -fx-background-color: #fce9e7; -fx-border-color: #b3261e; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 12 14 12 14; }
+.pg-error-title { -fx-text-fill: #8e1c16; -fx-font-weight: bold; }
+.pg-error-body { -fx-text-fill: #8e1c16; -fx-font-size: 12px; }
+.pg-table-head { -fx-background-color: #fafafa; -fx-padding: 14 20 14 20; }
+.pg-table-head .label { -fx-text-fill: #555555; -fx-font-weight: bold; -fx-font-size: 12px; }
+.pg-table-row { -fx-border-color: #e3e3e3 transparent transparent transparent; -fx-padding: 16 20 16 20; }
+.pg-table { -fx-background-color: white; -fx-border-color: #dedede; -fx-border-radius: 8; -fx-background-radius: 8; }
+.pg-empty-icon { -fx-background-color: #f4e6e8; -fx-background-radius: 27; -fx-min-width: 54; -fx-min-height: 54; -fx-text-fill: #73000a; -fx-alignment: center; -fx-font-size: 20px; }
+.pg-check { -fx-background-color: #e1f3e8; -fx-background-radius: 29; -fx-min-width: 58; -fx-min-height: 58; -fx-text-fill: #17613a; -fx-alignment: center; -fx-font-size: 24px; }
+.pg-detail-row { -fx-border-color: transparent transparent #dedede transparent; -fx-padding: 14 0 14 0; }
+.pg-step-dot { -fx-min-width: 26; -fx-min-height: 26; -fx-max-width: 26; -fx-max-height: 26; -fx-background-radius: 13; -fx-border-radius: 13; -fx-border-width: 2; -fx-alignment: center; -fx-font-size: 12px; -fx-font-weight: bold; }
+.pg-step-done { -fx-background-color: #73000a; -fx-border-color: #73000a; -fx-text-fill: white; }
+.pg-step-current { -fx-background-color: white; -fx-border-color: #73000a; -fx-text-fill: #73000a; }
+.pg-step-pending { -fx-background-color: white; -fx-border-color: #bdbdbd; -fx-text-fill: #707070; }
+.pg-overlay { -fx-background-color: rgba(0, 0, 0, 0.45); }
+.pg-dialog { -fx-background-color: white; -fx-background-radius: 8; -fx-padding: 24; }
+.pg-toggle { -fx-background-color: white; -fx-text-fill: #444444; -fx-border-color: #a7a7a7; -fx-border-radius: 8; -fx-background-radius: 8; -fx-font-weight: bold; -fx-padding: 8 14 8 14; -fx-cursor: hand; }
+.pg-toggle:selected { -fx-background-color: #f4e6e8; -fx-text-fill: #73000a; -fx-border-color: #73000a; }
+.pg-filter-bar { -fx-background-color: white; -fx-border-color: #dedede; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 10 14 10 14; }
+.pg-option { -fx-background-color: white; -fx-border-color: #dedede; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 14; -fx-cursor: hand; }
+.pg-option:hover { -fx-border-color: #9f777b; }
+.pg-option-selected, .pg-option-selected:hover { -fx-border-color: #73000a; -fx-border-width: 2; }
+.pg-map { -fx-background-color: #f0eeee; -fx-min-height: 150; -fx-alignment: center; }
+.pg-map .label { -fx-text-fill: #73000a; -fx-font-weight: bold; }
+.pg-note-box { -fx-background-color: #faf7f7; -fx-border-color: transparent transparent transparent #73000a; -fx-border-width: 0 0 0 3; -fx-padding: 12 14 12 14; }
+.pg-warn { -fx-background-color: #fff8e7; -fx-border-color: #e3ce9c; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 12 14 12 14; }
+.pg-warn .label { -fx-text-fill: #5f4310; }
+.pg-service { -fx-border-color: #dedede; -fx-border-radius: 8; -fx-padding: 10 12 10 12; }
+.pg-service-off { -fx-background-color: #f7f7f7; -fx-opacity: 0.62; }
+.pg-review { -fx-background-color: #f6f6f6; -fx-background-radius: 8; -fx-padding: 14; }
+.pg-summary { -fx-background-color: white; -fx-border-color: #dedede; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 14 18 14 18; }
+.pg-text-button { -fx-background-color: transparent; -fx-text-fill: #73000a; -fx-font-weight: bold; -fx-cursor: hand; -fx-padding: 6 4 6 4; }
+.progress-bar > .bar { -fx-background-color: #73000a; -fx-background-insets: 0; -fx-background-radius: 4; }
+.progress-bar > .track { -fx-background-color: #dedede; -fx-background-radius: 4; }
+.pg-trip { -fx-font-family: "Monospaced"; -fx-font-size: 12px; }
+.pg-ok { -fx-text-fill: #17613a; -fx-font-weight: bold; }

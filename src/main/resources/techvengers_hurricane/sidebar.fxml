@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<!-- Shared sidebar for every page after login. @author nate sheffield -->
+<VBox prefWidth="220.0" spacing="4.0" styleClass="rh-sidebar" stylesheets="@rolehome.css"
+      xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="controllers.SidebarController">
+    <HBox alignment="CENTER_LEFT" spacing="10.0">
+        <StackPane styleClass="rh-mark"><Label text="✚" styleClass="rh-mark-text" /></StackPane>
+        <VBox>
+            <Label text="Gamecock Relief" styleClass="rh-brand" />
+            <Label text="Network" styleClass="rh-brand-sub" />
+        </VBox>
+        <VBox.margin><Insets bottom="24.0" /></VBox.margin>
+    </HBox>
+    <Label text="RELIEF NETWORK" styleClass="rh-nav-label" />
+    <VBox fx:id="navBox" spacing="4.0" />
+    <Region VBox.vgrow="ALWAYS" />
+    <VBox styleClass="rh-help">
+        <Label text="Emergency assistance" styleClass="rh-help-small" />
+        <Label text="Call 911" styleClass="rh-help-big" />
+    </VBox>
+    <HBox alignment="CENTER_LEFT" spacing="10.0" styleClass="rh-profile">
+        <StackPane styleClass="rh-avatar"><Label fx:id="initialsLabel" styleClass="rh-avatar-text" /></StackPane>
+        <VBox>
+            <Label fx:id="nameLabel" styleClass="rh-side-name" />
+            <Label fx:id="emailLabel" styleClass="rh-side-email" />
+        </VBox>
+    </HBox>
+</VBox>
