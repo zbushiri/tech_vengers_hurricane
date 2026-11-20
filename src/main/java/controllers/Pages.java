@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+
 import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -278,7 +279,11 @@ public final class Pages {
         }
         return String.join("\n", kept);
     }
-
+    /**
+     * Splits the description into lines.
+     * @param request the request
+     * @return the lines
+     */
     private static List<String> lines(ReliefRequest request) {
         String text = request.getDescription();
         return text == null ? List.of() : List.of(text.split("\n"));

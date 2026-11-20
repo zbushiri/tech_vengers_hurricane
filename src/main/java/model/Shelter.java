@@ -115,7 +115,11 @@ public class Shelter {
         }
         return false;
     }
-
+    /**
+     * Checks if the user can manage the shelter.
+     * @param user the user to check
+     * @return true if the user can manage the shelter
+     */
     private boolean canManage(User user) {
         return user != null && ((user.hasRole(AccountRole.SHELTER_OPERATOR) && isShelterOperator(user))
                 || user.hasRole(AccountRole.COORDINATOR));

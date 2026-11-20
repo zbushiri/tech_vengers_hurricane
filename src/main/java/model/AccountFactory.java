@@ -3,6 +3,7 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -55,12 +56,22 @@ public class AccountFactory {
                 Boolean.parseBoolean(text(details, "transportationAccess")),
                 AvailabilityStatus.AVAILABLE);
     }
-
+    /**
+     * Extracts a text value from the details map.
+     * @param details the details
+     * @param key the key
+     * @return the text, or an empty string
+     */
     private static String text(Map<String, ?> details, String key) {
         Object value = details.get(key);
         return value == null ? "" : String.valueOf(value).trim();
     }
-
+    /**
+     * Converts a value to a list of strings. If the value is a List, each item is converted to text.
+     * If the value is a String, it is split on commas. Empty items are ignored.
+     * @param value the value
+     * @return the list of strings
+     */
     private static List<String> list(Object value) {
         List<String> items = new ArrayList<>();
         JsonNode node = new ObjectMapper().valueToTree(value);

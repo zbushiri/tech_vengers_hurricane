@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
+
 import location.MapTools;
 
 /**
@@ -25,7 +26,10 @@ final class ScenarioData {
         this.directory = directory;
     }
 
-    /** Rejects previously run or incomplete seed data before the presentation starts. */
+    /** Rejects previously run or incomplete seed data before the presentation starts.
+     * @throws IllegalStateException if the demonstration folder already contains a Carter account
+     * or if the open requests are not the expected sample requests
+     */
     void checkStartingData() {
         if (UserList.getInstance().getUser("dcarter") != null) {
             throw new IllegalStateException("Carter already exists. Use --verify or choose a fresh --data-dir folder.");
@@ -141,7 +145,11 @@ final class ScenarioData {
         }
     }
 
-    /** Copies the seed files only when creating a new demonstration folder. */
+    /** Copies the seed files only when creating a new demonstration folder.
+     * @param directory the demonstration folder
+     * @param verify true if the folder must already exist, false to create it and copy the seed files
+     * @throws IOException if the folder cannot be created or the seed files cannot be copied
+     */
     private static void prepareDirectory(Path directory, boolean verify) throws IOException {
         if (Files.exists(directory)) {
             return;

@@ -1,9 +1,5 @@
 package location;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URLEncoder;
@@ -12,6 +8,11 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * Uses the mapping API to geocode addresses and retrieve driving distances, directions and route geometry.
@@ -187,7 +188,11 @@ public class MapTools implements RoutingService {
             throw new IOException(e.getMessage(), e);
         }
     }
-
+    /**
+     * Validates that the provided address is a valid postal address.
+     * @param address The address to validate
+     * @throws IOException if the address is invalid
+     */
     private static void requirePostalAddress(Address address) throws IOException {
         if (address == null || !isAddressText(address.getStreet()) || !isAddressText(address.getCity())
                 || address.getState() == null || !address.getState().strip().matches("[A-Za-z]{2}")
@@ -195,7 +200,11 @@ public class MapTools implements RoutingService {
             throw new IOException("A valid street, city, state and ZIP are required.");
         }
     }
-
+    /**
+     * Checks if the provided text is valid for an address.
+     * @param text The text to check
+     * @return true if the text is valid, false otherwise
+     */
     private static boolean isAddressText(String text) {
         return text != null && text.length() <= 255 && text.codePoints().anyMatch(Character::isLetterOrDigit);
     }
@@ -249,6 +258,7 @@ public class MapTools implements RoutingService {
      * @return A json node representing the route.
      * @throws IOException if the mapping service or route response is unavailable
      * @throws InterruptedException if the network operation is interrupted
+     * @throws IllegalStateException if the API key is not set
      */
     private JsonNode getRoute(Coordinates start, Coordinates end)
             throws IOException, InterruptedException {
@@ -290,6 +300,7 @@ public class MapTools implements RoutingService {
      * @return The Driving route to be plotted on a map
      * @throws IOException if the mapping service or route response is unavailable
      * @throws InterruptedException if the network operation is interrupted
+     * @throws IllegalStateException if the API key is not set
      */
     public DrivingRoute getDrivingRoute(Address startingAddress, Address endingAddress) 
         throws IOException, InterruptedException {
@@ -326,6 +337,7 @@ public class MapTools implements RoutingService {
      * @return A list of all points to be put on the route
      * @throws IOException if the mapping service or route response is unavailable
      * @throws InterruptedException if the network operation is interrupted
+     * @throws IllegalStateException if the API key is not set
      */
     private ArrayList<Coordinates> getRoutePoints(Coordinates start,Coordinates end
     ) throws IOException, InterruptedException {
@@ -375,6 +387,7 @@ public class MapTools implements RoutingService {
 
     /**
      * Determine if we have a valid API key in our environment variable.
+     * @throws IllegalStateException if the API key is not set
      */
     private void checkForApiKey() {
         if (apiKey == null || apiKey.isBlank()) {

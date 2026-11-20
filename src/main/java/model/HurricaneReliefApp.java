@@ -148,13 +148,18 @@ public class HurricaneReliefApp {
         System.out.println("Account created successfully for user: " + user.getUsername());
         return true;
     }
-
+    /**
+     * The result of a registration attempt.
+     */
     public enum RegistrationResult {
         CREATED, INVALID_DETAILS, INVALID_EMAIL, USERNAME_TAKEN, EMAIL_TAKEN, SAVE_FAILED
     }
 
     /**
      * Registers an account and saves the user list before reporting success.
+     * @param role the role of the account to create
+     * @param details the details of the account to create
+     * @return the result of the registration attempt
      */
     public RegistrationResult registerAccount(AccountRole role, Map<String, ?> details) {
         User user = AccountFactory.createAccount(role, details);
@@ -243,6 +248,7 @@ public class HurricaneReliefApp {
     
     /**
      * Marks the signed-in user safe and records the update time.
+     * @return true if the user was marked safe, false otherwise
      */
     public void markSafe() {
         if (currentUser == null) {
@@ -572,7 +578,10 @@ public class HurricaneReliefApp {
                 && shelter.checkIn(reliefRequestCatalog.getRequest(requestId), currentUser);
     }
 
-    /** Checks full pickup-address syntax before accepting household details. */
+    /** Checks full pickup-address syntax before accepting household details.
+     * @param text the address text
+     * @return true if the text is a valid address
+     */
     private static boolean validAddress(String text) { return location.Address.fromString(text) != null; }
 
 }

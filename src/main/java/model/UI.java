@@ -1,10 +1,10 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.ArrayList;
 
 /**
  * Presents interactive terminal menus and delegates user actions to {@link HurricaneReliefApp}.
@@ -13,7 +13,10 @@ import java.util.ArrayList;
 public class UI {
     private Scanner scanner;
 
-
+    /**
+     * The main menu for the application.
+     * @return true if the user wants to continue, false if they want to exit
+     */
     private boolean startMenu() {
         System.out.println();
         System.out.println("1. Log in");
@@ -36,6 +39,10 @@ public class UI {
         return true;
     }
 
+    /**
+     * The home menu for the application.
+     * @return true if the user wants to continue, false if they want to exit
+     */
     private boolean homeMenu() {
         System.out.println();
         System.out.println("Logged in as " + app.getCurrentUser().getUsername());
@@ -83,7 +90,10 @@ public class UI {
         }
         return true;
     }
-
+    /**
+     * The menu for creating a new account.
+     * @return true if the account was created successfully, false otherwise
+     */
     private void createAccountMenu() {
         Map<String, String> details = new HashMap<>();
         details.put("username", prompt("Choose a username: "));
@@ -105,7 +115,10 @@ public class UI {
             app.login(details.get("username"), details.get("password"));
         }
     }
-
+    /**
+     * The menu for submitting a new request.
+     * @return true if the request was submitted successfully, false otherwise
+     */
     private void submitRequestMenu() {
         RequestType[] types = RequestType.values();
         for (int i = 0; i < types.length; i++) {
@@ -139,7 +152,7 @@ public class UI {
         System.out.println(created == null ? "Request could not be submitted." : "Request submitted: " + created.getRequestId() + " [" + created.getPriority() + "]");
     }
 
-    /** Displays recommended requests with explanations and existing assignments. */
+    /** Displays recommended requests with explanations and existing assignments.*/
     private void openRequestsMenu() {
         boolean volunteer = app.getCurrentUser().getVolunteerProfile() != null;
         List<RequestRecommendation> recommendations = volunteer ? app.getRecommendedRequests() : List.of();
@@ -169,7 +182,9 @@ public class UI {
                 : "; assigned to " + request.getAssignedVolunteer().getUsername());
     }
 
-    /** Prints names, ages, animals, medical needs and contact information. */
+    /** Prints names, ages, animals, medical needs and contact information.
+     * @param request the request to summarize
+     */
     private void showHousehold(ReliefRequest request) {
         System.out.println(requestSummary(request));
         request.getFamilyMembers().forEach(p -> System.out.println("  " + p.getFirstName() + " " + p.getLastName() + ", age " + p.getAge()));
@@ -179,7 +194,10 @@ public class UI {
         if (request.getSubmittedBy() != null) System.out.println("Contact: " + request.getSubmittedBy().getPhoneNumber()
                 + "; " + request.getSubmittedBy().getEmail());
     }
-
+    /**
+     * Displays a list of shelters.
+     * @param shelters the list of shelters to display
+     */
     private void showShelters(List<Shelter> shelters) {
         if (shelters.isEmpty()) {
             System.out.println("No open shelters were found near that location.");
@@ -191,7 +209,10 @@ public class UI {
                     + ", " + shelter.getAccommodations() + ")");
         }
     }
-
+    /**
+     * Displays information about the active hurricane event.
+     * @return true if there is an active hurricane event, false otherwise
+     */
     private void showHurricane() {
         HurricaneEvent active = app.getActiveHurricane();
         if (active != null) {
@@ -204,7 +225,10 @@ public class UI {
                     + hurricane.getAffectedAreas());
         }
     }
-
+    /**
+     * Displays the user's requests.
+     * @return true if the user has requests, false otherwise
+     */
     private void myRequestsMenu() {
         List<ReliefRequest> requests = app.getMyRequests();
         if (requests.isEmpty()) {
@@ -221,7 +245,10 @@ public class UI {
             app.cancelRequest(requests.get(choice - 1).getRequestId());
         }
     }
-
+    /**
+     * Displays the user's assignments.
+     * @return true if the user has assignments, false otherwise
+     */
     private void myAssignmentsMenu() {
         ArrayList<ReliefRequest> myAssignments = app.getMyAssignments();
         if (myAssignments.isEmpty()) {
@@ -289,7 +316,7 @@ public class UI {
 
     /**
      * Prints a prompt and reads one line.
-     *
+     * @param message the prompt to display
      * @return the trimmed line, or null if there is no more input
      */
     private String prompt(String message) {
@@ -300,7 +327,11 @@ public class UI {
         }
         return scanner.nextLine().trim();
     }
-
+    /**
+     * Converts a string to an integer.
+     * @param text the string to convert
+     * @return the integer value, or -1 if the string is null or not a valid integer
+     */
     private static int number(String text) {
         try {
             return text == null ? -1 : Integer.parseInt(text.trim());

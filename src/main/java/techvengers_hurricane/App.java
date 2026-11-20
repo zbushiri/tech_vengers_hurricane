@@ -1,13 +1,13 @@
 package techvengers_hurricane;
 
+import java.io.IOException;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import model.HurricaneReliefApp;
-
-import java.io.IOException;
 
 /**
  * Launches the original two-screen JavaFX template application.
@@ -56,7 +56,12 @@ public class App extends Application {
     public static void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml));
     }
-
+    /**
+     * Loads an FXML resource.
+     * @param fxml the name of the FXML resource to load
+     * @return the loaded parent node
+     * @throws IOException if the FXML resource cannot be loaded
+     */
     private static Parent loadFXML(String fxml) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
         return fxmlLoader.load();

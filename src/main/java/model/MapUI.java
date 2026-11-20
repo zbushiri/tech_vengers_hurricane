@@ -60,7 +60,7 @@ public class MapUI extends Application {
 
 
 
-    /** Finds the closest real shelter and gets directions to it. */
+    /** Finds the closest real shelter and gets directions to it.*/
     private void loadShelter() {
         Address userAddress = new Address("80 Broad Street", "Charleston", "SC", "29401");
         
@@ -104,12 +104,16 @@ public class MapUI extends Application {
         pen.fillText("Loading shelter map...", 320, 210);
     }
 
-    /** Changes the message at the top of the window. */
+    /** Changes the message at the top of the window.
+     * @param message the new message
+     */
     private void updateStatus(String message) {
         Platform.runLater(() -> status.setText(message));
     }
 
-    /** Draws the route using the coordinates returned by the map API. */
+    /** Draws the route using the coordinates returned by the map API.
+     * @param route the route to draw
+     */
     private void drawRoute(DrivingRoute route) {
         GraphicsContext pen = map.getGraphicsContext2D();
         pen.setFill(Color.web("#e8f2e8"));

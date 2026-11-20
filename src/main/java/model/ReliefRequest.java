@@ -1,6 +1,6 @@
 package model;
-import java.util.UUID;
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * A household relief request, its assignment, destination, and workflow state.
@@ -273,7 +273,11 @@ public class ReliefRequest {
         setStatus(RequestStatus.IN_PROGRESS);
         return true;
     }
-
+    /**
+     * Checks if the request is assigned to the specified volunteer.
+     * @param volunteer the volunteer to check
+     * @return true if the request is assigned to the volunteer; false otherwise
+     */
     private boolean isAssignedTo(VolunteerProfile volunteer) {
         return volunteer != null && assignedVolunteer != null
                 && assignedVolunteer.getUserId().equals(volunteer.getUserId());
