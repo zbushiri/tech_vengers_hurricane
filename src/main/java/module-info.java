@@ -4,6 +4,7 @@
 module techvengers_hurricane {
     requires javafx.controls;
     requires javafx.fxml;
+    requires javafx.web;
     requires java.net.http;
     requires com.fasterxml.jackson.databind;
     requires json.simple;

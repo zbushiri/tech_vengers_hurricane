@@ -6,7 +6,10 @@
       "name": "App",
       "request": "launch",
       "mainClass": "techvengers_hurricane/techvengers_hurricane.App",
-      "projectName": "hurricanejavafx"
+      "projectName": "hurricanejavafx",
+      "cwd": "${workspaceFolder}",
+      "envFile": "${workspaceFolder}/.env",
+      "vmArgs": "--enable-native-access=javafx.graphics"
     },
     {
       "type": "java",

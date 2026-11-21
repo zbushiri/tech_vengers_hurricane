@@ -28,7 +28,7 @@ public class MapTools implements RoutingService {
     private static final String ROUTE_GEOJSON_URL =
         "https://api.heigit.org/openrouteservice/v2/directions/driving-car/geojson";
     private static MapTools mapTools;
-    private final String apiKey = System.getenv("HURRICANE_API");
+    private final String apiKey = System.getenv("MAP_API_KEY");
     private final HttpClient httpClient;
     private final ObjectMapper objectMapper;
     private final HashMap<String, Coordinates> savedCoordinates = new HashMap<>();
@@ -392,7 +392,7 @@ public class MapTools implements RoutingService {
     private void checkForApiKey() {
         if (apiKey == null || apiKey.isBlank()) {
             throw new IllegalStateException(
-                    "HURRICANE_API environment variable has not been set."
+                    "MAP_API_KEY environment variable has not been set."
             );
         }
     }

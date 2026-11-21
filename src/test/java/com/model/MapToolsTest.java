@@ -21,7 +21,7 @@ public class MapToolsTest {
     }
 
     @Test
-    @Ignore("Requires a live HURRICANE_API key and an external geocoding service.")
+    @Ignore("Requires a live MAP_API key and an external geocoding service.")
     public void testGetCoordinates() {
         location.Coordinates coordinates = testAddress.getCoordinates();
         assertEquals(LATITUDE, coordinates.getLatitude(), 0.0001);

@@ -128,9 +128,9 @@ final class ScenarioData {
         }
 
         if (!verify) {
-            String apiKey = System.getenv("HURRICANE_API");
+            String apiKey = System.getenv("MAP_API_KEY");
             if (apiKey == null || apiKey.isBlank()) {
-                System.out.println("Set HURRICANE_API in the root .env file for VS Code, or export it in your shell.");
+                System.out.println("Set MAP_API_KEY in the root .env file for VS Code, or export it in your shell.");
                 return;
             }
         }

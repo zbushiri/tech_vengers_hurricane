@@ -1,5 +1,6 @@
 package controllers;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -18,6 +19,7 @@ import javafx.scene.layout.VBox;
 import model.Accommodation;
 import model.Shelter;
 import model.ShelterStatus;
+import techvengers_hurricane.App;
 
 /**
  * Searchable shelter list with filters and a preview of the selected shelter.
@@ -42,6 +44,13 @@ public class SheltersController extends PageController {
     @Override
     protected void build() {
         openCount = Pages.pill("", "green");
+        showHeaderButton("Map view", () -> {
+            try {
+                App.showShelterMap();
+            } catch (IOException e) {
+                openCount.setText("Could not open the map");
+            }
+        });
         VBox titles = new VBox(2, Pages.label("Available emergency shelter locations", "rh-eyebrow"),
                 Pages.label("Find a safe place nearby", "pg-h2"));
         Region gap = new Region();
@@ -155,7 +164,16 @@ public class SheltersController extends PageController {
     private void showDetail(Shelter shelter) {
         detail.getChildren().clear();
         if (shelter == null) return;
-        StackPane map = new StackPane(Pages.label("Route preview"));
+        Button showRoute = new Button("Show route on map");
+        showRoute.getStyleClass().add("rh-btn-primary");
+        showRoute.setOnAction(e -> {
+            try {
+                App.showRouteMap(shelter);
+            } catch (IOException ex) {
+                showRoute.setText("Could not open the map");
+            }
+        });
+        StackPane map = new StackPane(showRoute);
         map.getStyleClass().add("pg-map");
 
         Region gap = new Region();
