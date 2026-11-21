@@ -1,7 +1,5 @@
 package model;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
@@ -14,6 +12,9 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * Loads current and legacy JSON using Jackson's typed JSON nodes.
@@ -190,7 +191,10 @@ public class DataLoader extends DataConstants {
         return storms;
     }
 
-    /** Restores named family members and their documented special needs. */
+    /** Restores named family members and their documented special needs.
+     * @param rows the JSON rows
+     * @return the list of people
+     */
     private static ArrayList<Person> people(JsonNode rows) {
         ArrayList<Person> result = new ArrayList<>();
         if (rows.isArray()) for (JsonNode row : rows) {
@@ -200,40 +204,70 @@ public class DataLoader extends DataConstants {
         return result;
     }
 
-    /** Restores pets separately from human occupants. */
+    /** Restores pets separately from human occupants. 
+     * @param rows the JSON rows
+     * @return the list of pets
+     */
     private static ArrayList<Pet> pets(JsonNode rows) {
         ArrayList<Pet> result = new ArrayList<>();
         if (rows.isArray()) for (JsonNode row : rows) result.add(new Pet(text(row, "name"), text(row, "species")));
         return result;
     }
-
+    /**
+     * Restores a hurricane event from a JSON row.
+     * @param row the JSON row
+     * @return the hurricane event
+     */
     private static HurricaneEvent hurricane(JsonNode row) {
         return new HurricaneEvent(text(row, HURRICANE_NAME), parseDate(text(row, HURRICANE_START)),
                 parseDate(text(row, HURRICANE_END)), strings(row.path(HURRICANE_AREAS)),
                 enumValue(EventStatus.class, text(row, HURRICANE_STATUS), EventStatus.MONITORING));
     }
-
+    /**
+     * Converts a JSON node to a list of strings.
+     * @param node the JSON node
+     * @return the list of strings
+     */
     private static ArrayList<String> strings(JsonNode node) {
         ArrayList<String> values = new ArrayList<>();
         if (node.isArray()) for (JsonNode value : node) values.add(value.asText());
         return values;
     }
 
+    /**
+     * Reads a UUID from a JSON node.
+     * @param value the JSON node
+     * @return the UUID, or a random one if the node is invalid
+     */
     private static UUID readID(JsonNode value) {
         try { return UUID.fromString(value.asText()); }
         catch (IllegalArgumentException e) { return UUID.randomUUID(); }
     }
-
+    /**
+     * Gets an enum value from a string, with a fallback.
+     * @param type the enum type
+     * @param value the string value
+     * @param fallback the fallback value
+     * @return the enum value, or the fallback if the string is invalid
+     */
     private static <E extends Enum<E>> E enumValue(Class<E> type, String value, E fallback) {
         return value == null ? fallback : Enum.valueOf(type, value.toUpperCase(Locale.ROOT));
     }
-
+    /**
+     * Converts a string to a local date time.
+     * @param text the string
+     * @return the local date time
+     */
     private static LocalDateTime dateTime(String text) {
         if (text == null) return LocalDateTime.now();
         if (text.endsWith("Z")) text = text.substring(0, text.length() - 1);
         return LocalDateTime.parse(text);
     }
-
+    /**
+     * Parses a date string into a Date object.
+     * @param text the date string
+     * @return the Date object, or null if the string is invalid
+     */
     private static Date parseDate(String text) {
         if (text == null) return null;
         if (text.length() == 10) return Date.from(LocalDate.parse(text).atStartOfDay(ZoneOffset.UTC).toInstant());

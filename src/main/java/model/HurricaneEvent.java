@@ -125,7 +125,10 @@ public class HurricaneEvent {
         this.endDate = endDate;
     }
 
-    /** Formats persisted UTC calendar dates without shifting to the previous local day. */
+    /** Formats persisted UTC calendar dates without shifting to the previous local day.
+     * @param date the date
+     * @return the date string, or "unknown" if the date is null
+     */
     private static String calendarDate(Date date) {
         return date == null ? "unknown" : date.toInstant().atZone(java.time.ZoneOffset.UTC).toLocalDate().toString();
     }

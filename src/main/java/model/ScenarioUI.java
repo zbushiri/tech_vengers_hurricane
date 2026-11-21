@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+
 import location.RoutingService;
 
 /**
@@ -57,7 +58,10 @@ public class ScenarioUI {
         data.printRestartInstructions();
     }
 
-    /** Creates the named household and records its transportation and medical needs. */
+    /** Creates the named household and records its transportation and medical needs.
+     * @return the new request, or null if submission failed
+     * @throws IOException if saving or copying a JSON file fails
+     */
     private ReliefRequest createCarterRequest() throws IOException {
         System.out.println("\n1. David Carter creates an account and requests transportation.");
         ArrayList<AccountRole> roles = new ArrayList<>(List.of(AccountRole.RESIDENT));
@@ -79,7 +83,9 @@ public class ScenarioUI {
         return request;
     }
 
-    /** Shows why Carter's request is first among Rosa's seven open requests. */
+    /** Shows why Carter's request is first among Rosa's seven open requests.
+     * @param request the Carter request
+     */
     private void showRosasRecommendations(ReliefRequest request) {
         System.out.println("\n2. Rosa reviews seven open requests and the recommended household.");
         System.out.println("Rosa logged in: " + app.login("rosadelgado", "rosa2026"));
@@ -96,7 +102,10 @@ public class ScenarioUI {
         System.out.println("  Medical assistance: " + request.getMedicalNeeds());
     }
 
-    /** Finds the closest eligible shelter by road and assigns the trip to Rosa. */
+    /** Finds the closest eligible shelter by road and assigns the trip to Rosa.
+     * @throws IOException if saving or copying a JSON file fails
+     * @return the selected shelter, or null if none was found
+     */
     private Shelter selectShelterAndAssign(ReliefRequest request) throws IOException {
         System.out.println("\n3. Rosa compares ten shelters and claims the request.");
         System.out.println("  Shelters available to search: " + ShelterList.getInstance().getShelters().size());
@@ -115,14 +124,20 @@ public class ScenarioUI {
         return shelter;
     }
 
-    /** Exports the family details and directions for both parts of Rosa's trip. */
+    /** Exports the family details and directions for both parts of Rosa's trip.
+     * @param request the Carter request
+     * @throws IOException if the export fails
+     */
     private void exportTripSheet(ReliefRequest request) throws IOException {
         System.out.println("\n4. Rosa exports the household details and both route legs.");
         Path tripSheet = app.exportTripSheet(request.getRequestId(), data.tripSheetDirectory());
         System.out.println("  Saved: " + tripSheet);
     }
 
-    /** Demonstrates that transporting the family does not grant completion permission. */
+    /** Demonstrates that transporting the family does not grant completion permission.
+     * @param request the Carter request
+     * @throws IOException if saving or copying a JSON file fails
+     */
     private void demonstrateVolunteerRestriction(ReliefRequest request) {
         System.out.println("\n5. Rosa attempts completion after transporting the family.");
         System.out.println("Volunteer completion denied: " + !app.completeRequest(request.getRequestId()));
@@ -130,7 +145,11 @@ public class ScenarioUI {
         app.logout();
     }
 
-    /** Shows Felix's shelter and checks in the family without counting Buddy as a person. */
+    /** Shows Felix's shelter and checks in the family without counting Buddy as a person.
+     * @param request the Carter request
+     * @param shelter the selected shelter
+     * @throws IOException if saving or copying a JSON file fails
+     */
     private void checkInFamily(ReliefRequest request, Shelter shelter) throws IOException {
         System.out.println("\n6. Felix views his shelter and checks in the Carter household.");
         System.out.println("Felix logged in: " + app.login("felixgrant", "felix2026"));
@@ -146,7 +165,10 @@ public class ScenarioUI {
         data.snapshot(app, "checked-in");
     }
 
-    /** Demonstrates authorized completion and saves the final JSON snapshot. */
+    /** Demonstrates authorized completion and saves the final JSON snapshot.
+     * @throws IOException if saving or copying a JSON file fails
+     * @param request the Carter request
+     */
     private void completeRequest(ReliefRequest request) throws IOException {
         System.out.println("\n7. Felix completes the request and saves all changes.");
         System.out.println("Request completed by Felix: " + app.completeRequest(request.getRequestId()));
@@ -154,7 +176,10 @@ public class ScenarioUI {
         app.logout();
     }
 
-    /** Prints a readable list of people and accompanying pets. */
+    /** Prints a readable list of people and accompanying pets.
+     * @param people the list of people
+     * @param pets the list of pets
+     */
     private void printHousehold(List<Person> people, List<Pet> pets) {
         for (Person person : people) {
             System.out.println("  " + person.getFirstName() + " " + person.getLastName()

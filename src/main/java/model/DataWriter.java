@@ -1,11 +1,12 @@
 package model;
 
 import java.io.IOException;
-import java.util.Date;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.charset.StandardCharsets;
+import java.util.Date;
 import java.util.List;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -68,7 +69,11 @@ public class DataWriter extends DataConstants {
         return saveRequests(ReliefRequestCatalog.getInstance().getRequests());
     }
 
-    /** Writes through a temporary sibling so a failed write does not truncate saved data. */
+    /** Writes through a temporary sibling so a failed write does not truncate saved data.
+     * @param fileName the target file name
+     * @param data the JSON array to write
+     * @return true if the file was written successfully, false if an error occurred
+     */
     private static boolean writeFile(String fileName, JSONArray data) {
         Path target = Path.of(fileName).toAbsolutePath();
         Path temporary = null;
@@ -93,7 +98,11 @@ public class DataWriter extends DataConstants {
         }
     }
 
-    /** Serializes the named people in a request or shelter admission. */
+    /**
+     * Serializes the named people in a request or shelter admission.
+     * @param people the list of people
+     * @return the JSON array
+     */
     @SuppressWarnings("unchecked")
     private static JSONArray peopleJSON(List<Person> people) {
         JSONArray data = new JSONArray();
@@ -101,7 +110,10 @@ public class DataWriter extends DataConstants {
         return data;
     }
 
-    /** Serializes accompanying animals independently from human occupants. */
+    /** Serializes accompanying animals independently from human occupants.
+     * @param pets the list of pets
+     * @return the JSON array
+     */
     @SuppressWarnings("unchecked")
     private static JSONArray petsJSON(List<Pet> pets) {
         JSONArray data = new JSONArray();
@@ -152,7 +164,12 @@ public class DataWriter extends DataConstants {
         Files.writeString(file, text, StandardCharsets.UTF_8);
         return file;
     }
-
+    /**
+     * Writes a JSON array to a file.
+     * @param fileName the target file name
+     * @param data the JSON array to write
+     * @return true if the file was written successfully, false if an error occurred
+     */
     @SuppressWarnings("unchecked")
     private static JSONObject userToJSON(User user) {
         JSONObject json = new JSONObject();
@@ -183,7 +200,11 @@ public class DataWriter extends DataConstants {
         }
         return json;
     }
-
+    /**
+     * Converts a Person object to a JSON object.
+     * @param person the Person object
+     * @return the JSON object
+     */
     @SuppressWarnings("unchecked")
     private static JSONObject personToJSON(Person person) {
         JSONObject json = new JSONObject();
@@ -195,7 +216,11 @@ public class DataWriter extends DataConstants {
         json.put(PERSON_SPECIAL_NEEDS, needs);
         return json;
     }
-
+    /**
+     * Converts a Shelter object to a JSON object.
+     * @param shelter the Shelter object
+     * @return the JSON object
+     */
     @SuppressWarnings("unchecked")
     private static JSONObject shelterToJSON(Shelter shelter) {
         JSONObject json = new JSONObject();
@@ -222,7 +247,11 @@ public class DataWriter extends DataConstants {
         json.put(SHELTER_OPERATORS, operators);
         return json;
     }
-
+    /**
+     * Converts a ReliefRequest object to a JSON object.
+     * @param request the ReliefRequest object
+     * @return the JSON object
+     */
     @SuppressWarnings("unchecked")
     private static JSONObject requestToJSON(ReliefRequest request) {
         JSONObject json = new JSONObject();
@@ -252,7 +281,11 @@ public class DataWriter extends DataConstants {
         json.put(REQUEST_SUBMITTED_BY, submitter == null ? null : submitter.getUsername());
         return json;
     }
-
+    /**
+     * Converts a HurricaneEvent object to a JSON object.
+     * @param hurricane the HurricaneEvent object
+     * @return the JSON object
+     */
     @SuppressWarnings("unchecked")
     private static JSONObject hurricaneToJSON(HurricaneEvent hurricane) {
         JSONObject json = new JSONObject();
@@ -264,23 +297,36 @@ public class DataWriter extends DataConstants {
         return json;
     }
 
-    /** Writes a date like "2024-06-01T12:00:00Z", which DataLoader can read back. */
+    /** Writes a date like "2024-06-01T12:00:00Z", which DataLoader can read back.
+     * @param date the date
+     * @return the date string, or null if the date is null
+    */
     private static String dateText(Date date) {
         return date == null ? null : date.toInstant().toString();
     }
 
-    /** A missing value is saved as null so DataLoader falls back to its default. */
+    /** A missing value is saved as null so DataLoader falls back to its default.
+     * @param value the enum value
+     * @return the lowercase name, or null if the value is null
+    */
     private static String enumText(Enum<?> value) {
         return value == null ? null : value.name().toLowerCase(java.util.Locale.ROOT);
     }
-
+    /** Converts a list of strings to a JSON array.
+     * @param values the list of strings
+     * @return the JSON array
+     */
     @SuppressWarnings("unchecked")
     private static JSONArray textArray(List<String> values) {
         JSONArray data = new JSONArray();
         if (values != null) data.addAll(values);
         return data;
     }
-
+    /**
+     * Converts a list of enum values to a JSON array.
+     * @param values the list of enum values
+     * @return the JSON array
+     */
     @SuppressWarnings("unchecked")
     private static JSONArray enumArray(List<? extends Enum<?>> values) {
         JSONArray data = new JSONArray();
