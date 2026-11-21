@@ -164,7 +164,16 @@ public class SheltersController extends PageController {
     private void showDetail(Shelter shelter) {
         detail.getChildren().clear();
         if (shelter == null) return;
-        StackPane map = new StackPane(Pages.label("Route preview"));
+        Button showRoute = new Button("Show route on map");
+        showRoute.getStyleClass().add("rh-btn-primary");
+        showRoute.setOnAction(e -> {
+            try {
+                App.showRouteMap(shelter);
+            } catch (IOException ex) {
+                showRoute.setText("Could not open the map");
+            }
+        });
+        StackPane map = new StackPane(showRoute);
         map.getStyleClass().add("pg-map");
 
         Region gap = new Region();
