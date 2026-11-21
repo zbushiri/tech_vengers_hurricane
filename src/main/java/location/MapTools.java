@@ -392,7 +392,7 @@ public class MapTools implements RoutingService {
     private void checkForApiKey() {
         if (apiKey == null || apiKey.isBlank()) {
             throw new IllegalStateException(
-                    "HURRICANE_API environment variable has not been set."
+                    "MAP_API_KEY environment variable has not been set."
             );
         }
     }
