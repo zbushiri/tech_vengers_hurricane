@@ -72,6 +72,22 @@ public class App extends Application {
     }
     
     /**
+     * Switches to the map screen and draws the driving route to one shelter.
+     * @param shelter the destination shelter
+     * @throws IOException if map_view.fxml cannot be loaded
+     */
+    public static void showRouteMap(Shelter shelter) throws IOException {
+        FXMLLoader loader = new FXMLLoader(App.class.getResource("map_view.fxml"));
+        Parent root = loader.load();
+        MapController controller = loader.getController();
+        scene.setRoot(root);
+
+        Address start = Address.fromString(getReliefApp().getCurrentUser().getDepartureAddress());
+        Address end = Address.fromString(shelter.getAddress());
+        controller.showRouteOnMap(start, end);
+    }
+
+    /**
      * Replaces the current scene contents with another FXML screen.
      * @param fxml resource name without the .fxml extension
      * @throws IOException if the requested FXML resource cannot be loaded

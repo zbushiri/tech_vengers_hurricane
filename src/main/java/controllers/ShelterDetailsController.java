@@ -1,5 +1,6 @@
 package controllers;
 
+import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -14,6 +15,7 @@ import javafx.scene.layout.VBox;
 import model.Accommodation;
 import model.Shelter;
 import model.User;
+import techvengers_hurricane.App;
 
 /**
  * Full details for one shelter: availability, route, services and what to bring.
@@ -66,7 +68,16 @@ public class ShelterDetailsController extends PageController {
         });
         VBox overview = Pages.card(heading, Pages.label(shelter.getAddress(), "rh-muted"), availability, directions, copied);
 
-        StackPane map = new StackPane(Pages.label("Route preview"));
+        Button showRoute = new Button("Show route on map");
+        showRoute.getStyleClass().add("rh-btn-primary");
+        showRoute.setOnAction(e -> {
+            try {
+                App.showRouteMap(shelter);
+            } catch (IOException ex) {
+                copied.setText("Could not open the map.");
+            }
+        });
+        StackPane map = new StackPane(showRoute);
         map.getStyleClass().add("pg-map");
         User user = Pages.user();
         VBox points = new VBox(10,
