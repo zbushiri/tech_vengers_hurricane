@@ -110,6 +110,13 @@ public class HurricaneReliefApp {
         currentUser.logout();
         currentUser = null;
     }
+    /**
+     * Returns every shelter so a screen can list or map them.
+     * @return the loaded shelters
+     */
+    public ArrayList<Shelter> getShelters() {
+        return shelterList.getShelters();
+    }
 
     /**
      * Returns the current user.

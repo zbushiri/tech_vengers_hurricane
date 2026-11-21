@@ -1,6 +1,11 @@
 package techvengers_hurricane;
 
 import java.io.IOException;
+import java.util.ArrayList;
+
+import controllers.MapController;
+import location.Address;
+import model.Shelter;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -48,6 +53,24 @@ public class App extends Application {
         stage.show();
     }
 
+    /**
+     * Switches to the map screen and pins every shelter.
+     * @throws IOException if map_view.fxml cannot be loaded
+     */
+    public static void showShelterMap() throws IOException {
+        FXMLLoader loader = new FXMLLoader(App.class.getResource("map_view.fxml"));
+        Parent root = loader.load();
+        MapController controller = loader.getController();
+        scene.setRoot(root);
+
+        ArrayList<Address> addresses = new ArrayList<>();
+        for (Shelter shelter : getReliefApp().getShelters()) {
+            Address address = Address.fromString(shelter.getAddress());
+            if (address != null) addresses.add(address);
+        }
+        controller.showAddressesOnMap(addresses.toArray(new Address[0]));
+    }
+    
     /**
      * Replaces the current scene contents with another FXML screen.
      * @param fxml resource name without the .fxml extension
